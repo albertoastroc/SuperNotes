@@ -3,7 +3,10 @@ package com.gmail.pentominto.us.supernotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
 
@@ -11,7 +14,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SuperNotesTheme {
-                // A surface container using the 'background' color from the theme
+
+                val systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = true
+                    )
+                }
+
                 AllNotesScreen()
             }
         }

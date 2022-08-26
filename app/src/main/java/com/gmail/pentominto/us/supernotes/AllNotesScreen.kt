@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,11 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
+import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.PastelGreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AllNotesScreen() {
 
@@ -80,10 +82,10 @@ fun AllNotesScreen() {
         },
         content = {
 
-            LazyColumn() {
-                      items(notesList) { note ->
-                          NoteItem(noteTitle = note)
-                      }
+            LazyColumn {
+                items(notesList) { note ->
+                    NoteItem(noteTitle = note)
+                }
             }
 
         },
@@ -112,22 +114,44 @@ fun NoteItem(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(
                 start = 16.dp,
                 end = 16.dp,
-                bottom = 16.dp
+                bottom = 8.dp,
+                top = 8.dp
             ),
-        elevation = 4.dp,
-        backgroundColor = BrownBark,
-        shape = RoundedCornerShape(4.dp)
+        elevation = 1.dp,
+        shape = RoundedCornerShape(4.dp),
+        backgroundColor = LighterWalnutBrown
+
     ) {
+
+//        Row(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(
+//                    brush = Brush.verticalGradient(
+//                        colors = listOf(
+//                            Color.White,
+//                            LighterWalnutBrown
+//                        ),
+//                        startY = 0f,
+//                        tileMode = TileMode.Decal
+//                    )
+//                )
+//        ) {
+
         Text(
             text = noteTitle,
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
+                .background(
+                    color = Color.Transparent
+                ),
             fontSize = 20.sp
         )
-
     }
 
 }
