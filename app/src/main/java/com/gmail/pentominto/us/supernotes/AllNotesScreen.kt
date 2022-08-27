@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,7 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +20,6 @@ import com.gmail.pentominto.us.supernotes.ui.theme.PastelGreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AllNotesScreen() {
 
@@ -40,8 +38,12 @@ fun AllNotesScreen() {
         "Frozen"
     )
 
+    var state by remember { mutableStateOf("") }
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp),
         backgroundColor = Powder,
         topBar = {
 
@@ -56,18 +58,24 @@ fun AllNotesScreen() {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
 
-                    Icon(
-                        painterResource(id = R.drawable.ic_baseline_menu_24),
-                        modifier = Modifier.padding(start = 20.dp),
-                        contentDescription = null,
-                    )
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .background(Color.Transparent)
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.ic_baseline_menu_24),
+                            contentDescription = null,
+                        )
+                    }
 
                     TextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = "Search notes...",
+                        modifier = Modifier,
+                        value = state,
                         colors = TextFieldDefaults.textFieldColors(
                             disabledTextColor = Color.Transparent,
                             backgroundColor = searchBarBackGroundColor,
@@ -75,14 +83,34 @@ fun AllNotesScreen() {
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent
                         ),
-                        onValueChange = {}
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Search Notes..."
+                            )
+                        },
+                        onValueChange = { state = it },
                     )
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .background(Color.Transparent)
+                    ) {
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_baseline_more_vert_24),
+                            contentDescription = null
+                        )
+                    }
+
                 }
             }
         },
-        content = {
+        content = { padding ->
 
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.padding(padding)
+            ) {
                 items(notesList) { note ->
                     NoteItem(noteTitle = note)
                 }
@@ -127,21 +155,6 @@ fun NoteItem(
 
     ) {
 
-//        Row(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(
-//                    brush = Brush.verticalGradient(
-//                        colors = listOf(
-//                            Color.White,
-//                            LighterWalnutBrown
-//                        ),
-//                        startY = 0f,
-//                        tileMode = TileMode.Decal
-//                    )
-//                )
-//        ) {
-
         Text(
             text = noteTitle,
             modifier = Modifier
@@ -153,6 +166,5 @@ fun NoteItem(
             fontSize = 20.sp
         )
     }
-
 }
 
