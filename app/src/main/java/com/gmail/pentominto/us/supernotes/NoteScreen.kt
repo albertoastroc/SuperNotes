@@ -1,17 +1,18 @@
 package com.gmail.pentominto.us
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import com.gmail.pentominto.us.supernotes.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
@@ -65,32 +66,27 @@ fun NoteScreen() {
                             )
                         )
 
-                        IconButton(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier
-                                .align(CenterVertically)
-                                .background(Color.Transparent)
-                        ) {
+                        Icon(
+                            painterResource(id = R.drawable.ic_baseline_delete_24),
+                            modifier = Modifier.clickable(
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = {},
+                                indication = null
+                            ),
+                            contentDescription = null,
+                        )
 
-                            Icon(
-                                painterResource(id = R.drawable.ic_baseline_delete_24),
-                                contentDescription = null,
-                            )
-                        }
-
-                        IconButton(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier
-                                .align(CenterVertically)
-                                .background(Color.Transparent)
-                        ) {
-
-                            Icon(
-                                painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                                contentDescription = null,
-                            )
-                        }
+                        Icon(
+                            painterResource(id = R.drawable.ic_baseline_more_vert_24),
+                            modifier = Modifier.clickable(
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = {},
+                                indication = null
+                            ),
+                            contentDescription = null,
+                        )
                     }
+
                 }
 
                 Divider(

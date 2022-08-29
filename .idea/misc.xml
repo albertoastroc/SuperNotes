@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.259" />
+        <entry key="app/src/main/res/drawable/ic_iconexported.xml" value="0.259" />
       </map>
     </option>
   </component>

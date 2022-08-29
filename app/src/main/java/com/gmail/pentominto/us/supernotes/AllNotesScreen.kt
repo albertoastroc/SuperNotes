@@ -1,12 +1,15 @@
 package com.gmail.pentominto.us.supernotes
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,14 +19,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
-import com.gmail.pentominto.us.supernotes.ui.theme.PastelGreen
+import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
+import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen() {
 
-    val searchBarBackGroundColor = PastelGreen
+    val searchBarBackGroundColor = LimishGreen
 
     val notesList = listOf(
         "Shopping List",
@@ -38,13 +42,72 @@ fun AllNotesScreen() {
         "Frozen"
     )
 
+    val categoriesList = listOf(
+        "Work",
+        "School",
+        "Shows",
+        "Music",
+        "YT",
+        "Schedule",
+        "Ice Cream",
+        "Cheese-steak places"
+    )
+
     var state by remember { mutableStateOf("") }
+
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .padding(0.dp),
         backgroundColor = Powder,
+        scaffoldState = scaffoldState,
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerContent = {
+            DrawerHeader()
+            DrawerBodyMain(
+                drawerOptionsList = listOf(
+                    MenuItem(
+                        id = "1",
+                        title = "Home",
+                        icon = Icons.Default.Home
+                    ),
+                    MenuItem(
+                        id = "2",
+                        title = "Settings",
+                        icon = Icons.Default.Settings
+                    ),
+                    MenuItem(
+                        id = "3",
+                        title = "Backup settings",
+                        icon = Icons.Default.Build
+                    ),
+                    MenuItem(
+                        id = "3",
+                        title = "Privacy policy and info",
+                        icon = Icons.Default.Info
+                    ),
+
+                    MenuItem(
+                        id = "3",
+                        title = "Rate me in the Play Store!",
+                        icon = Icons.Default.Star
+                    ),
+                ),
+                onItemClick = {
+                    println("Clicked on ${it.title}")
+                }
+            )
+            Divider()
+            DrawerBodyCategories(
+                categoriesList = categoriesList,
+                modifier = Modifier,
+                onItemClick = {}
+            )
+
+        },
         topBar = {
 
             Box(
@@ -62,16 +125,23 @@ fun AllNotesScreen() {
                     horizontalArrangement = Arrangement.Center
                 ) {
 
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .background(Color.Transparent)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_baseline_menu_24),
-                            contentDescription = null,
-                        )
-                    }
+                    Icon(
+                        painterResource(id = R.drawable.ic_baseline_menu_24),
+                        modifier = Modifier.clickable(
+                            interactionSource = NoRippleInteractionSource(),
+                            onClick = {
+
+                                scope.launch {
+
+                                    scaffoldState.drawerState.open()
+                                }
+
+                            },
+                            indication = null
+                        ),
+                        contentDescription = null,
+                    )
+
 
                     TextField(
                         modifier = Modifier,
@@ -91,17 +161,16 @@ fun AllNotesScreen() {
                         },
                         onValueChange = { state = it },
                     )
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .background(Color.Transparent)
-                    ) {
 
-                        Icon(
-                            painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                            contentDescription = null
-                        )
-                    }
+                    Icon(
+                        painterResource(id = R.drawable.ic_baseline_more_vert_24),
+                        modifier = Modifier.clickable(
+                            interactionSource = NoRippleInteractionSource(),
+                            onClick = {},
+                            indication = null
+                        ),
+                        contentDescription = null,
+                    )
 
                 }
             }
