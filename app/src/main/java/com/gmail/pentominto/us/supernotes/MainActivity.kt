@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import com.gmail.pentominto.us.NoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -23,8 +24,8 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-//                NoteScreen()
-                AllNotesScreen()
+                NoteScreen()
+//                AllNotesScreen()
             }
         }
     }

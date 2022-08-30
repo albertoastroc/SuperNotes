@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -23,6 +25,8 @@ fun NoteScreen() {
 
     var titleState by remember { mutableStateOf("") }
     var noteBodyState by remember { mutableStateOf("") }
+
+    val configuration = LocalConfiguration.current
 
     Scaffold(
         modifier = Modifier
@@ -45,7 +49,8 @@ fun NoteScreen() {
                     Row(
                         modifier = Modifier
                             .background(LighterWalnutBrown)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextField(
                             value = titleState,
@@ -68,21 +73,25 @@ fun NoteScreen() {
 
                         Icon(
                             painterResource(id = R.drawable.ic_baseline_delete_24),
-                            modifier = Modifier.clickable(
-                                interactionSource = NoRippleInteractionSource(),
-                                onClick = {},
-                                indication = null
-                            ),
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .clickable(
+                                    interactionSource = NoRippleInteractionSource(),
+                                    onClick = {},
+                                    indication = null
+                                ),
                             contentDescription = null,
                         )
 
                         Icon(
                             painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                            modifier = Modifier.clickable(
-                                interactionSource = NoRippleInteractionSource(),
-                                onClick = {},
-                                indication = null
-                            ),
+                            modifier = Modifier
+                                .padding(end = 20.dp)
+                                .clickable(
+                                    interactionSource = NoRippleInteractionSource(),
+                                    onClick = {},
+                                    indication = null
+                                ),
                             contentDescription = null,
                         )
                     }
@@ -103,7 +112,6 @@ fun NoteScreen() {
                 ) {
 
                     Row() {
-
                         TextField(
                             value = noteBodyState,
                             placeholder = { Text(text = "Enter Text...") },
@@ -129,35 +137,46 @@ fun NoteScreen() {
                     color = BrownBark
                 )
 
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = 0.dp,
-                    shape = RoundedCornerShape(2.dp),
-                    backgroundColor = LighterWalnutBrown
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(4.dp),
-                        horizontalArrangement = Arrangement.End
+                when (configuration.orientation) {
+                    Configuration.ORIENTATION_PORTRAIT -> {
 
-                    ) {
-
-                        Column(
-                            horizontalAlignment = Alignment.End
+                        Card(
+                            modifier = Modifier.fillMaxWidth()
+                                .imePadding(),
+                            elevation = 0.dp,
+                            shape = RoundedCornerShape(2.dp),
+                            backgroundColor = LighterWalnutBrown
                         ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(4.dp),
+                                horizontalArrangement = Arrangement.End
+                            ) {
 
-                            Text(
-                                text = "Created : 4/13/22",
-                                fontStyle = FontStyle.Italic
-                            )
-                            Text(
-                                text = "Last Modified : 5/1/22",
-                                fontStyle = FontStyle.Italic
-                            )
+                                Column(
+                                    horizontalAlignment = Alignment.End,
+                                    modifier = Modifier
+                                ) {
+
+                                    Text(
+                                        text = "Created : 4/13/22",
+                                        fontStyle = FontStyle.Italic
+                                    )
+                                    Text(
+                                        text = "Last Modified : 5/1/22",
+                                        fontStyle = FontStyle.Italic
+                                    )
+                                }
+                            }
                         }
+
+                    } else -> {
+
                     }
                 }
+
+
             }
         }
     )

@@ -35,7 +35,6 @@ fun Drawer(
         }
         items(drawerOptionsList) { item ->
 
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -58,6 +57,19 @@ fun Drawer(
 
             }
 
+        }
+
+        item { Divider() }
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Categories",
+                    style = itemTextStyle,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
 
         items(categoriesList) { category ->
@@ -88,7 +100,6 @@ fun Drawer(
         }
 
     }
-
 }
 
 @Composable
@@ -111,91 +122,4 @@ fun DrawerHeader() {
 
     }
     Divider()
-}
-@Composable
-fun DrawerBodyMain(
-    drawerOptionsList : List<MenuItem>,
-    modifier : Modifier = Modifier,
-    itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
-    onItemClick : (MenuItem) -> Unit
-) {
-
-    LazyColumn(modifier) {
-
-        items(drawerOptionsList) { item ->
-
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onItemClick(item)
-                    }
-                    .padding(16.dp)
-            ) {
-
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = null
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = item.title,
-                    modifier = Modifier.weight(1f),
-                    style = itemTextStyle
-                )
-
-            }
-
-        }
-    }
-}
-
-@Composable
-fun DrawerBodyCategories(
-    categoriesList : List<String>,
-    modifier : Modifier = Modifier,
-    onItemClick : (String) -> Unit,
-    itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
-) {
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)) {
-        Text(text = "Categories"
-        , fontSize = 18.sp)
-    }
-    LazyColumn(modifier){
-
-        items(categoriesList) { category ->
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onItemClick(category)
-                    }
-                    .padding(16.dp)
-            ) {
-
-                Icon(
-                    painterResource(id = R.drawable.ic_baseline_circle_24),
-                    contentDescription = null,
-                    tint = Pine
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = category,
-                    modifier = Modifier.weight(1f),
-                    style = itemTextStyle
-                )
-
-            }
-
-        }
-
-    }
-
-
-
 }
