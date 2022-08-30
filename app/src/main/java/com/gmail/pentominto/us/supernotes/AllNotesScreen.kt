@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,17 +31,18 @@ fun AllNotesScreen() {
     val searchBarBackGroundColor = LimishGreen
 
     val notesList = listOf(
-        "Shopping List",
-        "Homeworks tips",
-        "Movies",
-        "Appointments",
-        "Rando",
-        "Planes",
-        "Cars",
-        "Good lak",
-        "Tropoya",
-        "Frozen"
+        Note("shopping list","Other"),
+        Note("boots", "Other"),
+        Note("math notes", "School"),
+        Note("science trip", "School"),
+        Note("movies", "Fun"),
+        Note("shows", "Fun"),
+        Note("games", "Fun"),
+        Note("quotes", "Thinking"),
+        Note("no cat", "Other")
     )
+
+    val groupedNotes = notesList.groupBy { it.category }.toSortedMap()
 
     val categoriesList = listOf(
         "Work",
@@ -60,52 +62,52 @@ fun AllNotesScreen() {
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(0.dp),
+            .fillMaxSize(),
         backgroundColor = Powder,
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
-            DrawerHeader()
-            DrawerBodyMain(
-                drawerOptionsList = listOf(
-                    MenuItem(
-                        id = "1",
-                        title = "Home",
-                        icon = Icons.Default.Home
-                    ),
-                    MenuItem(
-                        id = "2",
-                        title = "Settings",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
-                        id = "3",
-                        title = "Backup settings",
-                        icon = Icons.Default.Build
-                    ),
-                    MenuItem(
-                        id = "3",
-                        title = "Privacy policy and info",
-                        icon = Icons.Default.Info
-                    ),
 
-                    MenuItem(
-                        id = "3",
-                        title = "Rate me in the Play Store!",
-                        icon = Icons.Default.Star
-                    ),
-                ),
-                onItemClick = {
-                    println("Clicked on ${it.title}")
-                }
-            )
-            Divider()
-            DrawerBodyCategories(
-                categoriesList = categoriesList,
-                modifier = Modifier,
-                onItemClick = {}
-            )
+                    DrawerHeader()
+                    DrawerBodyMain(
+                        drawerOptionsList = listOf(
+                            MenuItem(
+                                id = "1",
+                                title = "Home",
+                                icon = Icons.Default.Home
+                            ),
+                            MenuItem(
+                                id = "2",
+                                title = "Settings",
+                                icon = Icons.Default.Settings
+                            ),
+                            MenuItem(
+                                id = "3",
+                                title = "Backup settings",
+                                icon = Icons.Default.Build
+                            ),
+                            MenuItem(
+                                id = "3",
+                                title = "Privacy policy and info",
+                                icon = Icons.Default.Info
+                            ),
+
+                            MenuItem(
+                                id = "3",
+                                title = "Rate me in the Play Store!",
+                                icon = Icons.Default.Star
+                            ),
+                        ),
+                        onItemClick = {
+                            println("Clicked on ${it.title}")
+                        }
+                    )
+                    Divider()
+                    DrawerBodyCategories(
+                        categoriesList = categoriesList,
+                        modifier = Modifier,
+                        onItemClick = {}
+                    )
 
         },
         topBar = {
@@ -127,24 +129,26 @@ fun AllNotesScreen() {
 
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_menu_24),
-                        modifier = Modifier.clickable(
-                            interactionSource = NoRippleInteractionSource(),
-                            onClick = {
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable(
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = {
 
-                                scope.launch {
+                                    scope.launch {
 
-                                    scaffoldState.drawerState.open()
-                                }
+                                        scaffoldState.drawerState.open()
+                                    }
 
-                            },
-                            indication = null
-                        ),
+                                },
+                                indication = null
+                            ),
                         contentDescription = null,
                     )
 
 
                     TextField(
-                        modifier = Modifier,
+                        modifier = Modifier.weight(3f),
                         value = state,
                         colors = TextFieldDefaults.textFieldColors(
                             disabledTextColor = Color.Transparent,
@@ -164,11 +168,13 @@ fun AllNotesScreen() {
 
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                        modifier = Modifier.clickable(
-                            interactionSource = NoRippleInteractionSource(),
-                            onClick = {},
-                            indication = null
-                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable(
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = {},
+                                indication = null
+                            ),
                         contentDescription = null,
                     )
 
@@ -177,12 +183,28 @@ fun AllNotesScreen() {
         },
         content = { padding ->
 
+
+
             LazyColumn(
                 modifier = Modifier.padding(padding)
             ) {
-                items(notesList) { note ->
-                    NoteItem(noteTitle = note)
+
+                groupedNotes.forEach { (notesCat, noteVals)  ->
+
+
+                    
+                    item {
+                        CategoryHeader(categoryHeader = notesCat)
+                    }
+                    
+                    items(noteVals) { noteVal ->
+                        
+                        NoteItem(noteTitle = noteVal.title)
+                        
+                    }
+                    
                 }
+                
             }
 
         },
@@ -202,6 +224,26 @@ fun AllNotesScreen() {
 
         }
     )
+}
+
+@Composable
+fun CategoryHeader(
+    categoryHeader : String
+) {
+    
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+            Text(
+                text = categoryHeader,
+                modifier = Modifier
+                    .padding(start = 16.dp, bottom = 8.dp, top = 8.dp)
+                    .align(CenterVertically),
+                fontSize = 20.sp
+            )
+
+    }
+    
 }
 
 @Composable
