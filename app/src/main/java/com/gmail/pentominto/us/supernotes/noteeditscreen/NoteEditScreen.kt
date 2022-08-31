@@ -14,14 +14,16 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import com.gmail.pentominto.us.supernotes.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.R
+import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
 @Composable
-fun NoteScreen() {
+fun NoteEditScreen(
+    noteId : Int
+) {
 
     var titleState by remember { mutableStateOf("") }
     var noteBodyState by remember { mutableStateOf("") }

@@ -3,12 +3,21 @@ package com.gmail.pentominto.us.supernotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.gmail.pentominto.us.NoteScreen
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.gmail.pentominto.us.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -23,11 +32,60 @@ class MainActivity : ComponentActivity() {
                         darkIcons = true
                     )
                 }
-
-                NoteScreen()
-//                AllNotesScreen()
+                SuperNotesApp()
             }
         }
     }
 }
 
+@Composable
+fun SuperNotesApp() {
+
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = "allNotes"
+    ) {
+
+        composable("allNotes") {
+
+            AllNotesScreen { noteId ->
+
+                navController.navigate("noteEdit/${noteId}")
+
+            }
+        }
+
+        composable(
+            "noteEdit/{noteId}",
+            arguments = listOf(
+                navArgument("noteId") { type = NavType.IntType }),
+        ) {
+
+            val noteId = remember {
+                it.arguments?.getInt("noteId")
+            }
+
+            if (noteId != null) {
+                NoteEditScreen(noteId = noteId)
+            }
+        }
+
+    }
+}
+
+/**
+ *
+ * Database for notes
+ * needs to be crossreferenced with category one to many
+ * Opens new note automatically? does not create note if there is no title
+ *
+ * Category defaults to other if no category given
+ * if category becomes empty it is not displayed
+ * put trash button in drawer next to categories
+ * move notes that were inside that category into others
+ *
+ * select notes delete
+ *
+ */
