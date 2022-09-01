@@ -14,15 +14,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
+import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
 @Composable
 fun NoteEditScreen(
-    noteId : Int
+    noteId : Int,
+    viewModel : NoteEditScreenViewModel = hiltViewModel()
 ) {
 
     var titleState by remember { mutableStateOf("") }
@@ -79,7 +82,10 @@ fun NoteEditScreen(
                                 .padding(end = 16.dp)
                                 .clickable(
                                     interactionSource = NoRippleInteractionSource(),
-                                    onClick = {},
+                                    onClick = {
+
+                                              viewModel.saveNote(titleState)
+                                    },
                                     indication = null
                                 ),
                             contentDescription = null,
@@ -143,7 +149,8 @@ fun NoteEditScreen(
                     Configuration.ORIENTATION_PORTRAIT -> {
 
                         Card(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .imePadding(),
                             elevation = 0.dp,
                             shape = RoundedCornerShape(2.dp),

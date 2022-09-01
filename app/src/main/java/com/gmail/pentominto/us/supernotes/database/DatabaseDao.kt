@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DatabaseDao {
@@ -17,7 +18,7 @@ interface DatabaseDao {
     suspend fun insertCategory(category : Category)
 
     @Query("SELECT * FROM note_table")
-    suspend fun getAllNotes() : List<Note>
+    fun getAllNotes() : Flow<List<Note>>
 
 }
 

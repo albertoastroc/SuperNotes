@@ -19,8 +19,9 @@ class AllNotesViewModel @Inject constructor(
 
        fun getNotes() = viewModelScope.launch {
 
-           databaseDao.insertNote(Note("Yo"))
-           notesList.value = databaseDao.getAllNotes()
+           databaseDao.getAllNotes().collect() {
+               notesList.value = it
+           }
        }
 
     init {
