@@ -9,6 +9,8 @@ data class Note(
 
     var noteTitle : String,
 
+    var noteBody : String,
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")
     var noteId : Long = 0,

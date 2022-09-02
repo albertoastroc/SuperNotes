@@ -6,7 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,8 +29,7 @@ fun NoteEditScreen(
     viewModel : NoteEditScreenViewModel = hiltViewModel()
 ) {
 
-    var titleState by remember { mutableStateOf("") }
-    var noteBodyState by remember { mutableStateOf("") }
+    val noteState = remember { viewModel.noteState }
 
     val configuration = LocalConfiguration.current
 
@@ -58,10 +58,10 @@ fun NoteEditScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextField(
-                            value = titleState,
+                            value = noteState.value.noteTitle,
                             singleLine = true,
                             placeholder = { Text(text = "Enter a Title...") },
-                            onValueChange = { titleState = it },
+                            onValueChange = { viewModel.onTitleInputChange(it) },
                             modifier = Modifier
                                 .weight(1f)
                                 .background(
@@ -84,7 +84,7 @@ fun NoteEditScreen(
                                     interactionSource = NoRippleInteractionSource(),
                                     onClick = {
 
-                                              viewModel.saveNote(titleState)
+                                        viewModel.saveNote()
                                     },
                                     indication = null
                                 ),
@@ -121,9 +121,9 @@ fun NoteEditScreen(
 
                     Row() {
                         TextField(
-                            value = noteBodyState,
+                            value = noteState.value.noteBody,
                             placeholder = { Text(text = "Enter Text...") },
-                            onValueChange = { noteBodyState = it },
+                            onValueChange = { viewModel.onBodyInputChange(it) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(
