@@ -84,7 +84,7 @@ fun NoteEditScreen(
                                     interactionSource = NoRippleInteractionSource(),
                                     onClick = {
 
-                                        viewModel.saveNote()
+                                        viewModel.updateNote(noteId)
                                     },
                                     indication = null
                                 ),
