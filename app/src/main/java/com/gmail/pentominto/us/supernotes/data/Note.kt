@@ -11,5 +11,5 @@ data class Note(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")
-    var noteId : Int = 0,
+    var noteId : Long = 0,
 )

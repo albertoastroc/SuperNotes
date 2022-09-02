@@ -24,7 +24,7 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
 @Composable
 fun NoteEditScreen(
-    noteId : Int,
+    noteId : Long,
     viewModel : NoteEditScreenViewModel = hiltViewModel()
 ) {
 
