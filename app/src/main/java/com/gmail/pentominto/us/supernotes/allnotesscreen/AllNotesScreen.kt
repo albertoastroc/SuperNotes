@@ -1,6 +1,7 @@
 package com.gmail.pentominto.us.supernotes
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,7 +30,7 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
-    onNewNoteClick : (Int) -> Unit,
+    onClick : (Long) -> Unit,
 ) {
 
     val searchBarBackGroundColor = LimishGreen
@@ -134,7 +135,12 @@ fun AllNotesScreen(
             ) {
                     items(notesState.value) { note ->
 
-                        NoteItem(noteTitle = note.noteTitle)
+                        NoteItem(
+                            noteTitle = note.noteTitle,
+                            modifier = Modifier.clickable {
+                                onClick(note.noteId)
+                            }
+                        )
                     }
             }
         },
@@ -142,7 +148,7 @@ fun AllNotesScreen(
 
             ExtendedFloatingActionButton(
                 text = { Text(text = "NEW NOTE") },
-                onClick = { onNewNoteClick(0)
+                onClick = { onClick(0)
                           },
                 backgroundColor = Pine,
                 icon = {
@@ -160,11 +166,12 @@ fun AllNotesScreen(
 
 @Composable
 fun NoteItem(
-    noteTitle : String
+    noteTitle : String,
+    modifier : Modifier
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(
                 start = 16.dp,
