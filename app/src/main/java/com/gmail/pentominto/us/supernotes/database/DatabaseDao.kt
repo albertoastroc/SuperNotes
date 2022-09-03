@@ -14,6 +14,9 @@ interface DatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note : Note)
 
+    @Query("SELECT * FROM note_table WHERE note_db_id = :id")
+    fun getNote(id : Long) : Flow<Note>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCategory(category : Category)
 

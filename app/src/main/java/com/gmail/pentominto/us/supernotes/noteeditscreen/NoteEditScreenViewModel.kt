@@ -22,6 +22,19 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _noteState : MutableState<Note> = mutableStateOf(Note("", ""))
     val noteState : State<Note> = _noteState
 
+    fun getNote(noteId : Long) {
+
+        viewModelScope.launch {
+
+            databaseDao.getNote(noteId).collect() {
+
+                _noteState.value = it
+            }
+
+        }
+
+    }
+
     fun updateNote(id : Long) {
 
         viewModelScope.launch {

@@ -60,7 +60,9 @@ fun SuperNotesApp() {
         composable(
             "noteEdit/{noteId}",
             arguments = listOf(
-                navArgument("noteId") { type = NavType.LongType }),
+                navArgument("noteId") {
+                    type = NavType.LongType }
+            ),
         ) {
 
             val noteId = remember {
@@ -71,7 +73,6 @@ fun SuperNotesApp() {
                 NoteEditScreen(noteId = noteId)
             }
         }
-
     }
 }
 

@@ -30,7 +30,8 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
-    onClick : (Long) -> Unit,
+    onClick : (Long?) -> Unit,
+
 ) {
 
     val searchBarBackGroundColor = LimishGreen
