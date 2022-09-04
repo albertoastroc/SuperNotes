@@ -68,10 +68,10 @@ fun SuperNotesApp() {
             val noteId = remember {
                 it.arguments?.getLong("noteId")
             }
-
             if (noteId != null) {
                 NoteEditScreen(noteId = noteId)
             }
+
         }
     }
 }

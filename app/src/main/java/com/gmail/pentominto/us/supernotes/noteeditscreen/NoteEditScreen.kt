@@ -25,11 +25,13 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
 @Composable
 fun NoteEditScreen(
-    noteId : Long?,
+    noteId : Long,
     viewModel : NoteEditScreenViewModel = hiltViewModel()
 ) {
 
-    noteId?.let { viewModel.getNote(it) }
+    if (noteId != 0L) {
+        viewModel.getNote(noteId)
+    }
 
     val noteState = remember { viewModel.noteState }
 

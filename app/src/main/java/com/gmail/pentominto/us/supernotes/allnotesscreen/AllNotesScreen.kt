@@ -30,7 +30,7 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
-    onClick : (Long?) -> Unit,
+    onClick : (Long) -> Unit,
 
 ) {
 
@@ -149,7 +149,7 @@ fun AllNotesScreen(
 
             ExtendedFloatingActionButton(
                 text = { Text(text = "NEW NOTE") },
-                onClick = { onClick(0)
+                onClick = { onClick(0L)
                           },
                 backgroundColor = Pine,
                 icon = {
