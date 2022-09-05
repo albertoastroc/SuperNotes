@@ -31,6 +31,8 @@ fun NoteEditScreen(
 
     if (noteId != 0L) {
         viewModel.getNote(noteId)
+    } else {
+        viewModel.insertNewNote()
     }
 
     val noteState = remember { viewModel.noteState }
@@ -87,8 +89,6 @@ fun NoteEditScreen(
                                 .clickable(
                                     interactionSource = NoRippleInteractionSource(),
                                     onClick = {
-
-                                        noteId?.let { viewModel.updateNote(it) }
                                     },
                                     indication = null
                                 ),

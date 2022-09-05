@@ -15,14 +15,14 @@ class AllNotesViewModel @Inject constructor(
     val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    val notesList  : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val notesList : MutableState<List<Note>> = mutableStateOf(emptyList())
 
-       fun getNotes() = viewModelScope.launch {
+    fun getNotes() = viewModelScope.launch {
 
-           databaseDao.getAllNotes().collect() {
-               notesList.value = it
-           }
-       }
+        databaseDao.getAllNotes().collect() {
+            notesList.value = it
+        }
+    }
 
     init {
         getNotes()

@@ -12,7 +12,10 @@ import kotlinx.coroutines.flow.Flow
 interface DatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note : Note)
+    suspend fun insertNote(note : Note) : Long
+
+    @Query("UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody WHERE note_db_id = :noteId")
+    suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Long)
 
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
     fun getNote(id : Long) : Flow<Note>

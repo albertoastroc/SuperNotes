@@ -19,7 +19,12 @@ class NoteEditScreenViewModel @Inject constructor(
 
     private var inputJob : Job? = null
 
-    private val _noteState : MutableState<Note> = mutableStateOf(Note("", ""))
+    private val _noteState : MutableState<Note> = mutableStateOf(
+        Note(
+            "",
+            ""
+        )
+    )
     val noteState : State<Note> = _noteState
 
     fun getNote(noteId : Long) {
@@ -32,21 +37,34 @@ class NoteEditScreenViewModel @Inject constructor(
             }
 
         }
+    }
 
+    fun insertNewNote()  {
+
+
+        viewModelScope.launch {
+
+            var newNoteId = 0L
+            newNoteId = databaseDao.insertNote(
+                Note(
+                    "",
+                    ""
+                )
+            )
+            getNote(newNoteId)
+        }
     }
 
     fun updateNote(id : Long) {
 
         viewModelScope.launch {
-            databaseDao.insertNote(
-                Note(
-                    noteTitle = _noteState.value.noteTitle,
-                    noteBody = _noteState.value.noteBody,
-                    noteId = id
-                )
+            databaseDao.updateNote(
+                noteTitle = _noteState.value.noteTitle,
+                noteBody = _noteState.value.noteBody,
+                noteId = id
+
             )
         }
-
     }
 
     fun onTitleInputChange(newInput : String) {
@@ -58,6 +76,7 @@ class NoteEditScreenViewModel @Inject constructor(
                 noteTitle = newInput
             )
         }
+        updateNote(noteState.value.noteId)
     }
 
     fun onBodyInputChange(newInput : String) {
@@ -69,6 +88,6 @@ class NoteEditScreenViewModel @Inject constructor(
                 noteBody = newInput
             )
         }
+        updateNote(noteState.value.noteId)
     }
-
 }

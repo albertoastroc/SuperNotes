@@ -149,7 +149,8 @@ fun AllNotesScreen(
 
             ExtendedFloatingActionButton(
                 text = { Text(text = "NEW NOTE") },
-                onClick = { onClick(0L)
+                onClick = {
+                    onClick(0L)
                           },
                 backgroundColor = Pine,
                 icon = {
