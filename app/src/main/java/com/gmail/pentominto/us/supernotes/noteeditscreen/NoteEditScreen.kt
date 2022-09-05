@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -11,6 +12,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -41,14 +43,14 @@ fun NoteEditScreen(
 
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
 
-    DisposableEffect(lifeCycleOwner){
+    DisposableEffect(lifeCycleOwner) {
 
         val observer = LifecycleEventObserver { source, event ->
 
             when (event) {
 
-                Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_STOP -> viewModel.updateNote(noteId)
-                else -> {
+                Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_STOP -> viewModel.updateNote()
+                else                                              -> {
                     //Nothing
                 }
             }
@@ -181,8 +183,7 @@ fun NoteEditScreen(
 
                         Card(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .imePadding(),
+                                .fillMaxWidth(),
                             elevation = 0.dp,
                             shape = RoundedCornerShape(2.dp),
                             backgroundColor = LighterWalnutBrown
@@ -191,8 +192,29 @@ fun NoteEditScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(4.dp),
-                                horizontalArrangement = Arrangement.End
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
+
+                                Row(
+                                    modifier = Modifier.heightIn()
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(start = 8.dp)
+                                            .clip(CircleShape)
+                                            .background(Color.LightGray)
+                                            .clickable {  }
+                                    ) {
+
+                                        Text(
+                                            text = "Other",
+                                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                                        )
+
+                                    }
+                                }
+
 
                                 Column(
                                     horizontalAlignment = Alignment.End,
@@ -210,12 +232,10 @@ fun NoteEditScreen(
                                 }
                             }
                         }
-
-                    } else -> {
-
+                    }
+                    else                               -> {
                     }
                 }
-
 
             }
         }
