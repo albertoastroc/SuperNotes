@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
@@ -33,6 +37,29 @@ fun NoteEditScreen(
         viewModel.getNote(noteId)
     } else {
         viewModel.insertNewNote()
+    }
+
+    val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
+
+    DisposableEffect(lifeCycleOwner){
+
+        val observer = LifecycleEventObserver { source, event ->
+
+            when (event) {
+
+                Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_STOP -> viewModel.updateNote(noteId)
+                else -> {
+                    //Nothing
+                }
+            }
+
+        }
+
+        lifeCycleOwner.addObserver(observer)
+
+        onDispose {
+            lifeCycleOwner.removeObserver(observer)
+        }
     }
 
     val noteState = remember { viewModel.noteState }

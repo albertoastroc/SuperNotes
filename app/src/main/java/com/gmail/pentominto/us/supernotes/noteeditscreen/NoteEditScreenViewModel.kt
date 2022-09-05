@@ -76,7 +76,6 @@ class NoteEditScreenViewModel @Inject constructor(
                 noteTitle = newInput
             )
         }
-        updateNote(noteState.value.noteId)
     }
 
     fun onBodyInputChange(newInput : String) {
@@ -88,6 +87,5 @@ class NoteEditScreenViewModel @Inject constructor(
                 noteBody = newInput
             )
         }
-        updateNote(noteState.value.noteId)
     }
 }
