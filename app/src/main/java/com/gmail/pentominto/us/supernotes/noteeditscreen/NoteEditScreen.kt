@@ -1,15 +1,14 @@
 package com.gmail.pentominto.us
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,7 +27,9 @@ import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteEditScreen(
     noteId : Long,
@@ -68,11 +69,20 @@ fun NoteEditScreen(
 
     val configuration = LocalConfiguration.current
 
+    val scope = rememberCoroutineScope()
+
+    val scaffoldState = rememberScaffoldState()
+
+    val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
+
+    var isExpanded = remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = Modifier
             .background(Powder)
             .fillMaxSize()
             .padding(16.dp),
+        scaffoldState = scaffoldState,
         content =
         { padding ->
 
@@ -204,12 +214,26 @@ fun NoteEditScreen(
                                             .padding(start = 8.dp)
                                             .clip(CircleShape)
                                             .background(Color.LightGray)
-                                            .clickable {  }
+                                            .clickable {
+
+                                                scope.launch {
+
+                                                    isExpanded.value = ! isExpanded.value
+                                                    bottomDrawerState.open()
+
+                                                }
+
+                                            }
                                     ) {
 
                                         Text(
                                             text = "Other",
-                                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+                                            modifier = Modifier.padding(
+                                                top = 4.dp,
+                                                bottom = 4.dp,
+                                                start = 8.dp,
+                                                end = 8.dp
+                                            )
                                         )
 
                                     }
@@ -231,13 +255,46 @@ fun NoteEditScreen(
                                     )
                                 }
                             }
+
+                            AnimatedVisibility(
+                                visible = isExpanded.value,
+                            ) {
+
+                                BottomDrawer(
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .background(Color.Red)
+                                    //maybe make a swipeable box instead of this bs
+                                    ,
+                                    drawerState = bottomDrawerState,
+                                    content = {
+                                        Text(text = "yo")
+                                    },
+                                    gesturesEnabled = true,
+                                    drawerContent = {
+                                        Text(text = "To")
+                                    })
+
+                            }
+
                         }
                     }
                     else                               -> {
                     }
                 }
-
             }
+
         }
     )
 }
+
+//AnimatedVisibility(visible = isExpanded.value) {
+//
+//    BottomDrawer(
+//        modifier = Modifier.height(200.dp),
+//        drawerState = bottomDrawerState,
+//        drawerContent = {
+//            Text(text = "yo")
+//        }) {
+//    }
+//}
