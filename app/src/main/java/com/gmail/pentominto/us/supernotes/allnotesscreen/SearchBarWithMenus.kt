@@ -31,7 +31,12 @@ fun SearchBarWithMenu(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
+            .padding(
+                start = 16.dp,
+                top = 16.dp,
+                end = 16.dp,
+                bottom = 8.dp
+            )
             .clip(CircleShape)
             .background(searchBarBackGroundColor),
 
@@ -54,13 +59,11 @@ fun SearchBarWithMenu(
 
                                 scaffoldState.drawerState.open()
                             }
-
                         },
                         indication = null
                     ),
                 contentDescription = null,
             )
-
 
             TextField(
                 modifier = Modifier.weight(1f),
@@ -99,7 +102,10 @@ fun SearchBarWithMenu(
 
                 DropdownMenu(
                     expanded = menuExpanded.value,
-                    offset = DpOffset(x =  0.dp, y = 8.dp),
+                    offset = DpOffset(
+                        x = 0.dp,
+                        y = 8.dp
+                    ),
                     onDismissRequest = { menuExpanded.value = false }) {
 
                     DropdownMenuItem(onClick = { /*TODO*/ }) {
@@ -113,11 +119,7 @@ fun SearchBarWithMenu(
                         Text(text = "Item 3")
                     }
                 }
-
             }
-
-
         }
     }
-
 }

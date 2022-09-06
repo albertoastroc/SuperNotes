@@ -1,10 +1,12 @@
 package com.gmail.pentominto.us
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -26,6 +28,7 @@ import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
+import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 import kotlinx.coroutines.launch
 
@@ -42,11 +45,43 @@ fun NoteEditScreen(
         viewModel.insertNewNote()
     }
 
+    val categories = mutableListOf(
+        "movies",
+        "music",
+        "shopping food",
+        "passwords",
+        "classes",
+        "movies",
+        "music",
+        "shopping food",
+        "passwords",
+        "classes",
+        "movies",
+        "music",
+        "shopping food",
+        "passwords",
+        "classes"
+    )
+
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
+
+    val noteState = remember { viewModel.noteState }
+
+    val configuration = LocalConfiguration.current
+
+    val scope = rememberCoroutineScope()
+
+    val bottomDrawerState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomDrawerState)
+
+    val dialogState = remember { mutableStateOf(false) }
+
+    val dialogText = remember { mutableStateOf("") }
 
     DisposableEffect(lifeCycleOwner) {
 
-        val observer = LifecycleEventObserver { source, event ->
+        val observer = LifecycleEventObserver { _, event ->
 
             when (event) {
 
@@ -55,7 +90,6 @@ fun NoteEditScreen(
                     //Nothing
                 }
             }
-
         }
 
         lifeCycleOwner.addObserver(observer)
@@ -65,26 +99,19 @@ fun NoteEditScreen(
         }
     }
 
-    val noteState = remember { viewModel.noteState }
-
-    val configuration = LocalConfiguration.current
-
-    val scope = rememberCoroutineScope()
-
-    val scaffoldState = rememberScaffoldState()
-
-    val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
-
-    var isExpanded = remember { mutableStateOf(false) }
-
-    Scaffold(
+    BottomSheetScaffold(
         modifier = Modifier
             .background(Powder)
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(
+                top = 16.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
         scaffoldState = scaffoldState,
-        content =
-        { padding ->
+        sheetGesturesEnabled = false,
+        sheetPeekHeight = 0.dp,
+        content = { padding ->
 
             Column(
                 modifier = Modifier.padding(padding)
@@ -146,7 +173,6 @@ fun NoteEditScreen(
                             contentDescription = null,
                         )
                     }
-
                 }
 
                 Divider(
@@ -159,7 +185,6 @@ fun NoteEditScreen(
                     elevation = 1.dp,
                     shape = RoundedCornerShape(4.dp),
                     backgroundColor = LighterWalnutBrown
-
                 ) {
 
                     Row() {
@@ -181,13 +206,11 @@ fun NoteEditScreen(
                             )
                         )
                     }
-
                 }
 
                 Divider(
                     color = BrownBark
                 )
-
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> {
 
@@ -198,6 +221,7 @@ fun NoteEditScreen(
                             shape = RoundedCornerShape(2.dp),
                             backgroundColor = LighterWalnutBrown
                         ) {
+
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -209,6 +233,7 @@ fun NoteEditScreen(
                                 Row(
                                     modifier = Modifier.heightIn()
                                 ) {
+
                                     Box(
                                         modifier = Modifier
                                             .padding(start = 8.dp)
@@ -218,11 +243,8 @@ fun NoteEditScreen(
 
                                                 scope.launch {
 
-                                                    isExpanded.value = ! isExpanded.value
-                                                    bottomDrawerState.open()
-
+                                                    bottomDrawerState.expand()
                                                 }
-
                                             }
                                     ) {
 
@@ -235,10 +257,8 @@ fun NoteEditScreen(
                                                 end = 8.dp
                                             )
                                         )
-
                                     }
                                 }
-
 
                                 Column(
                                     horizontalAlignment = Alignment.End,
@@ -249,34 +269,13 @@ fun NoteEditScreen(
                                         text = "Created : 4/13/22",
                                         fontStyle = FontStyle.Italic
                                     )
+
                                     Text(
                                         text = "Last Modified : 5/1/22",
                                         fontStyle = FontStyle.Italic
                                     )
                                 }
                             }
-
-                            AnimatedVisibility(
-                                visible = isExpanded.value,
-                            ) {
-
-                                BottomDrawer(
-                                    modifier = Modifier
-                                        .height(200.dp)
-                                        .background(Color.Red)
-                                    //maybe make a swipeable box instead of this bs
-                                    ,
-                                    drawerState = bottomDrawerState,
-                                    content = {
-                                        Text(text = "yo")
-                                    },
-                                    gesturesEnabled = true,
-                                    drawerContent = {
-                                        Text(text = "To")
-                                    })
-
-                            }
-
                         }
                     }
                     else                               -> {
@@ -284,17 +283,103 @@ fun NoteEditScreen(
                 }
             }
 
+        },
+        sheetContent = {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = "Add to...",
+                    modifier = Modifier.padding(8.dp)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            dialogState.value = true
+                        }
+
+                ){
+
+                if (dialogState.value) {
+
+                    CategoryAlertDialog(dialogState = dialogState)
+                }
+
+                    Row(
+                        modifier = Modifier
+                            .background(LimishGreen)
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+
+                        Text(
+                            text = "Add new category",
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                            contentDescription = null,
+                        )
+                    }
+
+                }
+            }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+
+                items(categories) { item ->
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = item,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                        Checkbox(
+                            checked = true,
+                            onCheckedChange = {
+
+                            }
+                        )
+                    }
+                }
+            }
         }
     )
 }
 
-//AnimatedVisibility(visible = isExpanded.value) {
-//
-//    BottomDrawer(
-//        modifier = Modifier.height(200.dp),
-//        drawerState = bottomDrawerState,
-//        drawerContent = {
-//            Text(text = "yo")
-//        }) {
-//    }
-//}
+@Composable
+fun CategoryAlertDialog(
+    dialogState : MutableState<Boolean>
+) {
+
+    if (dialogState.value) {
+        AlertDialog(
+            onDismissRequest = {
+                dialogState.value = false },
+            title = {
+                Text(text = "New Category")
+            },
+            text = {
+            },
+            buttons = {
+                Text(text = "A button")
+            }
+        )
+    }
+
+}
