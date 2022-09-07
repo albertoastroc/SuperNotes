@@ -26,6 +26,9 @@ interface DatabaseDao {
     @Query("SELECT * FROM note_table")
     fun getAllNotes() : Flow<List<Note>>
 
+    @Query("SELECT * FROM category_table")
+    fun getAllCategories() : Flow<List<Category>>
+
 }
 
 

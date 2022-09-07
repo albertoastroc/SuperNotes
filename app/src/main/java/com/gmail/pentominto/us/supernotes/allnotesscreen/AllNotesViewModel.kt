@@ -1,6 +1,7 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,12 +16,13 @@ class AllNotesViewModel @Inject constructor(
     val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    val notesList : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val _notesList : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val notesList : State<List<Note>> = _notesList
 
     fun getNotes() = viewModelScope.launch {
 
         databaseDao.getAllNotes().collect() {
-            notesList.value = it
+            _notesList.value = it
         }
     }
 

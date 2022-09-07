@@ -11,9 +11,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -23,7 +23,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
-import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
@@ -33,13 +32,6 @@ fun AllNotesScreen(
     onClick : (Long) -> Unit,
 
 ) {
-
-    val searchBarBackGroundColor = LimishGreen
-    val scope = rememberCoroutineScope()
-
-
-
-//    val groupedNotes = notesList.groupBy { it.category }.toSortedMap()
 
     val categoriesList = listOf(
         "Work",
@@ -56,7 +48,7 @@ fun AllNotesScreen(
 
     val scaffoldState = rememberScaffoldState()
 
-    val notesState = viewModel.notesList
+    val notesState by remember { viewModel.notesList }
 
     Scaffold(
         modifier = Modifier
@@ -134,7 +126,10 @@ fun AllNotesScreen(
             LazyColumn(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                    items(notesState.value) { note ->
+                    items(
+                        items = notesState,
+                        key = { it.noteId }
+                    ) { note ->
 
                         NoteItem(
                             noteTitle = note.noteTitle,

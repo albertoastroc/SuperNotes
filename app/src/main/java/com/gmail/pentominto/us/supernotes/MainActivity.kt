@@ -1,3 +1,5 @@
+
+
 package com.gmail.pentominto.us.supernotes
 
 import android.os.Bundle
@@ -43,17 +45,17 @@ fun SuperNotesApp() {
 
     val navController = rememberNavController()
 
-    NavHost(
+   NavHost(
         navController = navController,
-        startDestination = "allNotes"
-    ) {
+        startDestination = "allNotes",
 
-        composable("allNotes") {
+    ) {
+        composable(
+            "allNotes"
+        ) {
 
             AllNotesScreen { noteId ->
-
                 navController.navigate("noteEdit/${noteId}")
-
             }
         }
 
@@ -61,7 +63,8 @@ fun SuperNotesApp() {
             "noteEdit/{noteId}",
             arguments = listOf(
                 navArgument("noteId") {
-                    type = NavType.LongType }
+                    type = NavType.LongType
+                }
             ),
         ) {
 
@@ -71,7 +74,6 @@ fun SuperNotesApp() {
             if (noteId != null) {
                 NoteEditScreen(noteId = noteId)
             }
-
         }
     }
 }

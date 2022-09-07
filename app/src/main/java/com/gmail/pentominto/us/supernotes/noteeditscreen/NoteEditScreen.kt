@@ -45,22 +45,11 @@ fun NoteEditScreen(
         viewModel.insertNewNote()
     }
 
-    val categories = mutableListOf(
-        "movies",
-        "music",
-        "shopping food",
-        "passwords",
-        "classes",
-        "movies",
-        "music",
-        "shopping food",
-        "passwords",
-        "classes",
-    )
-
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
 
     val noteState = remember { viewModel.noteState }
+
+    val categories = remember { viewModel.categories }
 
     val configuration = LocalConfiguration.current
 
@@ -283,65 +272,67 @@ fun NoteEditScreen(
         },
         sheetContent = {
 
-            Column(
-                modifier = Modifier.heightIn(max = 400.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Text(
-                        text = "Add to...",
-                        modifier = Modifier.padding(8.dp)
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable {
-                                dialogState.value = true
-                            }
-
-                    ) {
-
-                        if (dialogState.value) {
-
-                            CategoryAlertDialog(dialogState = dialogState)
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .background(LimishGreen)
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-
-                            Text(
-                                text = "Add new category",
-                                modifier = Modifier.padding(end = 8.dp, start = 8.dp)
-                            )
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                }
-
-                Divider(modifier = Modifier
-                    .height(1.dp)
-                )
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .heightIn(max = 400.dp),
                 ) {
+                    item() {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
 
-                    items(categories) { item ->
+                            Text(
+                                text = "Add to...",
+                                modifier = Modifier.padding(8.dp)
+                            )
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable {
+                                        dialogState.value = true
+                                    }
+
+                            ) {
+
+                                if (dialogState.value) {
+
+                                    CategoryAlertDialog(dialogState = dialogState)
+                                }
+
+                                Row(
+                                    modifier = Modifier
+                                        .background(LimishGreen)
+                                        .padding(8.dp),
+                                    horizontalArrangement = Arrangement.End,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+
+                                    Text(
+                                        text = "Add new category",
+                                        modifier = Modifier.padding(end = 8.dp, start = 8.dp)
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                                        contentDescription = null,
+                                    )
+                                }
+                            }
+                        }
+
+                        Divider(modifier = Modifier
+                            .height(1.dp)
+                        )
+                    }
+
+                    items(
+                        items = categories.value,
+                        key = { it.categoryId }
+                    ) { item ->
 
                         Row(
                             modifier = Modifier
@@ -349,7 +340,7 @@ fun NoteEditScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = item,
+                                text = item.categoryTitle,
                                 modifier = Modifier.padding(top = 8.dp, start = 16.dp, bottom = 8.dp)
                             )
 
@@ -384,7 +375,6 @@ fun NoteEditScreen(
                         }
                     }
                 }
-            }
         }
     )
 }
