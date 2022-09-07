@@ -233,7 +233,7 @@ fun NoteEditScreen(
 
                                     Box(
                                         modifier = Modifier
-                                            .padding(start = 8.dp)
+                                            .padding(start = 4.dp)
                                             .clip(CircleShape)
                                             .background(Color.LightGray)
                                             .clickable {
@@ -248,10 +248,10 @@ fun NoteEditScreen(
                                         Text(
                                             text = "Other",
                                             modifier = Modifier.padding(
-                                                top = 4.dp,
-                                                bottom = 4.dp,
-                                                start = 8.dp,
-                                                end = 8.dp
+                                                top = 8.dp,
+                                                bottom = 8.dp,
+                                                start = 12.dp,
+                                                end = 12.dp
                                             )
                                         )
                                     }
