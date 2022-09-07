@@ -56,11 +56,6 @@ fun NoteEditScreen(
         "shopping food",
         "passwords",
         "classes",
-        "movies",
-        "music",
-        "shopping food",
-        "passwords",
-        "classes"
     )
 
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
@@ -78,6 +73,8 @@ fun NoteEditScreen(
     val dialogState = remember { mutableStateOf(false) }
 
     val dialogText = remember { mutableStateOf("") }
+
+    val checkboxState = remember { mutableStateOf(false) }
 
     DisposableEffect(lifeCycleOwner) {
 
@@ -109,7 +106,7 @@ fun NoteEditScreen(
                 end = 16.dp
             ),
         scaffoldState = scaffoldState,
-        sheetGesturesEnabled = false,
+        sheetGesturesEnabled = true,
         sheetPeekHeight = 0.dp,
         content = { padding ->
 
@@ -286,75 +283,104 @@ fun NoteEditScreen(
         },
         sheetContent = {
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier.heightIn(max = 400.dp)
             ) {
-
-                Text(
-                    text = "Add to...",
-                    modifier = Modifier.padding(8.dp)
-                )
-
-                Box(
+                Row(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable {
-                            dialogState.value = true
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Text(
+                        text = "Add to...",
+                        modifier = Modifier.padding(8.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable {
+                                dialogState.value = true
+                            }
+
+                    ) {
+
+                        if (dialogState.value) {
+
+                            CategoryAlertDialog(dialogState = dialogState)
                         }
 
-                ){
+                        Row(
+                            modifier = Modifier
+                                .background(LimishGreen)
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.End
+                        ) {
 
-                if (dialogState.value) {
-
-                    CategoryAlertDialog(dialogState = dialogState)
-                }
-
-                    Row(
-                        modifier = Modifier
-                            .background(LimishGreen)
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-
-                        Text(
-                            text = "Add new category",
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                            contentDescription = null,
-                        )
+                            Text(
+                                text = "Add new category",
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                                contentDescription = null,
+                            )
+                        }
                     }
-
                 }
-            }
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
+                Divider(modifier = Modifier
+                    .height(1.dp)
+                )
 
-                items(categories) { item ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = item,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                        Checkbox(
-                            checked = true,
-                            onCheckedChange = {
+                    items(categories) { item ->
 
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = item,
+                                modifier = Modifier.padding(top = 8.dp, start = 16.dp, bottom = 8.dp)
+                            )
+
+                            Row(
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Icon(
+                                    painterResource(id = R.drawable.ic_baseline_delete_24),
+                                    modifier = Modifier
+                                        .padding(end = 16.dp)
+                                        .clickable(
+                                            interactionSource = NoRippleInteractionSource(),
+                                            onClick = {
+                                            },
+                                            indication = null
+                                        ),
+                                    contentDescription = null,
+                                )
+
+                                Checkbox(
+                                    checked = checkboxState.value,
+                                    modifier = Modifier.padding(end = 8.dp),
+                                    onCheckedChange = {
+                                        checkboxState.value = it
+                                    }
+                                )
                             }
-                        )
+
+
+                        }
                     }
                 }
             }
@@ -370,7 +396,8 @@ fun CategoryAlertDialog(
     if (dialogState.value) {
         AlertDialog(
             onDismissRequest = {
-                dialogState.value = false },
+                dialogState.value = false
+            },
             title = {
                 Text(text = "New Category")
             },
@@ -381,5 +408,4 @@ fun CategoryAlertDialog(
             }
         )
     }
-
 }
