@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,11 @@ class AllNotesViewModel @Inject constructor(
     val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    val _notesList : MutableState<List<Note>> = mutableStateOf(emptyList())
+    private val _notesList : MutableState<List<Note>> = mutableStateOf(emptyList())
     val notesList : State<List<Note>> = _notesList
+
+    private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
+    val categories : State<List<Category>> = _categories
 
     fun getNotes() = viewModelScope.launch {
 
@@ -26,7 +30,17 @@ class AllNotesViewModel @Inject constructor(
         }
     }
 
+    fun getCategories() = viewModelScope.launch {
+
+        databaseDao.getAllCategories().collect() {
+
+            _categories.value = it
+        }
+
+    }
+
     init {
         getNotes()
+        getCategories()
     }
 }

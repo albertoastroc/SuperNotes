@@ -48,10 +48,9 @@ class NoteEditScreenViewModel @Inject constructor(
             }
 
         }
-
     }
 
-    fun insertNewNote()  {
+    fun insertNewNote() {
 
         viewModelScope.launch {
 
@@ -81,14 +80,15 @@ class NoteEditScreenViewModel @Inject constructor(
 
     fun onTitleInputChange(newInput : String) {
 
-            _noteState.value = _noteState.value.copy(
-                noteTitle = newInput
-            )
+        _noteState.value = _noteState.value.copy(
+            noteTitle = newInput
+        )
     }
 
     fun onBodyInputChange(newInput : String) {
 
-            _noteState.value = _noteState.value.copy(
-                noteBody = newInput)
+        _noteState.value = _noteState.value.copy(
+            noteBody = newInput
+        )
     }
 }

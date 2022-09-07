@@ -15,12 +15,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 
 @Composable
 fun Drawer(
     drawerOptionsList : List<MenuItem>,
-    categoriesList : List<String>,
+    categoriesList : List<Category>,
     onSettingClick : (MenuItem) -> Unit,
     onCategoryClick : (String) -> Unit,
     itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
@@ -78,7 +79,7 @@ fun Drawer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        onCategoryClick(category)
+
                     }
                     .padding(16.dp)
             ) {
@@ -90,7 +91,7 @@ fun Drawer(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = category,
+                    text = category.categoryTitle,
                     modifier = Modifier.weight(1f),
                     style = itemTextStyle
                 )

@@ -272,109 +272,116 @@ fun NoteEditScreen(
         },
         sheetContent = {
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 400.dp),
-                ) {
-                    item() {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 400.dp),
+            ) {
+                item() {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
-                            Text(
-                                text = "Add to...",
-                                modifier = Modifier.padding(8.dp)
-                            )
-
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .clickable {
-                                        dialogState.value = true
-                                    }
-
-                            ) {
-
-                                if (dialogState.value) {
-
-                                    CategoryAlertDialog(dialogState = dialogState)
-                                }
-
-                                Row(
-                                    modifier = Modifier
-                                        .background(LimishGreen)
-                                        .padding(8.dp),
-                                    horizontalArrangement = Arrangement.End,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-
-                                    Text(
-                                        text = "Add new category",
-                                        modifier = Modifier.padding(end = 8.dp, start = 8.dp)
-                                    )
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                                        contentDescription = null,
-                                    )
-                                }
-                            }
-                        }
-
-                        Divider(modifier = Modifier
-                            .height(1.dp)
+                        Text(
+                            text = "Add to...",
+                            modifier = Modifier.padding(8.dp)
                         )
-                    }
 
-                    items(
-                        items = categories.value,
-                        key = { it.categoryId }
-                    ) { item ->
-
-                        Row(
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable {
+                                    dialogState.value = true
+                                }
+
                         ) {
-                            Text(
-                                text = item.categoryTitle,
-                                modifier = Modifier.padding(top = 8.dp, start = 16.dp, bottom = 8.dp)
-                            )
+
+                            if (dialogState.value) {
+
+                                CategoryAlertDialog(dialogState = dialogState)
+                            }
 
                             Row(
+                                modifier = Modifier
+                                    .background(LimishGreen)
+                                    .padding(8.dp),
                                 horizontalArrangement = Arrangement.End,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 
-                                Icon(
-                                    painterResource(id = R.drawable.ic_baseline_delete_24),
-                                    modifier = Modifier
-                                        .padding(end = 16.dp)
-                                        .clickable(
-                                            interactionSource = NoRippleInteractionSource(),
-                                            onClick = {
-                                            },
-                                            indication = null
-                                        ),
+                                Text(
+                                    text = "Add new category",
+                                    modifier = Modifier.padding(
+                                        end = 8.dp,
+                                        start = 8.dp
+                                    )
+                                )
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_baseline_add_24),
                                     contentDescription = null,
                                 )
-
-                                Checkbox(
-                                    checked = checkboxState.value,
-                                    modifier = Modifier.padding(end = 8.dp),
-                                    onCheckedChange = {
-                                        checkboxState.value = it
-                                    }
-                                )
                             }
-
-
                         }
                     }
+
+                    Divider(
+                        modifier = Modifier
+                            .height(1.dp)
+                    )
                 }
+
+                items(
+                    items = categories.value,
+                    key = { it.categoryId }
+                ) { item ->
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = item.categoryTitle,
+                            modifier = Modifier.padding(
+                                top = 8.dp,
+                                start = 16.dp,
+                                bottom = 8.dp
+                            )
+                        )
+
+                        Row(
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Icon(
+                                painterResource(id = R.drawable.ic_baseline_delete_24),
+                                modifier = Modifier
+                                    .padding(end = 16.dp)
+                                    .clickable(
+                                        interactionSource = NoRippleInteractionSource(),
+                                        onClick = {
+                                        },
+                                        indication = null
+                                    ),
+                                contentDescription = null,
+                            )
+
+                            Checkbox(
+                                checked = checkboxState.value,
+                                modifier = Modifier.padding(end = 8.dp),
+                                onCheckedChange = {
+                                    checkboxState.value = it
+                                }
+                            )
+                        }
+
+                    }
+                }
+            }
         }
     )
 }

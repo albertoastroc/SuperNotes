@@ -10,10 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,24 +28,22 @@ fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
     onClick : (Long) -> Unit,
 
-) {
-
-    val categoriesList = listOf(
-        "Work",
-        "School",
-        "Shows",
-        "Music",
-        "YT",
-        "Schedule",
-        "Ice Cream",
-        "Cheese-steak places"
-    )
+    ) {
 
     var state = remember { mutableStateOf("") }
 
     val scaffoldState = rememberScaffoldState()
 
     val notesState by remember { viewModel.notesList }
+
+    val categories by remember { viewModel.categories }
+
+    LaunchedEffect(
+        key1 = viewModel.notesList,
+        block = {
+            viewModel.getNotes()
+        }
+    )
 
     Scaffold(
         modifier = Modifier
@@ -88,7 +83,7 @@ fun AllNotesScreen(
                     ),
 
                     ),
-                categoriesList = categoriesList,
+                categoriesList = categories,
                 onSettingClick = {},
                 onCategoryClick = {}
             )
@@ -126,18 +121,18 @@ fun AllNotesScreen(
             LazyColumn(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                    items(
-                        items = notesState,
-                        key = { it.noteId }
-                    ) { note ->
+                items(
+                    items = notesState,
+                    key = { it.noteId }
+                ) { note ->
 
-                        NoteItem(
-                            noteTitle = note.noteTitle,
-                            modifier = Modifier.clickable {
-                                onClick(note.noteId)
-                            }
-                        )
-                    }
+                    NoteItem(
+                        noteTitle = note.noteTitle,
+                        modifier = Modifier.clickable {
+                            onClick(note.noteId)
+                        }
+                    )
+                }
             }
         },
         floatingActionButton = {
@@ -146,7 +141,7 @@ fun AllNotesScreen(
                 text = { Text(text = "NEW NOTE") },
                 onClick = {
                     onClick(0L)
-                          },
+                },
                 backgroundColor = Pine,
                 icon = {
                     Icon(
