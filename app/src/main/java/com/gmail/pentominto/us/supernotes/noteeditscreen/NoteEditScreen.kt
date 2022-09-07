@@ -316,12 +316,13 @@ fun NoteEditScreen(
                             modifier = Modifier
                                 .background(LimishGreen)
                                 .padding(8.dp),
-                            horizontalArrangement = Arrangement.End
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
 
                             Text(
                                 text = "Add new category",
-                                modifier = Modifier.padding(end = 8.dp)
+                                modifier = Modifier.padding(end = 8.dp, start = 8.dp)
                             )
                             Image(
                                 painter = painterResource(id = R.drawable.ic_baseline_add_24),

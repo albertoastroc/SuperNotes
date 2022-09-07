@@ -89,4 +89,6 @@ fun SuperNotesApp() {
  *
  * select notes delete
  *
+ * if the focus is on the note body or title while categories are active, close categories
+ *
  */
