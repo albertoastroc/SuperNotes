@@ -93,4 +93,8 @@ fun SuperNotesApp() {
  *
  * if the focus is on the note body or title while categories are active, close categories
  *
+ * reuse categories list as a composable, see what composables i can reuse and use logging
+ * try using weight instead of extra containers
+ * use by to not have to use .value
+ *
  */

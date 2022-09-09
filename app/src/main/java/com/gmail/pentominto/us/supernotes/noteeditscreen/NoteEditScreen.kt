@@ -71,8 +71,10 @@ fun NoteEditScreen(
 
             when (event) {
 
-                Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_STOP -> viewModel.updateNote()
-                else                                              -> {
+                Lifecycle.Event.ON_PAUSE,
+                Lifecycle.Event.ON_STOP,
+                Lifecycle.Event.ON_DESTROY -> viewModel.updateNote()
+                else                       -> {
                     //Nothing
                 }
             }
@@ -97,14 +99,14 @@ fun NoteEditScreen(
         scaffoldState = scaffoldState,
         sheetGesturesEnabled = true,
         sheetPeekHeight = 0.dp,
-        content = { padding ->
+        content = {
 
             Column(
-                modifier = Modifier.padding(padding)
+                modifier = Modifier.fillMaxWidth()
             ) {
 
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier,
                     shape = RoundedCornerShape(4.dp),
                     elevation = 1.dp
                 ) {
@@ -112,7 +114,7 @@ fun NoteEditScreen(
                     Row(
                         modifier = Modifier
                             .background(LighterWalnutBrown)
-                            .fillMaxWidth(),
+                            .weight(1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextField(
@@ -173,26 +175,25 @@ fun NoteEditScreen(
                     backgroundColor = LighterWalnutBrown
                 ) {
 
-                    Row() {
-                        TextField(
-                            value = noteState.value.noteBody,
-                            placeholder = { Text(text = "Enter Text...") },
-                            onValueChange = { viewModel.onBodyInputChange(it) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = Color.Transparent
-                                ),
-                            colors = TextFieldDefaults.textFieldColors(
-                                disabledTextColor = Color.Transparent,
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
-                            )
+                    TextField(
+                        value = noteState.value.noteBody,
+                        placeholder = { Text(text = "Enter Text...") },
+                        onValueChange = { viewModel.onBodyInputChange(it) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color.Transparent
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            disabledTextColor = Color.Transparent,
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
                         )
-                    }
+                    )
                 }
+
 
                 Divider(
                     color = BrownBark
@@ -201,8 +202,7 @@ fun NoteEditScreen(
                     Configuration.ORIENTATION_PORTRAIT -> {
 
                         Card(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier,
                             elevation = 0.dp,
                             shape = RoundedCornerShape(2.dp),
                             backgroundColor = LighterWalnutBrown
@@ -210,41 +210,37 @@ fun NoteEditScreen(
 
                             Row(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .weight(1f)
                                     .padding(4.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 
-                                Row(
-                                    modifier = Modifier.heightIn()
+                                Box(
+                                    modifier = Modifier
+                                        .padding(start = 4.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.LightGray)
+                                        .clickable {
+
+                                            scope.launch {
+
+                                                bottomDrawerState.expand()
+                                            }
+                                        }
                                 ) {
 
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(start = 4.dp)
-                                            .clip(CircleShape)
-                                            .background(Color.LightGray)
-                                            .clickable {
-
-                                                scope.launch {
-
-                                                    bottomDrawerState.expand()
-                                                }
-                                            }
-                                    ) {
-
-                                        Text(
-                                            text = "Other",
-                                            modifier = Modifier.padding(
-                                                top = 8.dp,
-                                                bottom = 8.dp,
-                                                start = 12.dp,
-                                                end = 12.dp
-                                            )
+                                    Text(
+                                        text = "Other",
+                                        modifier = Modifier.padding(
+                                            top = 8.dp,
+                                            bottom = 8.dp,
+                                            start = 12.dp,
+                                            end = 12.dp
                                         )
-                                    }
+                                    )
                                 }
+
 
                                 Column(
                                     horizontalAlignment = Alignment.End,
@@ -264,8 +260,7 @@ fun NoteEditScreen(
                             }
                         }
                     }
-                    else                               -> {
-                    }
+                    else                               -> {}
                 }
             }
 
