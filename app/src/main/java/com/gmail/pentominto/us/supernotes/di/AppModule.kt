@@ -24,5 +24,4 @@ object AppModule {
         NoteDatabase::class.java ,
         DATABASE_NAME
     ).build().getNoteDatabaseDao()
-
 }

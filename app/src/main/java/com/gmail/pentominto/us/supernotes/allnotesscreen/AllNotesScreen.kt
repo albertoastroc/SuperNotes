@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
@@ -129,10 +130,9 @@ fun AllNotesScreen(
                 ) { note ->
 
                     NoteItem(
-                        noteTitle = note.noteTitle,
-                        modifier = Modifier.clickable {
-                            onClick(note.noteId)
-                        }
+                        note = note,
+                        modifier = Modifier,
+                        onClick = onClick
                     )
                 }
             }
@@ -160,13 +160,17 @@ fun AllNotesScreen(
 
 @Composable
 fun NoteItem(
-    noteTitle : String,
-    modifier : Modifier
+    note : Note,
+    modifier : Modifier,
+    onClick : (Long) -> Unit
 ) {
 
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .clickable {
+                onClick(note.noteId)
+            }
             .padding(
                 start = 16.dp,
                 end = 16.dp,
@@ -180,7 +184,7 @@ fun NoteItem(
     ) {
 
         Text(
-            text = noteTitle,
+            text = note.noteTitle,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp)
