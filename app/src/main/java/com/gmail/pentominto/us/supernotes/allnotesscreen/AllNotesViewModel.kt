@@ -23,6 +23,14 @@ class AllNotesViewModel @Inject constructor(
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
     val categories : State<List<Category>> = _categories
 
+    private val _searchBarText : MutableState<String> = mutableStateOf("")
+    val searchBarText : State<String> = _searchBarText
+
+    fun onSearchChange(input : String) {
+
+        _searchBarText.value = input
+    }
+
     fun getNotes() = viewModelScope.launch {
 
         databaseDao.getAllNotes().collect() {

@@ -16,7 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.ui.theme.Pine
+import com.gmail.pentominto.us.supernotes.noteeditscreen.CategoriesList
 
 @Composable
 fun Drawer(
@@ -61,46 +61,49 @@ fun Drawer(
         }
 
         item { Divider() }
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Categories",
-                    style = itemTextStyle,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
 
-        items(categoriesList) { category ->
+//        item {
+//            Row(
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(
+//                    text = "Categories",
+//                    style = itemTextStyle,
+//                    modifier = Modifier.padding(16.dp)
+//                )
+//            }
+//        }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-
-                    }
-                    .padding(16.dp)
-            ) {
-
-                Icon(
-                    painterResource(id = R.drawable.ic_baseline_circle_24),
-                    contentDescription = null,
-                    tint = Pine
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = category.categoryTitle,
-                    modifier = Modifier.weight(1f),
-                    style = itemTextStyle
-                )
-
-            }
-
-        }
+//        items(categoriesList) { category ->
+//
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .clickable {
+//
+//                    }
+//                    .padding(16.dp)
+//            ) {
+//
+//                Icon(
+//                    painterResource(id = R.drawable.ic_baseline_circle_24),
+//                    contentDescription = null,
+//                    tint = Pine
+//                )
+//                Spacer(modifier = Modifier.width(16.dp))
+//                Text(
+//                    text = category.categoryTitle,
+//                    modifier = Modifier.weight(1f),
+//                    style = itemTextStyle
+//                )
+//
+//            }
+//
+//        }
 
     }
+
+    CategoriesList(categories = categoriesList)
 }
 
 @Composable

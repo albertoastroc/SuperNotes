@@ -1,12 +1,9 @@
 package com.gmail.pentominto.us
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -25,10 +22,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
+import com.gmail.pentominto.us.supernotes.noteeditscreen.CategoriesList
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
-import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 import kotlinx.coroutines.launch
 
@@ -39,17 +36,21 @@ fun NoteEditScreen(
     viewModel : NoteEditScreenViewModel = hiltViewModel()
 ) {
 
-    if (noteId != 0L) {
-        viewModel.getNote(noteId)
-    } else {
-        viewModel.insertNewNote()
+    LaunchedEffect(
+        key1 = noteId,
+    ) {
+        if (noteId != 0L) {
+            viewModel.getNote(noteId)
+        } else {
+            viewModel.insertNewNote()
+        }
     }
 
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
 
-    val noteState = remember { viewModel.noteState }
+    val noteState by remember { viewModel.note }
 
-    val categories = remember { viewModel.categories }
+    val categories by remember { viewModel.categories }
 
     val configuration = LocalConfiguration.current
 
@@ -59,11 +60,9 @@ fun NoteEditScreen(
 
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomDrawerState)
 
-    val dialogState = remember { mutableStateOf(false) }
+    var dialogState by remember { mutableStateOf(false) }
 
-    val dialogText = remember { mutableStateOf("") }
-
-    val checkboxState = remember { mutableStateOf(false) }
+    var checkboxState by remember { mutableStateOf(false) }
 
     DisposableEffect(lifeCycleOwner) {
 
@@ -118,7 +117,7 @@ fun NoteEditScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextField(
-                            value = noteState.value.noteTitle,
+                            value = noteState.noteTitle,
                             singleLine = true,
                             placeholder = { Text(text = "Enter a Title...") },
                             onValueChange = { viewModel.onTitleInputChange(it) },
@@ -176,7 +175,7 @@ fun NoteEditScreen(
                 ) {
 
                     TextField(
-                        value = noteState.value.noteBody,
+                        value = noteState.noteBody,
                         placeholder = { Text(text = "Enter Text...") },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
@@ -210,26 +209,23 @@ fun NoteEditScreen(
 
                             Row(
                                 modifier = Modifier
-                                    .weight(1f)
+                                    .fillMaxWidth()
                                     .padding(4.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 
-                                Box(
-                                    modifier = Modifier
-                                        .padding(start = 4.dp)
-                                        .clip(CircleShape)
-                                        .background(Color.LightGray)
-                                        .clickable {
+                                Button(
+                                    onClick = {
+                                        scope.launch {
 
-                                            scope.launch {
-
-                                                bottomDrawerState.expand()
-                                            }
+                                            bottomDrawerState.expand()
                                         }
+                                    },
+                                    modifier = Modifier
+                                        .clip(CircleShape),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray)
                                 ) {
-
                                     Text(
                                         text = "Other",
                                         modifier = Modifier.padding(
@@ -240,8 +236,6 @@ fun NoteEditScreen(
                                         )
                                     )
                                 }
-
-
                                 Column(
                                     horizontalAlignment = Alignment.End,
                                     modifier = Modifier
@@ -267,138 +261,9 @@ fun NoteEditScreen(
         },
         sheetContent = {
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 400.dp),
-            ) {
-                item() {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Text(
-                            text = "Add to...",
-                            modifier = Modifier.padding(8.dp)
-                        )
-
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(10.dp))
-                                .clickable {
-                                    dialogState.value = true
-                                }
-
-                        ) {
-
-                            if (dialogState.value) {
-
-                                CategoryAlertDialog(dialogState = dialogState)
-                            }
-
-                            Row(
-                                modifier = Modifier
-                                    .background(LimishGreen)
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.End,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-
-                                Text(
-                                    text = "Add new category",
-                                    modifier = Modifier.padding(
-                                        end = 8.dp,
-                                        start = 8.dp
-                                    )
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                                    contentDescription = null,
-                                )
-                            }
-                        }
-                    }
-
-                    Divider(
-                        modifier = Modifier
-                            .height(1.dp)
-                    )
-                }
-
-                items(
-                    items = categories.value,
-                    key = { it.categoryId }
-                ) { item ->
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = item.categoryTitle,
-                            modifier = Modifier.padding(
-                                top = 8.dp,
-                                start = 16.dp,
-                                bottom = 8.dp
-                            )
-                        )
-
-                        Row(
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-
-                            Icon(
-                                painterResource(id = R.drawable.ic_baseline_delete_24),
-                                modifier = Modifier
-                                    .padding(end = 16.dp)
-                                    .clickable(
-                                        interactionSource = NoRippleInteractionSource(),
-                                        onClick = {
-                                        },
-                                        indication = null
-                                    ),
-                                contentDescription = null,
-                            )
-
-                            Checkbox(
-                                checked = checkboxState.value,
-                                modifier = Modifier.padding(end = 8.dp),
-                                onCheckedChange = {
-                                    checkboxState.value = it
-                                }
-                            )
-                        }
-
-                    }
-                }
-            }
+            CategoriesList(
+                categories = categories
+            )
         }
     )
-}
-
-@Composable
-fun CategoryAlertDialog(
-    dialogState : MutableState<Boolean>
-) {
-
-    if (dialogState.value) {
-        AlertDialog(
-            onDismissRequest = {
-                dialogState.value = false
-            },
-            title = {
-                Text(text = "New Category")
-            },
-            text = {
-            },
-            buttons = {
-                Text(text = "A button")
-            }
-        )
-    }
 }

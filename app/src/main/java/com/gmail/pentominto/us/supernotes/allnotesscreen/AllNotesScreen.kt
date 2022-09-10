@@ -3,6 +3,7 @@ package com.gmail.pentominto.us.supernotes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,16 +28,16 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
     onClick : (Long) -> Unit,
-
     ) {
 
-    var state = remember { mutableStateOf("") }
+    var state by remember { mutableStateOf(viewModel.searchBarText) }
 
     val scaffoldState = rememberScaffoldState()
 
     val notesState by remember { viewModel.notesList }
 
     val categories by remember { viewModel.categories }
+
 
     LaunchedEffect(
         key1 = viewModel.notesList,
@@ -91,8 +92,9 @@ fun AllNotesScreen(
 
         topBar = {
             SearchBarWithMenu(
-                state = state,
-                scaffoldState = scaffoldState
+                input = state.value,
+                scaffoldState = scaffoldState,
+                onInputChange = {viewModel.onSearchChange(state.value)}
             )
 
         },
@@ -164,7 +166,7 @@ fun NoteItem(
 
     Card(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(
                 start = 16.dp,
                 end = 16.dp,
@@ -180,7 +182,7 @@ fun NoteItem(
         Text(
             text = noteTitle,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(20.dp)
                 .background(
                     color = Color.Transparent

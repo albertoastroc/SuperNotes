@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,8 +23,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SearchBarWithMenu(
-    state : MutableState<String>,
-    scaffoldState : ScaffoldState
+    input : String,
+    onInputChange : (String) -> Unit,
+    scaffoldState : ScaffoldState,
 ) {
 
     val searchBarBackGroundColor = LimishGreen
@@ -67,7 +71,7 @@ fun SearchBarWithMenu(
 
             TextField(
                 modifier = Modifier.weight(1f),
-                value = state.value,
+                value = input,
                 colors = TextFieldDefaults.textFieldColors(
                     disabledTextColor = Color.Transparent,
                     backgroundColor = searchBarBackGroundColor,
@@ -81,7 +85,7 @@ fun SearchBarWithMenu(
                         text = "Search Notes..."
                     )
                 },
-                onValueChange = { state.value = it },
+                onValueChange = { onInputChange(it) },
             )
 
             Column() {

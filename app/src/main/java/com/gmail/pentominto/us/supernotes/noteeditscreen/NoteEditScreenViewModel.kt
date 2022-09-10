@@ -14,17 +14,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
-    val databaseDao : DatabaseDao
+    private val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    private val _noteState : MutableState<Note> = mutableStateOf(
+    private val _note : MutableState<Note> = mutableStateOf(
         Note(
             "",
             "",
             ""
         )
     )
-    val noteState : State<Note> = _noteState
+    val note : State<Note> = _note
 
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
 
@@ -36,7 +36,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
             databaseDao.getNote(noteId).collect() {
 
-                _noteState.value = it
+                _note.value = it
             }
         }
 
@@ -70,9 +70,9 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             databaseDao.updateNote(
-                noteTitle = _noteState.value.noteTitle,
-                noteBody = _noteState.value.noteBody,
-                noteId = noteState.value.noteId
+                noteTitle = _note.value.noteTitle,
+                noteBody = _note.value.noteBody,
+                noteId = note.value.noteId
 
             )
         }
@@ -80,14 +80,14 @@ class NoteEditScreenViewModel @Inject constructor(
 
     fun onTitleInputChange(newInput : String) {
 
-        _noteState.value = _noteState.value.copy(
+        _note.value = _note.value.copy(
             noteTitle = newInput
         )
     }
 
     fun onBodyInputChange(newInput : String) {
 
-        _noteState.value = _noteState.value.copy(
+        _note.value = _note.value.copy(
             noteBody = newInput
         )
     }
