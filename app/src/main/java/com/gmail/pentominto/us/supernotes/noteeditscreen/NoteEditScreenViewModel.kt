@@ -17,13 +17,7 @@ class NoteEditScreenViewModel @Inject constructor(
     private val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    private val _note : MutableState<Note> = mutableStateOf(
-        Note(
-            "",
-            "",
-            ""
-        )
-    )
+    private val _note : MutableState<Note> = mutableStateOf(Note())
     val note : State<Note> = _note
 
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
@@ -46,7 +40,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
                 _categories.value = it
             }
-
         }
     }
 
@@ -55,26 +48,27 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             getNote(
-                databaseDao.insertNote(
-                    Note(
-                        "",
-                        "",
-                        ""
-                    )
-                )
+                databaseDao.insertNote(Note())
             )
+        }
+    }
+
+    fun insertCategory(categoryName : String) {
+
+        viewModelScope.launch {
+
+            databaseDao.insertCategory(Category(categoryName))
 
         }
     }
 
-    fun updateNote() {
+    fun updateNoteText() {
 
         viewModelScope.launch {
             databaseDao.updateNote(
-                noteTitle = _note.value.noteTitle,
-                noteBody = _note.value.noteBody,
+                noteTitle = _note.value.noteTitle.toString(),
+                noteBody = _note.value.noteBody.toString(),
                 noteId = note.value.noteId
-
             )
         }
     }

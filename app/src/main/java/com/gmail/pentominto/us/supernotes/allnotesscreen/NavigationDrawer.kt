@@ -16,7 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.noteeditscreen.CategoriesList
+
 
 @Composable
 fun Drawer(
@@ -102,8 +102,6 @@ fun Drawer(
 //        }
 
     }
-
-    CategoriesList(categories = categoriesList)
 }
 
 @Composable

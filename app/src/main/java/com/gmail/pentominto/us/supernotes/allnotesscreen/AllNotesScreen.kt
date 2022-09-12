@@ -133,7 +133,7 @@ fun AllNotesScreen(
         floatingActionButton = {
 
             ExtendedFloatingActionButton(
-                text = { Text(text = "NEW NOTE") },
+                text = { Text(text = "New Note") },
                 onClick = {
                     onClick(0L)
                 },

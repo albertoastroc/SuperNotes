@@ -20,7 +20,7 @@ interface DatabaseDao {
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
     fun getNote(id : Long) : Flow<Note>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category : Category)
 
     @Query("SELECT * FROM note_table")

@@ -1,9 +1,13 @@
 package com.gmail.pentominto.us
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -21,12 +25,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
+import com.gmail.pentominto.us.supernotes.Utility.LogCompositions
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
-import com.gmail.pentominto.us.supernotes.noteeditscreen.CategoriesList
+import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
-import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
-import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
-import com.gmail.pentominto.us.supernotes.ui.theme.Powder
+import com.gmail.pentominto.us.supernotes.ui.theme.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -72,7 +75,7 @@ fun NoteEditScreen(
 
                 Lifecycle.Event.ON_PAUSE,
                 Lifecycle.Event.ON_STOP,
-                Lifecycle.Event.ON_DESTROY -> viewModel.updateNote()
+                Lifecycle.Event.ON_DESTROY -> viewModel.updateNoteText()
                 else                       -> {
                     //Nothing
                 }
@@ -100,8 +103,6 @@ fun NoteEditScreen(
         sheetPeekHeight = 0.dp,
         content = {
 
-
-
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -120,7 +121,7 @@ fun NoteEditScreen(
                     ) {
 
                         TextField(
-                            value = noteState.noteTitle,
+                            value = noteState.noteTitle.toString(),
                             singleLine = true,
                             placeholder = { Text(text = "Enter a Title...") },
                             onValueChange = { viewModel.onTitleInputChange(it) },
@@ -178,7 +179,7 @@ fun NoteEditScreen(
                 ) {
 
                     TextField(
-                        value = noteState.noteBody,
+                        value = noteState.noteBody.toString(),
                         placeholder = { Text(text = "Enter Text...") },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
@@ -195,7 +196,6 @@ fun NoteEditScreen(
                         )
                     )
                 }
-
 
                 Divider(
                     color = BrownBark
@@ -260,13 +260,187 @@ fun NoteEditScreen(
                     else                               -> {}
                 }
             }
-
         },
         sheetContent = {
 
             CategoriesList(
-                categories = categories
+                categories = categories,
+                onClick = { viewModel.insertCategory(it) }
             )
         }
     )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CategoriesList(
+    categories : List<Category>,
+    onClick : (String) -> Unit
+) {
+
+    val openDialog = remember { mutableStateOf(false) }
+
+    val dialogInput = remember { mutableStateOf("") }
+
+    val dialogTitleState = remember { mutableStateOf("") }
+
+    LogCompositions(
+        tag = "TAG",
+        msg = "CategoriesList"
+    )
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 450.dp)
+    ) {
+
+        stickyHeader() {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(BrownBark)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            openDialog.value = true
+                        }
+
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .background(LimishGreen)
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Text(
+                            text = "Add new category",
+                            modifier = Modifier.padding(
+                                end = 8.dp,
+                                start = 8.dp
+                            )
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                            contentDescription = null,
+                        )
+                    }
+                }
+
+                if (openDialog.value) {
+
+                    AlertDialog(
+                        onDismissRequest = { openDialog.value = false },
+                        title = {
+                            Text(
+                                text = dialogTitleState.value
+                            )
+                        },
+                        text = {
+                            TextField(
+                                value = dialogInput.value,
+                                modifier = Modifier.padding(top = 8.dp),
+                                placeholder = { Text(text = "New Category Name...") },
+                                onValueChange = {
+                                    dialogInput.value = it
+                                    dialogTitleState.value = ""
+                                })
+                        },
+                        confirmButton = {
+
+                            Button(
+                                onClick = {
+
+                                    if (dialogInput.value.isNotEmpty()) {
+                                        onClick(dialogInput.value)
+                                        openDialog.value = false
+                                    } else {
+                                        dialogTitleState.value = "Category name is empty"
+                                    }
+
+                                },
+                                modifier = Modifier.width(100.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Pine,
+                                    contentColor = Color.White
+                                )
+                            ) {
+
+                                Text(text = "Add")
+
+                            }
+                        },
+                        dismissButton = {
+                            Button(
+                                onClick = { openDialog.value = false },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Pine,
+                                    contentColor = Color.White
+                                ),
+                                modifier = Modifier.width(100.dp)
+
+                            ) {
+                                Text(text = "Cancel")
+                            }
+                        }
+                    )
+                }
+            }
+
+            Divider(
+                modifier = Modifier
+                    .height(1.dp)
+            )
+        }
+
+        items(
+            items = categories,
+            key = { it.categoryId }
+        ) { item ->
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable{
+
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = item.categoryTitle,
+                    modifier = Modifier.padding(
+                        top = 8.dp,
+                        start = 16.dp,
+                        bottom = 8.dp
+                    )
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Icon(
+                        painterResource(id = R.drawable.ic_baseline_delete_24),
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable(
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = {
+                                },
+                                indication = null
+                            ),
+                        contentDescription = null,
+                    )
+                }
+            }
+        }
+    }
 }

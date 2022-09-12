@@ -41,7 +41,7 @@ fun NoteItem(
     ) {
 
         Text(
-            text = note.noteTitle,
+            text = note.noteTitle.toString(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp)
