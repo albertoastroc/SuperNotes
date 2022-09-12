@@ -100,6 +100,8 @@ fun NoteEditScreen(
         sheetPeekHeight = 0.dp,
         content = {
 
+
+
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -116,6 +118,7 @@ fun NoteEditScreen(
                             .weight(1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+
                         TextField(
                             value = noteState.noteTitle,
                             singleLine = true,

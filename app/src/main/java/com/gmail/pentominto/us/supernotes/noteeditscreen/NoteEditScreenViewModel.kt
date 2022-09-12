@@ -54,15 +54,16 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            var newNoteId = 0L
-            newNoteId = databaseDao.insertNote(
-                Note(
-                    "",
-                    "",
-                    ""
+            getNote(
+                databaseDao.insertNote(
+                    Note(
+                        "",
+                        "",
+                        ""
+                    )
                 )
             )
-            getNote(newNoteId)
+
         }
     }
 

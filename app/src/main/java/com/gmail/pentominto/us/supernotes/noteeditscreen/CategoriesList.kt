@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
+import com.gmail.pentominto.us.supernotes.Utility.LogCompositions
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
@@ -23,6 +24,11 @@ import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
 fun CategoriesList(
     categories : List<Category>
 ) {
+    
+    LogCompositions(
+        tag = "TAG",
+        msg = "CategoriesList"
+    )
 
     LazyColumn(
         modifier = Modifier

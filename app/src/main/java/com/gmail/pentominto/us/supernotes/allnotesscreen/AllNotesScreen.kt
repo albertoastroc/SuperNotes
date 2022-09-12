@@ -1,13 +1,9 @@
 package com.gmail.pentominto.us.supernotes
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -15,13 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
+import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItem
 import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
-import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
@@ -156,43 +149,5 @@ fun AllNotesScreen(
 
         }
     )
-}
-
-@Composable
-fun NoteItem(
-    note : Note,
-    modifier : Modifier,
-    onClick : (Long) -> Unit
-) {
-
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick(note.noteId)
-            }
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                bottom = 8.dp,
-                top = 8.dp
-            ),
-        elevation = 1.dp,
-        shape = RoundedCornerShape(4.dp),
-        backgroundColor = LighterWalnutBrown
-
-    ) {
-
-        Text(
-            text = note.noteTitle,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-                .background(
-                    color = Color.Transparent
-                ),
-            fontSize = 20.sp
-        )
-    }
 }
 
