@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.gmail.pentominto.us
 
 import android.content.res.Configuration
@@ -13,26 +15,34 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.Utility.LogCompositions
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
-import com.gmail.pentominto.us.supernotes.ui.theme.*
+import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
+import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
+import com.gmail.pentominto.us.supernotes.ui.theme.Pine
+import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
 fun NoteEditScreen(
     noteId : Long,
@@ -278,16 +288,14 @@ fun CategoriesList(
     onClick : (String) -> Unit
 ) {
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val openDialog = remember { mutableStateOf(false) }
 
     val dialogInput = remember { mutableStateOf("") }
 
     val dialogTitleState = remember { mutableStateOf("") }
 
-    LogCompositions(
-        tag = "TAG",
-        msg = "CategoriesList"
-    )
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -298,39 +306,27 @@ fun CategoriesList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BrownBark)
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.End
+                    .background(Color.White)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable {
-                            openDialog.value = true
-                        }
 
-                ) {
+                Text(
+                    text = "Categories",
+                    fontSize = 18.sp
+                )
 
-                    Row(
-                        modifier = Modifier
-                            .background(LimishGreen)
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                    contentDescription = null,
+                    modifier = Modifier.clickable(
+                        interactionSource = NoRippleInteractionSource(),
+                        indication = null,
+                        onClick = { openDialog.value = true }
+                    )
+                )
 
-                        Text(
-                            text = "Add new category",
-                            modifier = Modifier.padding(
-                                end = 8.dp,
-                                start = 8.dp
-                            )
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                            contentDescription = null,
-                        )
-                    }
-                }
 
                 if (openDialog.value) {
 
@@ -408,7 +404,7 @@ fun CategoriesList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .clickable{
+                    .clickable {
 
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
