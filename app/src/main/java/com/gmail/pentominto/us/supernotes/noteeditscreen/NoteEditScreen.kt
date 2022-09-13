@@ -359,6 +359,7 @@ fun CategoriesList(
                                     if (dialogInput.value.isNotEmpty()) {
                                         onClick(dialogInput.value)
                                         openDialog.value = false
+                                        dialogInput.value = ""
                                     } else {
                                         dialogTitleState.value = "Category name is empty"
                                     }
@@ -406,7 +407,7 @@ fun CategoriesList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .height(60.dp)
                     .clickable{
 
                     },
