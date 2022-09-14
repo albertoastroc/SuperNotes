@@ -11,5 +11,5 @@ data class Category(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "category_db_id")
-    var categoryId : Int = 0
+    var categoryId : Long = 0
 )

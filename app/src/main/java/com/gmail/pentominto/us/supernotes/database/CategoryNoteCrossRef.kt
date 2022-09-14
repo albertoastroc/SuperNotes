@@ -9,7 +9,7 @@ import androidx.room.Entity
 )
 data class CategoryNoteCrossRef(
 
-    val category_db_id : Int,
-    val note_db_id : Int,
+    val category_db_id : Long,
+    val note_db_id : Long,
 
 )

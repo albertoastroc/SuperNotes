@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.gmail.pentominto.us
+package com.gmail.pentominto.us.supernotes.noteeditscreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -21,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -32,7 +31,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreenViewModel
 import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
@@ -41,13 +39,27 @@ import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterialApi::class,
-    ExperimentalComposeUiApi::class
 )
 @Composable
 fun NoteEditScreen(
     noteId : Long,
     viewModel : NoteEditScreenViewModel = hiltViewModel()
+
 ) {
+
+    val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
+
+    val configuration = LocalConfiguration.current
+
+    val scope = rememberCoroutineScope()
+
+    val bottomDrawerState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomDrawerState)
+
+    val note by remember { viewModel.note }
+
+    val categories by remember { viewModel.categories }
 
     LaunchedEffect(
         key1 = noteId,
@@ -58,24 +70,6 @@ fun NoteEditScreen(
             viewModel.insertNewNote()
         }
     }
-
-    val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
-
-    val noteState by remember { viewModel.note }
-
-    val categories by remember { viewModel.categories }
-
-    val configuration = LocalConfiguration.current
-
-    val scope = rememberCoroutineScope()
-
-    val bottomDrawerState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
-
-    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomDrawerState)
-
-    var dialogState by remember { mutableStateOf(false) }
-
-    var checkboxState by remember { mutableStateOf(false) }
 
     DisposableEffect(lifeCycleOwner) {
 
@@ -131,7 +125,7 @@ fun NoteEditScreen(
                     ) {
 
                         TextField(
-                            value = noteState.noteTitle.toString(),
+                            value = note.noteTitle.toString(),
                             singleLine = true,
                             placeholder = { Text(text = "Enter a Title...") },
                             onValueChange = { viewModel.onTitleInputChange(it) },
@@ -147,19 +141,6 @@ fun NoteEditScreen(
                                 unfocusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent
                             )
-                        )
-
-                        Icon(
-                            painterResource(id = R.drawable.ic_baseline_delete_24),
-                            modifier = Modifier
-                                .padding(end = 16.dp)
-                                .clickable(
-                                    interactionSource = NoRippleInteractionSource(),
-                                    onClick = {
-                                    },
-                                    indication = null
-                                ),
-                            contentDescription = null,
                         )
 
                         Icon(
@@ -189,7 +170,7 @@ fun NoteEditScreen(
                 ) {
 
                     TextField(
-                        value = noteState.noteBody.toString(),
+                        value = note.noteBody.toString(),
                         placeholder = { Text(text = "Enter Text...") },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
@@ -288,9 +269,7 @@ fun CategoriesList(
     onClick : (String) -> Unit
 ) {
 
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    val openDialog = remember { mutableStateOf(false) }
+    val openCategoryDialog = remember { mutableStateOf(false) }
 
     val dialogInput = remember { mutableStateOf("") }
 
@@ -323,15 +302,15 @@ fun CategoriesList(
                     modifier = Modifier.clickable(
                         interactionSource = NoRippleInteractionSource(),
                         indication = null,
-                        onClick = { openDialog.value = true }
+                        onClick = { openCategoryDialog.value = true }
                     )
                 )
 
 
-                if (openDialog.value) {
+                if (openCategoryDialog.value) {
 
                     AlertDialog(
-                        onDismissRequest = { openDialog.value = false },
+                        onDismissRequest = { openCategoryDialog.value = false },
                         title = {
                             Text(
                                 text = dialogTitleState.value
@@ -354,7 +333,7 @@ fun CategoriesList(
 
                                     if (dialogInput.value.isNotEmpty()) {
                                         onClick(dialogInput.value)
-                                        openDialog.value = false
+                                        openCategoryDialog.value = false
                                         dialogInput.value = ""
                                     } else {
                                         dialogTitleState.value = "Category name is empty"
@@ -374,7 +353,7 @@ fun CategoriesList(
                         },
                         dismissButton = {
                             Button(
-                                onClick = { openDialog.value = false },
+                                onClick = { openCategoryDialog.value = false },
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Pine,
                                     contentColor = Color.White

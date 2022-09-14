@@ -18,6 +18,7 @@ import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
@@ -28,11 +29,10 @@ fun AllNotesScreen(
 
     val scaffoldState = rememberScaffoldState()
 
-    val notesState by remember { viewModel.notesList }
+    val notes by remember { viewModel.notesList }
 
     val categories by remember { viewModel.categories }
-
-
+    
     LaunchedEffect(
         key1 = viewModel.notesList,
         block = {
@@ -118,15 +118,35 @@ fun AllNotesScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
                 items(
-                    items = notesState,
+                    items = notes,
                     key = { it.noteId }
                 ) { note ->
 
-                    NoteItem(
-                        note = note,
-                        modifier = Modifier,
-                        onClick = onClick
+                    val dismissState = rememberDismissState(
+                        confirmStateChange = {
+                            if (it == DismissValue.DismissedToEnd) {
+                                viewModel.deleteNote(note.noteId)
+                            }
+                            true
+                        }
                     )
+                    
+                    SwipeToDismiss(
+                        state = dismissState,
+                        directions = setOf(DismissDirection.StartToEnd),
+                        dismissThresholds = { FractionalThreshold(.6f) },
+                        background = {},
+                    ) {
+
+                        NoteItem(
+                            note = note,
+                            modifier = Modifier,
+                            onClick = onClick
+                        )
+
+                    }
+
+
                 }
             }
         },

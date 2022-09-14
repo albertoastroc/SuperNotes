@@ -47,6 +47,12 @@ class AllNotesViewModel @Inject constructor(
 
     }
 
+    fun deleteNote(noteId : Long) = viewModelScope.launch {
+
+        databaseDao.deleteNote(noteId)
+
+    }
+
     init {
         getNotes()
         getCategories()

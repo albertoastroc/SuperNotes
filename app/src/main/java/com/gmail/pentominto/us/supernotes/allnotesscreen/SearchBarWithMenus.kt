@@ -2,7 +2,10 @@ package com.gmail.pentominto.us.supernotes.allnotesscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
@@ -88,42 +90,42 @@ fun SearchBarWithMenu(
                 onValueChange = { onInputChange(it) },
             )
 
-            Column() {
-
-                Icon(
-                    painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                    modifier = Modifier
-                        .padding(end = 20.dp)
-                        .clickable(
-                            interactionSource = NoRippleInteractionSource(),
-                            onClick = {
-                                menuExpanded.value = ! menuExpanded.value
-                            },
-                            indication = null
-                        ),
-                    contentDescription = null,
-                )
-
-                DropdownMenu(
-                    expanded = menuExpanded.value,
-                    offset = DpOffset(
-                        x = 0.dp,
-                        y = 8.dp
-                    ),
-                    onDismissRequest = { menuExpanded.value = false }) {
-
-                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-                        Text(text = "Item 1")
-                    }
-
-                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-                        Text(text = "Item 2")
-                    }
-                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-                        Text(text = "Item 3")
-                    }
-                }
-            }
+//            Column() {
+//
+//                Icon(
+//                    painterResource(id = R.drawable.ic_baseline_more_vert_24),
+//                    modifier = Modifier
+//                        .padding(end = 20.dp)
+//                        .clickable(
+//                            interactionSource = NoRippleInteractionSource(),
+//                            onClick = {
+//                                menuExpanded.value = ! menuExpanded.value
+//                            },
+//                            indication = null
+//                        ),
+//                    contentDescription = null,
+//                )
+//
+//                DropdownMenu(
+//                    expanded = menuExpanded.value,
+//                    offset = DpOffset(
+//                        x = 0.dp,
+//                        y = 8.dp
+//                    ),
+//                    onDismissRequest = { menuExpanded.value = false }) {
+//
+//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
+//                        Text(text = "Item 1")
+//                    }
+//
+//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
+//                        Text(text = "Item 2")
+//                    }
+//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
+//                        Text(text = "Item 3")
+//                    }
+//                }
+//            }
         }
     }
 }
