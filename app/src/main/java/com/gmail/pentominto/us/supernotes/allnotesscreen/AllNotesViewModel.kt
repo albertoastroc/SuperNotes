@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -18,8 +17,8 @@ class AllNotesViewModel @Inject constructor(
     val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    private val _notesList : MutableState<List<Note>> = mutableStateOf(emptyList())
-    val notesList : State<List<Note>> = _notesList
+    private val _notesList : MutableState<Map<Category, List<Note>>> = mutableStateOf(emptyMap())
+    val notesList : State<Map<Category, List<Note>>> = _notesList
 
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
     val categories : State<List<Category>> = _categories
@@ -34,45 +33,14 @@ class AllNotesViewModel @Inject constructor(
 
     fun getNotes() = viewModelScope.launch {
 
-        databaseDao.getAllNotes().collect() {
+        databaseDao.getAllCategoriesAndNotes().collect() {
             _notesList.value = it
         }
-    }
-
-    fun getCategories() = viewModelScope.launch {
-
-        databaseDao.getAllCategories().collect() {
-
-            _categories.value = it
-        }
-
     }
 
     fun deleteNote(noteId : Long) = viewModelScope.launch {
 
         databaseDao.deleteNote(noteId)
 
-    }
-
-    fun testGetAllNotes(){
-
-        var test = emptyMap<Category, List<Note>>()
-
-        viewModelScope.launch {
-
-            databaseDao.getAllCategoriesAndNotes().collect() {
-
-                Log.d(
-                    "TAG",
-                    "testGetAllNotes: $it"
-                )
-
-            }
-        }
-    }
-
-    init {
-        getNotes()
-        getCategories()
     }
 }

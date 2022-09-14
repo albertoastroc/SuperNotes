@@ -23,7 +23,7 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
     onClick : (Long) -> Unit,
-    ) {
+) {
 
     var state by remember { mutableStateOf(viewModel.searchBarText) }
 
@@ -32,12 +32,11 @@ fun AllNotesScreen(
     val notes by remember { viewModel.notesList }
 
     val categories by remember { viewModel.categories }
-    
+
     LaunchedEffect(
         key1 = viewModel.notesList,
         block = {
             viewModel.getNotes()
-            viewModel.testGetAllNotes()
         }
     )
 
@@ -89,65 +88,50 @@ fun AllNotesScreen(
             SearchBarWithMenu(
                 input = state.value,
                 scaffoldState = scaffoldState,
-                onInputChange = {viewModel.onSearchChange(state.value)}
+                onInputChange = { viewModel.onSearchChange(state.value) }
             )
 
         },
         content = { paddingValues ->
 
-//            LazyColumn(
-//                modifier = Modifier.padding(padding)
-//            ) {
-//
-//                groupedNotes.forEach { (notesCat, noteVals) ->
-//
-//                    item {
-//                        CategoryHeader(categoryHeader = notesCat)
-//                    }
-//
-//                    items(noteVals) { noteVal ->
-//
-//                        NoteItem(noteTitle = noteVal.title)
-//
-//                    }
-//
-//                }
-//
-//            }
-
             LazyColumn(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                items(
-                    items = notes,
-                    key = { it.noteId }
-                ) { note ->
 
-                    val dismissState = rememberDismissState(
-                        confirmStateChange = {
-                            if (it == DismissValue.DismissedToEnd) {
-                                viewModel.deleteNote(note.noteId)
-                            }
-                            true
-                        }
-                    )
-                    
-                    SwipeToDismiss(
-                        state = dismissState,
-                        directions = setOf(DismissDirection.StartToEnd),
-                        dismissThresholds = { FractionalThreshold(.6f) },
-                        background = {},
-                    ) {
+                notes.entries.forEach { (category, notes) ->
 
-                        NoteItem(
-                            note = note,
-                            modifier = Modifier,
-                            onClick = onClick
-                        )
-
+                    item {
+                        Text(category.categoryTitle)
                     }
 
+                    items(
+                        items = notes,
+                        key = { it.noteId },
+                    ) { note ->
 
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                if (it == DismissValue.DismissedToEnd) {
+                                    viewModel.deleteNote(note.noteId)
+                                }
+                                true
+                            }
+                        )
+
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.StartToEnd),
+                            dismissThresholds = { FractionalThreshold(.6f) },
+                            background = {},
+                        ) {
+
+                            NoteItem(
+                                note = note,
+                                modifier = Modifier,
+                                onClick = onClick
+                            )
+                        }
+                    }
                 }
             }
         },

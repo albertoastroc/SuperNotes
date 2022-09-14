@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.noteeditscreen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -21,25 +22,50 @@ class NoteEditScreenViewModel @Inject constructor(
     val note : State<Note> = _note
 
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
-
     val categories : State<List<Category>> = _categories
 
-    fun getNote(noteId : Long) {
+    private val _noteCategory : MutableState<Category?> = mutableStateOf(null)
+    val noteCategory : State<Category?> = _noteCategory
+
+//    fun getNote(noteId : Long) {
+//
+//        viewModelScope.launch {
+//
+//            databaseDao.getNote(noteId).collect() {
+//
+//                _note.value = it
+//            }
+//        }
+//
+//        viewModelScope.launch {
+//
+//            databaseDao.getAllCategories().collect() {
+//
+//                _categories.value = it
+//            }
+//        }
+//    }
+
+    fun getNote(noteId : Long){
 
         viewModelScope.launch {
 
-            databaseDao.getNote(noteId).collect() {
+            databaseDao.getNoteWithCategory(noteId).collect() {
 
-                _note.value = it
+                it.forEach {
+
+                    _noteCategory.value = it.key
+                    _note.value = it.value
+
+                }
+
+                Log.d(
+                    "TAG",
+                    "getNote: $it"
+                )
+
             }
-        }
 
-        viewModelScope.launch {
-
-            databaseDao.getAllCategories().collect() {
-
-                _categories.value = it
-            }
         }
     }
 

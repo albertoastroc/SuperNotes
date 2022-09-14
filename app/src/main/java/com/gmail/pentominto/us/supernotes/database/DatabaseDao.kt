@@ -32,6 +32,9 @@ interface DatabaseDao {
     @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle")
     fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>>
 
+    @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle WHERE note_db_id = :id")
+    fun getNoteWithCategory(id : Long) : Flow<Map<Category, Note>>
+
     @Query("SELECT * FROM category_table")
     fun getAllCategories() : Flow<List<Category>>
 
