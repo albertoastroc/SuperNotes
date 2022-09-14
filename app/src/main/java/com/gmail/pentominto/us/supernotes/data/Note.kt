@@ -11,7 +11,7 @@ data class Note(
 
     var noteBody : String? = "",
 
-    var category : String? = "Other",
+    var category : String? = null,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")

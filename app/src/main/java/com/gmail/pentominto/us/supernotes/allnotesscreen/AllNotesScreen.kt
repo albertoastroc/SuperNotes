@@ -37,6 +37,7 @@ fun AllNotesScreen(
         key1 = viewModel.notesList,
         block = {
             viewModel.getNotes()
+            viewModel.testGetAllNotes()
         }
     )
 

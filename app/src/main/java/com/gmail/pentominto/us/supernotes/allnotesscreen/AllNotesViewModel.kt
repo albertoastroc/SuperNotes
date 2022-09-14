@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,23 @@ class AllNotesViewModel @Inject constructor(
 
         databaseDao.deleteNote(noteId)
 
+    }
+
+    fun testGetAllNotes(){
+
+        var test = emptyMap<Category, List<Note>>()
+
+        viewModelScope.launch {
+
+            databaseDao.getAllCategoriesAndNotes().collect() {
+
+                Log.d(
+                    "TAG",
+                    "testGetAllNotes: $it"
+                )
+
+            }
+        }
     }
 
     init {
