@@ -26,25 +26,6 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _noteCategory : MutableState<Category?> = mutableStateOf(null)
     val noteCategory : State<Category?> = _noteCategory
 
-//    fun getNote(noteId : Long) {
-//
-//        viewModelScope.launch {
-//
-//            databaseDao.getNote(noteId).collect() {
-//
-//                _note.value = it
-//            }
-//        }
-//
-//        viewModelScope.launch {
-//
-//            databaseDao.getAllCategories().collect() {
-//
-//                _categories.value = it
-//            }
-//        }
-//    }
-
     fun getNote(noteId : Long){
 
         viewModelScope.launch {
@@ -55,11 +36,9 @@ class NoteEditScreenViewModel @Inject constructor(
 
                     _noteCategory.value = it.key
                     _note.value = it.value
-
                 }
             }
         }
-
         getCategories()
     }
 
