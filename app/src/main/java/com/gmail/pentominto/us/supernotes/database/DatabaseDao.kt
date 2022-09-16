@@ -17,6 +17,9 @@ interface DatabaseDao {
     @Query("UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody WHERE note_db_id = :noteId")
     suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Long)
 
+    @Query("UPDATE note_table SET category = :chosenCategory WHERE note_db_id = :noteId")
+    suspend fun updateNoteCategory(chosenCategory : String, noteId : Long)
+
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
     fun getNote(id : Long) : Flow<Note>
 

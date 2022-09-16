@@ -84,6 +84,18 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
+    fun updateCategory(category : Category) {
+
+        viewModelScope.launch {
+            _noteCategory.value?.let {
+                databaseDao.updateNoteCategory(
+                    chosenCategory = category.categoryTitle,
+                    noteId = note.value.noteId
+                )
+            }
+        }
+    }
+
     fun onTitleInputChange(newInput : String) {
 
         _note.value = _note.value.copy(

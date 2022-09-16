@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,10 +32,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
-import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
-import com.gmail.pentominto.us.supernotes.ui.theme.Pine
-import com.gmail.pentominto.us.supernotes.ui.theme.Powder
+import com.gmail.pentominto.us.supernotes.ui.theme.*
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -217,17 +215,22 @@ fun NoteEditScreen(
                                         }
                                     },
                                     modifier = Modifier
-                                        .clip(CircleShape),
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray)
+                                        .clip(CircleShape)
+                                        .widthIn(max = 200.dp)
+                                        .heightIn(max = 100.dp),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                                 ) {
                                     Text(
-                                        text = "Other",
-                                        modifier = Modifier.padding(
-                                            top = 8.dp,
-                                            bottom = 8.dp,
-                                            start = 12.dp,
-                                            end = 12.dp
-                                        )
+                                        text = if (viewModel.noteCategory.value?.categoryTitle != null) viewModel.noteCategory.value?.categoryTitle.toString() else "No Category",
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 8.dp,
+                                                bottom = 8.dp,
+                                                start = 12.dp,
+                                                end = 12.dp
+                                            ),
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 1
                                     )
                                 }
                                 Column(
@@ -256,8 +259,17 @@ fun NoteEditScreen(
 
             CategoriesList(
                 categories = categories,
-                onClick = { viewModel.insertCategory(it) }
-            )
+                currentCategory = viewModel.noteCategory.value,
+                onClickDialog = { viewModel.insertCategory(it) }
+            ) {
+                viewModel.updateCategory(it)
+
+                scope.launch {
+
+                    scaffoldState.bottomSheetState.collapse()
+                }
+
+            }
         }
     )
 }
@@ -266,7 +278,9 @@ fun NoteEditScreen(
 @Composable
 fun CategoriesList(
     categories : List<Category>,
-    onClick : (String) -> Unit
+    currentCategory : Category?,
+    onClickDialog : (String) -> Unit,
+    onClickCategory : (Category) -> Unit
 ) {
 
     val openCategoryDialog = remember { mutableStateOf(false) }
@@ -332,7 +346,7 @@ fun CategoriesList(
                                 onClick = {
 
                                     if (dialogInput.value.isNotEmpty()) {
-                                        onClick(dialogInput.value)
+                                        onClickDialog(dialogInput.value)
                                         openCategoryDialog.value = false
                                         dialogInput.value = ""
                                     } else {
@@ -382,11 +396,12 @@ fun CategoriesList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(color = if (item == currentCategory) WhiteSmoke else Color.White)
                     .height(60.dp)
                     .clickable {
 
+                        onClickCategory(item)
                     },
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -395,27 +410,27 @@ fun CategoriesList(
                         top = 8.dp,
                         start = 16.dp,
                         bottom = 8.dp
-                    )
+                    ).weight(1f),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2
                 )
 
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Icon(
+                    painterResource(id = R.drawable.ic_baseline_delete_24),
+                    modifier = Modifier
+                        .padding(
+                            end = 16.dp,
+                            start = 8.dp
+                        )
+                        .clickable(
+                            interactionSource = NoRippleInteractionSource(),
+                            onClick = {
+                            },
+                            indication = null
+                        ),
+                    contentDescription = null,
+                )
 
-                    Icon(
-                        painterResource(id = R.drawable.ic_baseline_delete_24),
-                        modifier = Modifier
-                            .padding(end = 16.dp)
-                            .clickable(
-                                interactionSource = NoRippleInteractionSource(),
-                                onClick = {
-                                },
-                                indication = null
-                            ),
-                        contentDescription = null,
-                    )
-                }
             }
         }
     }
