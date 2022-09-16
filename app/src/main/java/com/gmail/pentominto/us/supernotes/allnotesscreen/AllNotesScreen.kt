@@ -106,7 +106,6 @@ fun AllNotesScreen(
 
                     items(
                         items = notes,
-                        key = { it.noteId },
                     ) { note ->
 
                         val dismissState = rememberDismissState(

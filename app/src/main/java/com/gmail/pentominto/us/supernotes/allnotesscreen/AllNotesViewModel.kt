@@ -35,6 +35,10 @@ class AllNotesViewModel @Inject constructor(
 
         databaseDao.getAllCategoriesAndNotes().collect() {
             _notesList.value = it
+//            Log.d(
+//                "TAG",
+//                "getNotes: $it"
+//            )
         }
     }
 
