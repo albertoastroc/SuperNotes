@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
 package com.gmail.pentominto.us.supernotes.noteeditscreen
 
 import android.content.res.Configuration
@@ -15,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -221,7 +218,7 @@ fun NoteEditScreen(
                                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                                 ) {
                                     Text(
-                                        text = if (viewModel.noteCategory.value?.categoryTitle != null) viewModel.noteCategory.value?.categoryTitle.toString() else "No Category",
+                                        text = viewModel.noteCategory.value.categoryTitle.toString(),
                                         modifier = Modifier
                                             .padding(
                                                 top = 8.dp,
@@ -295,7 +292,7 @@ fun CategoriesList(
             .heightIn(max = 450.dp)
     ) {
 
-        stickyHeader() {
+        stickyHeader {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -391,45 +388,50 @@ fun CategoriesList(
         items(
             items = categories,
             key = { it.categoryId }
-        ) { item ->
+        ) { category ->
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = if (item == currentCategory) WhiteSmoke else Color.White)
+                    .background(color = if (category == currentCategory) WhiteSmoke else Color.White)
                     .height(60.dp)
                     .clickable {
 
-                        onClickCategory(item)
+                        onClickCategory(category)
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = item.categoryTitle,
-                    modifier = Modifier.padding(
-                        top = 8.dp,
-                        start = 16.dp,
-                        bottom = 8.dp
-                    ).weight(1f),
+                    text = category.categoryTitle.toString(),
+                    modifier = Modifier
+                        .padding(
+                            top = 8.dp,
+                            start = 16.dp,
+                            bottom = 8.dp
+                        )
+                        .weight(1f),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2
                 )
 
-                Icon(
-                    painterResource(id = R.drawable.ic_baseline_delete_24),
-                    modifier = Modifier
-                        .padding(
-                            end = 16.dp,
-                            start = 8.dp
-                        )
-                        .clickable(
-                            interactionSource = NoRippleInteractionSource(),
-                            onClick = {
-                            },
-                            indication = null
-                        ),
-                    contentDescription = null,
-                )
+                if (category.categoryTitle != "No Category") {
+
+                    Icon(
+                        painterResource(id = R.drawable.ic_baseline_delete_24),
+                        modifier = Modifier
+                            .padding(
+                                end = 16.dp,
+                                start = 8.dp
+                            )
+                            .clickable(
+                                interactionSource = NoRippleInteractionSource(),
+                                onClick = {
+                                },
+                                indication = null
+                            ),
+                        contentDescription = null,
+                    )
+                }
 
             }
         }

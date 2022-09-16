@@ -101,11 +101,12 @@ fun AllNotesScreen(
                 notes.entries.forEach { (category, notes) ->
 
                     item {
-                        Text(category.categoryTitle)
+                        Text(category.categoryTitle.toString())
                     }
 
                     items(
                         items = notes,
+                        key = { it.noteId }
                     ) { note ->
 
                         val dismissState = rememberDismissState(

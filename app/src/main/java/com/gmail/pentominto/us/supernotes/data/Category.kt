@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "category_table")
 data class Category(
 
-    var categoryTitle : String,
+    var categoryTitle : String? = "No Category",
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "category_db_id")

@@ -24,8 +24,8 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
     val categories : State<List<Category>> = _categories
 
-    private val _noteCategory : MutableState<Category?> = mutableStateOf(null)
-    val noteCategory : State<Category?> = _noteCategory
+    private val _noteCategory : MutableState<Category> = mutableStateOf(Category())
+    val noteCategory : State<Category> = _noteCategory
 
     fun getNote(noteId : Long){
 
@@ -59,7 +59,10 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            insertCategory("No Category")
+            if (! databaseDao.defaultCategoryExists()) {
+
+                insertCategory("No Category")
+            }
 
             getNote(
                 databaseDao.insertNote(Note(category = "No Category"))
@@ -96,7 +99,7 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
             _noteCategory.value?.let {
                 databaseDao.updateNoteCategory(
-                    chosenCategory = category.categoryTitle,
+                    chosenCategory = category.categoryTitle.toString(),
                     noteId = note.value.noteId
                 )
             }
