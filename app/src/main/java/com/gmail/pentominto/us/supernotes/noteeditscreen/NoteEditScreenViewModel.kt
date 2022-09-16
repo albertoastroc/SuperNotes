@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.noteeditscreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -79,7 +78,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun updateNoteText() {
+    fun saveNoteText() {
 
         viewModelScope.launch {
             databaseDao.updateNote(
@@ -87,18 +86,14 @@ class NoteEditScreenViewModel @Inject constructor(
                 noteBody = _note.value.noteBody.toString(),
                 noteId = note.value.noteId
             )
-            Log.d(
-                "TAG",
-                "updateNoteText: ${note.value.noteId}"
-            )
         }
     }
 
-    fun updateCategory(category : Category) {
+    fun saveCategory(category : Category) {
 
         viewModelScope.launch {
 
-            updateNoteText()
+            saveNoteText()
             _noteCategory.value.let {
                 databaseDao.updateNoteCategory(
                     chosenCategory = category.categoryTitle.toString(),

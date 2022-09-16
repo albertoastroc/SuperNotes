@@ -56,14 +56,10 @@ fun NoteEditScreen(
 
     val categories by remember { viewModel.categories }
 
-    LaunchedEffect(
-        key1 = noteId,
-    ) {
-        if (noteId != 0L) {
-            viewModel.getNote(noteId)
-        } else {
-            viewModel.insertNewNote()
-        }
+    if (noteId != 0L) {
+        viewModel.getNote(noteId)
+    } else {
+        viewModel.insertNewNote()
     }
 
     DisposableEffect(lifeCycleOwner) {
@@ -74,7 +70,7 @@ fun NoteEditScreen(
 
                 Lifecycle.Event.ON_PAUSE,
                 Lifecycle.Event.ON_STOP,
-                Lifecycle.Event.ON_DESTROY -> viewModel.updateNoteText()
+                Lifecycle.Event.ON_DESTROY -> viewModel.saveNoteText()
                 else                       -> {
                     //Nothing
                 }
@@ -259,7 +255,7 @@ fun NoteEditScreen(
                 currentCategory = viewModel.noteCategory.value,
                 onClickDialog = { viewModel.insertCategory(it) }
             ) {
-                viewModel.updateCategory(it)
+                viewModel.saveCategory(it)
                 scope.launch {
 
                     scaffoldState.bottomSheetState.collapse()
