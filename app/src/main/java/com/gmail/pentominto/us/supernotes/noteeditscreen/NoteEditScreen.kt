@@ -260,7 +260,6 @@ fun NoteEditScreen(
                 onClickDialog = { viewModel.insertCategory(it) }
             ) {
                 viewModel.updateCategory(it)
-
                 scope.launch {
 
                     scaffoldState.bottomSheetState.collapse()

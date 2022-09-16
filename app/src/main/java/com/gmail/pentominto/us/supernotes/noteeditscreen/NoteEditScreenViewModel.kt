@@ -97,7 +97,9 @@ class NoteEditScreenViewModel @Inject constructor(
     fun updateCategory(category : Category) {
 
         viewModelScope.launch {
-            _noteCategory.value?.let {
+
+            updateNoteText()
+            _noteCategory.value.let {
                 databaseDao.updateNoteCategory(
                     chosenCategory = category.categoryTitle.toString(),
                     noteId = note.value.noteId
