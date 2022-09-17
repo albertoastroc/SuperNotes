@@ -73,6 +73,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            saveNoteText()
             databaseDao.insertCategory(Category(categoryName))
 
         }

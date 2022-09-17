@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.data.Note
@@ -31,12 +32,7 @@ fun NoteItem(
             .clickable {
                 onClick(note.noteId)
             }
-            .padding(
-                start = 8.dp,
-                end = 8.dp,
-                bottom = 8.dp,
-                top = 8.dp
-            ),
+            .padding(4.dp),
         elevation = 1.dp,
         shape = RoundedCornerShape(4.dp),
         backgroundColor = LighterWalnutBrown
@@ -68,11 +64,18 @@ fun NoteItem(
                 text = note.noteTitle.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .padding(
+                        start = 24.dp,
+                        end = 12.dp,
+                        top = 12.dp,
+                        bottom = 12.dp
+                    )
                     .background(
                         color = Color.Transparent
                     ),
-                fontSize = 24.sp
+                fontSize = 18.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Divider(
                 modifier = Modifier.height(1.dp)

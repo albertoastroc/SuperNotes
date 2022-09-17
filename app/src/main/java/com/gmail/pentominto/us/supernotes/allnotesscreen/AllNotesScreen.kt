@@ -11,6 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItem
@@ -101,7 +104,18 @@ fun AllNotesScreen(
                 notes.entries.forEach { (category, notes) ->
 
                     item {
-                        Text(category.categoryTitle.toString())
+                        Text(
+                            text = category.categoryTitle.toString(),
+                            modifier = Modifier
+                                .padding(
+                                    start = 16.dp,
+                                    top = 8.dp,
+                                    bottom = 8.dp
+                                ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = 24.sp
+                        )
                     }
 
                     items(
@@ -151,7 +165,6 @@ fun AllNotesScreen(
                 },
                 contentColor = Color.White
             )
-
         }
     )
 }

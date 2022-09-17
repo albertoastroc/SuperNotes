@@ -35,16 +35,11 @@ class AllNotesViewModel @Inject constructor(
 
         databaseDao.getAllCategoriesAndNotes().collect() {
             _notesList.value = it
-//            Log.d(
-//                "TAG",
-//                "getNotes: $it"
-//            )
         }
     }
 
     fun deleteNote(noteId : Long) = viewModelScope.launch {
 
         databaseDao.deleteNote(noteId)
-
     }
 }

@@ -260,7 +260,6 @@ fun NoteEditScreen(
 
                     scaffoldState.bottomSheetState.collapse()
                 }
-
             }
         }
     )
@@ -312,7 +311,6 @@ fun CategoriesList(
                     )
                 )
 
-
                 if (openCategoryDialog.value) {
 
                     AlertDialog(
@@ -344,7 +342,6 @@ fun CategoriesList(
                                     } else {
                                         dialogTitleState.value = "Category name is empty"
                                     }
-
                                 },
                                 modifier = Modifier.width(100.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -427,7 +424,6 @@ fun CategoriesList(
                         contentDescription = null,
                     )
                 }
-
             }
         }
     }
