@@ -35,6 +35,9 @@ interface DatabaseDao {
     @Query("DELETE FROM note_table WHERE note_db_id = :id")
     suspend fun deleteNote(id : Long)
 
+    @Query("DELETE FROM category_table WHERE category_db_id = :id")
+    suspend fun deleteCategory(id : Long)
+
     @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle")
     fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>>
 

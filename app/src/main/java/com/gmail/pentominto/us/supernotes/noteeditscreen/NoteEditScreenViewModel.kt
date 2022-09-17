@@ -79,6 +79,15 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteCategory(category : Category) {
+
+        viewModelScope.launch {
+
+            databaseDao.deleteCategory(category.categoryId)
+            saveCategory(Category("No Category"))
+        }
+    }
+
     fun saveNoteText() {
 
         viewModelScope.launch {

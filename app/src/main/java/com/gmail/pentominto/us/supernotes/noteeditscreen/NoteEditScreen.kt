@@ -253,14 +253,17 @@ fun NoteEditScreen(
             CategoriesList(
                 categories = categories,
                 currentCategory = viewModel.noteCategory.value,
-                onClickDialog = { viewModel.insertCategory(it) }
-            ) {
-                viewModel.saveCategory(it)
-                scope.launch {
+                onClickDialog = { viewModel.insertCategory(it) },
+                onDeleteCategory = { viewModel.deleteCategory(it) },
+                onClickCategory = {
 
-                    scaffoldState.bottomSheetState.collapse()
+                    viewModel.saveCategory(it)
+                    scope.launch {
+
+                        scaffoldState.bottomSheetState.collapse()
+                    }
                 }
-            }
+            )
         }
     )
 }
@@ -271,7 +274,8 @@ fun CategoriesList(
     categories : List<Category>,
     currentCategory : Category?,
     onClickDialog : (String) -> Unit,
-    onClickCategory : (Category) -> Unit
+    onDeleteCategory : (Category) -> Unit,
+    onClickCategory : (Category) -> Unit,
 ) {
 
     val openCategoryDialog = remember { mutableStateOf(false) }
@@ -418,6 +422,7 @@ fun CategoriesList(
                             .clickable(
                                 interactionSource = NoRippleInteractionSource(),
                                 onClick = {
+                                    onDeleteCategory(category)
                                 },
                                 indication = null
                             ),
