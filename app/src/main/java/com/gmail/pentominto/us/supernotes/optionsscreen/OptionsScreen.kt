@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,19 +33,17 @@ fun OptionsScreen(
         OptionsRow(
             optionsTitle = "Theme",
             optionSelected = "Light mode",
-            hasSwitch = true
         ) {}
 
 
         OptionsRow(
             optionsTitle = "Note font size",
             optionSelected = "Medium",
-            hasSwitch = false
         ) {}
 
         OptionsRowWithSwitch(
-            optionsTitle = "Categories",
-            optionSelected = viewModel.categoriesOptionsState.value.toString(),
+            optionsTitle = "Enable categories",
+            optionSelected = "When disabled one uncategorized list will be displayed",
             switchState = viewModel.categoriesOptionsState.value
         ) {
             viewModel.categoriesPrefToggle()
@@ -52,22 +51,18 @@ fun OptionsScreen(
         OptionsRow(
             optionsTitle = "Export all notes",
             optionSelected = null,
-            hasSwitch = false
         ) {}
         OptionsRow(
             optionsTitle = "Import notes",
             optionSelected = null,
-            hasSwitch = false
         ) {}
         OptionsRow(
             optionsTitle = "Delete all notes",
             optionSelected = null,
-            hasSwitch = false
         ) {}
         OptionsRow(
             optionsTitle = "Delete all categories",
             optionSelected = null,
-            hasSwitch = false
         ) {}
     }
 }
@@ -76,7 +71,6 @@ fun OptionsScreen(
 fun OptionsRow(
     optionsTitle : String,
     optionSelected : String?,
-    hasSwitch : Boolean,
     onClick : (Boolean) -> Unit
 ) {
 
@@ -111,18 +105,6 @@ fun OptionsRow(
                 )
             }
         }
-
-        if (hasSwitch) {
-            Switch(
-                checked = checkedState.value,
-                onCheckedChange = {
-                    onClick(checkedState.value)
-                    checkedState.value = it
-                },
-                modifier = Modifier
-                    .padding(end = 16.dp)
-            )
-        }
     }
 
     Divider()
@@ -140,11 +122,8 @@ fun OptionsRowWithSwitch(
 
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         Column(
@@ -152,8 +131,9 @@ fun OptionsRowWithSwitch(
                 .padding(
                     top = 24.dp,
                     bottom = 24.dp,
-                    start = 16.dp
+                    start = 16.dp,
                 )
+                .weight(1f)
         ) {
 
             Text(
@@ -163,7 +143,8 @@ fun OptionsRowWithSwitch(
             if (optionSelected != null) {
                 Text(
                     text = optionSelected,
-                    fontWeight = FontWeight.Light
+                    fontWeight = FontWeight.Light,
+                    overflow = TextOverflow.Clip,
                 )
             }
         }

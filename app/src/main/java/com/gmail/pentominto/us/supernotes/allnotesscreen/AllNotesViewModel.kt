@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
@@ -32,6 +33,11 @@ class AllNotesViewModel @Inject constructor(
     private val _searchBarText : MutableState<String> = mutableStateOf("")
     val searchBarText : State<String> = _searchBarText
 
+    private val _categoriesOptionState : MutableState<Boolean> = mutableStateOf(false)
+    val categoriesOptionsState : State<Boolean> = _categoriesOptionState
+
+    val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+
     fun onSearchChange(input : String) {
 
         _searchBarText.value = input
@@ -57,5 +63,21 @@ class AllNotesViewModel @Inject constructor(
 
     }
 
+    fun getPrefs() {
 
+        viewModelScope.launch {
+
+            dataStore.data.collect() { preferences ->
+
+                if (preferences.contains(hideCategoriesKey)) {
+
+                    _categoriesOptionState.value = preferences[hideCategoriesKey] !!
+                }
+            }
+        }
+    }
+
+    init {
+        getPrefs()
+    }
 }

@@ -22,7 +22,7 @@ import com.gmail.pentominto.us.supernotes.data.Category
 fun Drawer(
     drawerOptionsList : List<MenuItem>,
     categoriesList : List<Category>,
-    onSettingClick : (MenuItem) -> Unit,
+    onSettingClick : (Int) -> Unit,
     onCategoryClick : (String) -> Unit,
     itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
 ) {
@@ -40,7 +40,7 @@ fun Drawer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        onSettingClick(item)
+                        onSettingClick(item.id)
                     }
                     .padding(16.dp)
             ) {

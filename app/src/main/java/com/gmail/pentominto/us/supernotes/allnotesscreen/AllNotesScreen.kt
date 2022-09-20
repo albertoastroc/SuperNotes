@@ -26,14 +26,14 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
     onNoteClick : (Long) -> Unit,
-    onOptionsClick : () -> Unit,
+    onOptionsClick : (Int) -> Unit,
 ) {
 
     var state by remember { mutableStateOf(viewModel.searchBarText) }
 
     val scaffoldState = rememberScaffoldState()
 
-    val hideCategories = remember { mutableStateOf(true) }
+    val showCategories = remember { viewModel.categoriesOptionsState }
 
     val notes by remember { viewModel.notesListWithCategories }
 
@@ -41,8 +41,10 @@ fun AllNotesScreen(
 
     LaunchedEffect(
         key1 = viewModel.notesListWithCategories,
+        key2 = viewModel.notesListNoCategories,
         block = {
             viewModel.getNotesWithCategories()
+            viewModel.getNotesNoCategories()
         }
     )
 
@@ -57,35 +59,35 @@ fun AllNotesScreen(
             Drawer(
                 drawerOptionsList = listOf(
                     MenuItem(
-                        id = "1",
+                        id = 1,
                         title = "Home",
                         icon = Icons.Default.Home
                     ),
                     MenuItem(
-                        id = "2",
+                        id = 2,
                         title = "Options",
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
-                        id = "3",
+                        id = 3,
                         title = "Backup settings",
                         icon = Icons.Default.Build
                     ),
                     MenuItem(
-                        id = "3",
+                        id = 4,
                         title = "Privacy policy and info",
                         icon = Icons.Default.Info
                     ),
 
                     MenuItem(
-                        id = "3",
+                        id = 5,
                         title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),
 
                     ),
                 categoriesList = categories,
-                onSettingClick = { onOptionsClick() },
+                onSettingClick = { onOptionsClick(it) },
                 onCategoryClick = {}
             )
         },
@@ -104,37 +106,37 @@ fun AllNotesScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
 
-//                if (hideCategories.value) {
-//
-//                    items(
-//                        items = different list
-//                        key = { it }
-//                    ) { note ->
-//
-//                        val dismissState = rememberDismissState(
-//                            confirmStateChange = {
-//                                if (it == DismissValue.DismissedToEnd) {
-//                                    viewModel.deleteNote(note.noteId)
-//                                }
-//                                true
-//                            }
-//                        )
-//
-//                        SwipeToDismiss(
-//                            state = dismissState,
-//                            directions = setOf(DismissDirection.StartToEnd),
-//                            dismissThresholds = { FractionalThreshold(.6f) },
-//                            background = {},
-//                        ) {
-//
-//                            NoteItem(
-//                                note = note,
-//                                modifier = Modifier,
-//                                onClick = onClick
-//                            )
-//                        }
-//                    }
-//                } else {
+                if (!showCategories.value) {
+
+                    items(
+                        items = viewModel.notesListNoCategories.value,
+                                key = { it.noteId }
+                    ) { note ->
+
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                if (it == DismissValue.DismissedToEnd) {
+                                    viewModel.deleteNote(note.noteId)
+                                }
+                                true
+                            }
+                        )
+
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.StartToEnd),
+                            dismissThresholds = { FractionalThreshold(.6f) },
+                            background = {},
+                        ) {
+
+                            NoteItem(
+                                note = note,
+                                modifier = Modifier,
+                                onClick = { onNoteClick(note.noteId) }
+                            )
+                        }
+                    }
+                } else {
 
                     notes.entries.forEach { (category, notes) ->
 
@@ -177,12 +179,13 @@ fun AllNotesScreen(
                                 NoteItem(
                                     note = note,
                                     modifier = Modifier,
-                                    onClick = onNoteClick
+                                    onClick = { onNoteClick(note.noteId) }
                                 )
                             }
                         }
                     }
                 }
+            }
 
         },
         floatingActionButton = {

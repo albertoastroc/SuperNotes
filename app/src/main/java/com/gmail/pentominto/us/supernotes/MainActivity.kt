@@ -60,8 +60,13 @@ fun SuperNotesApp() {
                 onNoteClick = { noteId ->
                     navController.navigate("noteEdit/${noteId}")
                 },
-                onOptionsClick = {
-                    navController.navigate("options")
+                onOptionsClick = { menuItemId ->
+
+                    when (menuItemId) {
+
+                        2 -> navController.navigate("options")
+
+                    }
                 }
             )
         }
