@@ -51,7 +51,6 @@ class NoteEditScreenViewModel @Inject constructor(
                 _categories.value = it
             }
         }
-
     }
 
     fun insertNewNote() {
@@ -75,7 +74,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
             saveNoteText()
             databaseDao.insertCategory(Category(categoryName))
-
         }
     }
 
@@ -84,7 +82,7 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             databaseDao.deleteCategory(category.categoryId)
-            saveCategory(Category("No Category"))
+            saveNoteCategory(Category("No Category"))
         }
     }
 
@@ -99,7 +97,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveCategory(category : Category) {
+    fun saveNoteCategory(category : Category) {
 
         viewModelScope.launch {
 

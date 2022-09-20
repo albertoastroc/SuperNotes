@@ -3,6 +3,8 @@ package com.gmail.pentominto.us.supernotes.allnotesscreen
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
@@ -14,11 +16,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
-    val databaseDao : DatabaseDao
+    val databaseDao : DatabaseDao,
+    private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
-    private val _notesList : MutableState<Map<Category, List<Note>>> = mutableStateOf(emptyMap())
-    val notesList : State<Map<Category, List<Note>>> = _notesList
+    private val _notesListWithCategories : MutableState<Map<Category, List<Note>>> = mutableStateOf(emptyMap())
+    val notesListWithCategories : State<Map<Category, List<Note>>> = _notesListWithCategories
+
+    private val _notesListNoCategories : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val notesListNoCategories : State<List<Note>> = _notesListNoCategories
 
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
     val categories : State<List<Category>> = _categories
@@ -31,10 +37,10 @@ class AllNotesViewModel @Inject constructor(
         _searchBarText.value = input
     }
 
-    fun getNotes() = viewModelScope.launch {
+    fun getNotesWithCategories() = viewModelScope.launch {
 
         databaseDao.getAllCategoriesAndNotes().collect() {
-            _notesList.value = it
+            _notesListWithCategories.value = it
         }
     }
 
@@ -42,4 +48,14 @@ class AllNotesViewModel @Inject constructor(
 
         databaseDao.deleteNote(noteId)
     }
+
+    fun getNotesNoCategories() = viewModelScope.launch {
+
+        databaseDao.getAllNotes().collect(){
+            _notesListNoCategories.value = it
+        }
+
+    }
+
+
 }

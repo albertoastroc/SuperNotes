@@ -25,21 +25,24 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
-    onClick : (Long) -> Unit,
+    onNoteClick : (Long) -> Unit,
+    onOptionsClick : () -> Unit,
 ) {
 
     var state by remember { mutableStateOf(viewModel.searchBarText) }
 
     val scaffoldState = rememberScaffoldState()
 
-    val notes by remember { viewModel.notesList }
+    val hideCategories = remember { mutableStateOf(true) }
+
+    val notes by remember { viewModel.notesListWithCategories }
 
     val categories by remember { viewModel.categories }
 
     LaunchedEffect(
-        key1 = viewModel.notesList,
+        key1 = viewModel.notesListWithCategories,
         block = {
-            viewModel.getNotes()
+            viewModel.getNotesWithCategories()
         }
     )
 
@@ -60,7 +63,7 @@ fun AllNotesScreen(
                     ),
                     MenuItem(
                         id = "2",
-                        title = "Settings",
+                        title = "Options",
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
@@ -82,7 +85,7 @@ fun AllNotesScreen(
 
                     ),
                 categoriesList = categories,
-                onSettingClick = {},
+                onSettingClick = { onOptionsClick() },
                 onCategoryClick = {}
             )
         },
@@ -101,60 +104,93 @@ fun AllNotesScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
 
-                notes.entries.forEach { (category, notes) ->
+//                if (hideCategories.value) {
+//
+//                    items(
+//                        items = different list
+//                        key = { it }
+//                    ) { note ->
+//
+//                        val dismissState = rememberDismissState(
+//                            confirmStateChange = {
+//                                if (it == DismissValue.DismissedToEnd) {
+//                                    viewModel.deleteNote(note.noteId)
+//                                }
+//                                true
+//                            }
+//                        )
+//
+//                        SwipeToDismiss(
+//                            state = dismissState,
+//                            directions = setOf(DismissDirection.StartToEnd),
+//                            dismissThresholds = { FractionalThreshold(.6f) },
+//                            background = {},
+//                        ) {
+//
+//                            NoteItem(
+//                                note = note,
+//                                modifier = Modifier,
+//                                onClick = onClick
+//                            )
+//                        }
+//                    }
+//                } else {
 
-                    item {
-                        Text(
-                            text = category.categoryTitle.toString(),
-                            modifier = Modifier
-                                .padding(
-                                    start = 16.dp,
-                                    top = 8.dp,
-                                    bottom = 8.dp
-                                ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            fontSize = 24.sp
-                        )
-                    }
+                    notes.entries.forEach { (category, notes) ->
 
-                    items(
-                        items = notes,
-                        key = { it.noteId }
-                    ) { note ->
-
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToEnd) {
-                                    viewModel.deleteNote(note.noteId)
-                                }
-                                true
-                            }
-                        )
-
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(DismissDirection.StartToEnd),
-                            dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {},
-                        ) {
-
-                            NoteItem(
-                                note = note,
-                                modifier = Modifier,
-                                onClick = onClick
+                        item {
+                            Text(
+                                text = category.categoryTitle.toString(),
+                                modifier = Modifier
+                                    .padding(
+                                        start = 16.dp,
+                                        top = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = 24.sp
                             )
+                        }
+
+                        items(
+                            items = notes,
+                            key = { it.noteId }
+                        ) { note ->
+
+                            val dismissState = rememberDismissState(
+                                confirmStateChange = {
+                                    if (it == DismissValue.DismissedToEnd) {
+                                        viewModel.deleteNote(note.noteId)
+                                    }
+                                    true
+                                }
+                            )
+
+                            SwipeToDismiss(
+                                state = dismissState,
+                                directions = setOf(DismissDirection.StartToEnd),
+                                dismissThresholds = { FractionalThreshold(.6f) },
+                                background = {},
+                            ) {
+
+                                NoteItem(
+                                    note = note,
+                                    modifier = Modifier,
+                                    onClick = onNoteClick
+                                )
+                            }
                         }
                     }
                 }
-            }
+
         },
         floatingActionButton = {
 
             ExtendedFloatingActionButton(
                 text = { Text(text = "New Note") },
                 onClick = {
-                    onClick(0L)
+                    onNoteClick(0L)
                 },
                 backgroundColor = Pine,
                 icon = {

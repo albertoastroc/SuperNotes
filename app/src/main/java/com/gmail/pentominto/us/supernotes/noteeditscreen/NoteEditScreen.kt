@@ -15,8 +15,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -46,15 +49,23 @@ fun NoteEditScreen(
 
     val configuration = LocalConfiguration.current
 
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    val bottomDrawerState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
 
-    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomDrawerState)
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
+
+    val focusRequester = remember { FocusRequester() }
+
+    val focusManager = LocalFocusManager.current
+
+
 
     val note by remember { viewModel.note }
 
     val categories by remember { viewModel.categories }
+
+
 
     if (noteId != 0L) {
         viewModel.getNote(noteId)
@@ -93,7 +104,7 @@ fun NoteEditScreen(
                 start = 16.dp,
                 end = 16.dp
             ),
-        scaffoldState = scaffoldState,
+        scaffoldState = bottomSheetScaffoldState,
         sheetGesturesEnabled = true,
         sheetPeekHeight = 0.dp,
         content = {
@@ -165,6 +176,7 @@ fun NoteEditScreen(
                         placeholder = { Text(text = "Enter Text...") },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
+                            .focusRequester(focusRequester)
                             .fillMaxWidth()
                             .background(
                                 color = Color.Transparent
@@ -175,7 +187,7 @@ fun NoteEditScreen(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent
-                        )
+                        ),
                     )
                 }
 
@@ -202,9 +214,10 @@ fun NoteEditScreen(
 
                                 Button(
                                     onClick = {
-                                        scope.launch {
+                                        coroutineScope.launch {
 
-                                            bottomDrawerState.expand()
+                                            bottomSheetState.expand()
+                                            focusManager.clearFocus()
                                         }
                                     },
                                     modifier = Modifier
@@ -257,10 +270,10 @@ fun NoteEditScreen(
                 onDeleteCategory = { viewModel.deleteCategory(it) },
                 onClickCategory = {
 
-                    viewModel.saveCategory(it)
-                    scope.launch {
+                    viewModel.saveNoteCategory(it)
+                    coroutineScope.launch {
 
-                        scaffoldState.bottomSheetState.collapse()
+                        bottomSheetScaffoldState.bottomSheetState.collapse()
                     }
                 }
             )
@@ -272,7 +285,7 @@ fun NoteEditScreen(
 @Composable
 fun CategoriesList(
     categories : List<Category>,
-    currentCategory : Category?,
+    currentCategory : Category,
     onClickDialog : (String) -> Unit,
     onDeleteCategory : (Category) -> Unit,
     onClickCategory : (Category) -> Unit,
@@ -308,10 +321,13 @@ fun CategoriesList(
                 Image(
                     painter = painterResource(id = R.drawable.ic_baseline_add_24),
                     contentDescription = null,
-                    modifier = Modifier.clickable(
+                    modifier = Modifier
+                        .clickable(
                         interactionSource = NoRippleInteractionSource(),
                         indication = null,
-                        onClick = { openCategoryDialog.value = true }
+                        onClick = {
+                            openCategoryDialog.value = true
+                        }
                     )
                 )
 
@@ -327,7 +343,8 @@ fun CategoriesList(
                         text = {
                             TextField(
                                 value = dialogInput.value,
-                                modifier = Modifier.padding(top = 8.dp),
+                                modifier = Modifier
+                                    .padding(top = 8.dp),
                                 placeholder = { Text(text = "New Category Name...") },
                                 onValueChange = {
                                     dialogInput.value = it
@@ -335,7 +352,6 @@ fun CategoriesList(
                                 })
                         },
                         confirmButton = {
-
                             Button(
                                 onClick = {
 
@@ -422,6 +438,7 @@ fun CategoriesList(
                             .clickable(
                                 interactionSource = NoRippleInteractionSource(),
                                 onClick = {
+
                                     onDeleteCategory(category)
                                 },
                                 indication = null
