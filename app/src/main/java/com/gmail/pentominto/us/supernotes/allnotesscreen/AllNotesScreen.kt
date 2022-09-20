@@ -84,8 +84,7 @@ fun AllNotesScreen(
                         title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),
-
-                    ),
+                ),
                 categoriesList = categories,
                 onSettingClick = { onOptionsClick(it) },
                 onCategoryClick = {}
@@ -106,37 +105,7 @@ fun AllNotesScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
 
-                if (!showCategories.value) {
-
-                    items(
-                        items = viewModel.notesListNoCategories.value,
-                                key = { it.noteId }
-                    ) { note ->
-
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToEnd) {
-                                    viewModel.deleteNote(note.noteId)
-                                }
-                                true
-                            }
-                        )
-
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(DismissDirection.StartToEnd),
-                            dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {},
-                        ) {
-
-                            NoteItem(
-                                note = note,
-                                modifier = Modifier,
-                                onClick = { onNoteClick(note.noteId) }
-                            )
-                        }
-                    }
-                } else {
+                if (showCategories.value) {
 
                     notes.entries.forEach { (category, notes) ->
 
@@ -184,9 +153,38 @@ fun AllNotesScreen(
                             }
                         }
                     }
+                } else {
+
+                    items(
+                        items = viewModel.notesListNoCategories.value,
+                        key = { it.noteId }
+                    ) { note ->
+
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                if (it == DismissValue.DismissedToEnd) {
+                                    viewModel.deleteNote(note.noteId)
+                                }
+                                true
+                            }
+                        )
+
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.StartToEnd),
+                            dismissThresholds = { FractionalThreshold(.6f) },
+                            background = {},
+                        ) {
+
+                            NoteItem(
+                                note = note,
+                                modifier = Modifier,
+                                onClick = { onNoteClick(note.noteId) }
+                            )
+                        }
+                    }
                 }
             }
-
         },
         floatingActionButton = {
 
