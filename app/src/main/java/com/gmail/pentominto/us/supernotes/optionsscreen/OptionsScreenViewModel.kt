@@ -22,6 +22,8 @@ class OptionsScreenViewModel @Inject constructor(
     private val _categoriesOptionState : MutableState<Boolean> = mutableStateOf(false)
     val categoriesOptionsState : State<Boolean> = _categoriesOptionState
 
+    val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+
     fun categoriesPrefToggle() {
 
         viewModelScope.launch {
@@ -29,7 +31,6 @@ class OptionsScreenViewModel @Inject constructor(
             dataStore.edit { settings ->
 
                 _categoriesOptionState.value = !_categoriesOptionState.value
-                val hideCategoriesKey = booleanPreferencesKey("hide_categories")
                 settings[hideCategoriesKey] = categoriesOptionsState.value
 
                 Log.d(
@@ -44,13 +45,11 @@ class OptionsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val hideCategoryKey = booleanPreferencesKey("hide_categories")
-
             dataStore.data.collect() { preferences ->
 
-                if (preferences.contains(hideCategoryKey)) {
+                if (preferences.contains(hideCategoriesKey)) {
 
-                    _categoriesOptionState.value = preferences[hideCategoryKey] !!
+                    _categoriesOptionState.value = preferences[hideCategoriesKey] !!
                 }
             }
         }
