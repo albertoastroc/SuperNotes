@@ -43,7 +43,7 @@ fun OptionsScreen(
 
         OptionsRowWithSwitch(
             optionsTitle = "Enable categories",
-            optionSelected = "When disabled one uncategorized list will be displayed",
+            optionSelected = "When disabled one uncategorized list will be shown",
             switchState = viewModel.categoriesOptionsState.value
         ) {
             viewModel.categoriesPrefToggle()

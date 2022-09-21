@@ -2,6 +2,7 @@
 
 package com.gmail.pentominto.us.supernotes
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,16 +10,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.gmail.pentominto.us.supernotes.Utility.Constants.PREFERENCES_STORE_NAME
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.optionsscreen.OptionsScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_STORE_NAME)
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(){
@@ -27,12 +34,14 @@ class MainActivity : ComponentActivity(){
         super.onCreate(savedInstanceState)
 
         setContent {
-            SuperNotesTheme {
+            SuperNotesTheme(
+                darkTheme = false
+            ) {
 
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
                     systemUiController.setSystemBarsColor(
-                        color = Color.Transparent,
+                        color = Color.White,
                         darkIcons = true
                     )
                 }
@@ -110,14 +119,14 @@ fun SuperNotesApp() {
  * in settings screen/ maybe call it options instead of settings - done
  *
  * restore tutorial note - need to know what all to include in tutorial first, for prepopulating https://developer.android.com/training/data-storage/room/prepopulate
- * disable categories
+ * disable categories - done
  * export all notes
  * import txt file
  * delete all notes
  * delete all categories
  * select font size
- * turn off reminders
- * dark mode
+ *
+ * dark mode - working on it
  *
  * single note settings
  *

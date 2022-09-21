@@ -32,7 +32,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.ui.theme.*
+import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
+import com.gmail.pentominto.us.supernotes.ui.theme.Pine
+import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -58,8 +60,6 @@ fun NoteEditScreen(
     val focusRequester = remember { FocusRequester() }
 
     val focusManager = LocalFocusManager.current
-
-
 
     val note by remember { viewModel.note }
 
@@ -116,12 +116,12 @@ fun NoteEditScreen(
                 Card(
                     modifier = Modifier,
                     shape = RoundedCornerShape(4.dp),
-                    elevation = 1.dp
+                    elevation = 1.dp,
+                    backgroundColor = MaterialTheme.colors.secondary
                 ) {
 
                     Row(
                         modifier = Modifier
-                            .background(LighterWalnutBrown)
                             .weight(1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -168,7 +168,7 @@ fun NoteEditScreen(
                         .weight(1f),
                     elevation = 1.dp,
                     shape = RoundedCornerShape(4.dp),
-                    backgroundColor = LighterWalnutBrown
+                    backgroundColor = MaterialTheme.colors.secondary
                 ) {
 
                     TextField(
@@ -201,7 +201,7 @@ fun NoteEditScreen(
                             modifier = Modifier,
                             elevation = 0.dp,
                             shape = RoundedCornerShape(2.dp),
-                            backgroundColor = LighterWalnutBrown
+                            backgroundColor = MaterialTheme.colors.secondary
                         ) {
 
                             Row(
@@ -224,7 +224,7 @@ fun NoteEditScreen(
                                         .clip(CircleShape)
                                         .widthIn(max = 200.dp)
                                         .heightIn(max = 100.dp),
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                                 ) {
                                     Text(
                                         text = viewModel.noteCategory.value.categoryTitle.toString(),
@@ -236,7 +236,8 @@ fun NoteEditScreen(
                                                 end = 12.dp
                                             ),
                                         overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1
+                                        maxLines = 1,
+                                        color = MaterialTheme.colors.onBackground
                                     )
                                 }
                                 Column(
@@ -323,12 +324,12 @@ fun CategoriesList(
                     contentDescription = null,
                     modifier = Modifier
                         .clickable(
-                        interactionSource = NoRippleInteractionSource(),
-                        indication = null,
-                        onClick = {
-                            openCategoryDialog.value = true
-                        }
-                    )
+                            interactionSource = NoRippleInteractionSource(),
+                            indication = null,
+                            onClick = {
+                                openCategoryDialog.value = true
+                            }
+                        )
                 )
 
                 if (openCategoryDialog.value) {
@@ -405,7 +406,10 @@ fun CategoriesList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = if (category == currentCategory) WhiteSmoke else Color.White)
+                    .background(
+                        color = if (category == currentCategory)
+                            MaterialTheme.colors.primary else MaterialTheme.colors.background
+                    )
                     .height(60.dp)
                     .clickable {
 

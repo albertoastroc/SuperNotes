@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,19 +18,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
-import com.gmail.pentominto.us.supernotes.ui.theme.LimishGreen
-import kotlinx.coroutines.launch
+import com.gmail.pentominto.us.supernotes.ui.theme.LightLimeGreen
 
 @Composable
 fun SearchBarWithMenu(
     input : String,
     onInputChange : (String) -> Unit,
     scaffoldState : ScaffoldState,
+    onMenuIconClick : () -> Unit
 ) {
 
-    val searchBarBackGroundColor = LimishGreen
+    val searchBarBackGroundColor = LightLimeGreen
     val scope = rememberCoroutineScope()
-    var menuExpanded = remember { mutableStateOf(false) }
+    //var menuExpanded = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -44,7 +42,7 @@ fun SearchBarWithMenu(
                 bottom = 8.dp
             )
             .clip(CircleShape)
-            .background(searchBarBackGroundColor),
+            .background(MaterialTheme.colors.primary),
 
         ) {
 
@@ -61,10 +59,7 @@ fun SearchBarWithMenu(
                         interactionSource = NoRippleInteractionSource(),
                         onClick = {
 
-                            scope.launch {
-
-                                scaffoldState.drawerState.open()
-                            }
+                            onMenuIconClick()
                         },
                         indication = null
                     ),
@@ -76,7 +71,7 @@ fun SearchBarWithMenu(
                 value = input,
                 colors = TextFieldDefaults.textFieldColors(
                     disabledTextColor = Color.Transparent,
-                    backgroundColor = searchBarBackGroundColor,
+                    backgroundColor = MaterialTheme.colors.primary,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent

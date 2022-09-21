@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,8 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
-import com.gmail.pentominto.us.supernotes.ui.theme.LighterWalnutBrown
 
 @Composable
 fun NoteItem(
@@ -35,7 +34,7 @@ fun NoteItem(
             .padding(4.dp),
         elevation = 1.dp,
         shape = RoundedCornerShape(4.dp),
-        backgroundColor = LighterWalnutBrown
+        backgroundColor = MaterialTheme.colors.secondary
 
     ) {
 
@@ -45,7 +44,7 @@ fun NoteItem(
                 .border(
                     border = BorderStroke(
                         2.dp,
-                        BrownBark
+                        MaterialTheme.colors.secondaryVariant
                     )
                 )
         ) {
@@ -57,7 +56,7 @@ fun NoteItem(
             Divider(
                 modifier = Modifier.height(1.dp)
                     .padding(horizontal = 12.dp),
-                color = BrownBark
+                color = MaterialTheme.colors.secondaryVariant
             )
 
             Text(
@@ -80,7 +79,7 @@ fun NoteItem(
             Divider(
                 modifier = Modifier.height(1.dp)
                     .padding(horizontal = 12.dp),
-                color = BrownBark
+                color = MaterialTheme.colors.secondaryVariant
             )
             Spacer(
                 modifier = Modifier

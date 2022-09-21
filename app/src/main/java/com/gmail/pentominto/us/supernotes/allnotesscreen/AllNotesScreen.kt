@@ -18,8 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItem
 import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
-import com.gmail.pentominto.us.supernotes.ui.theme.Pine
-import com.gmail.pentominto.us.supernotes.ui.theme.Powder
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -39,6 +38,8 @@ fun AllNotesScreen(
 
     val categories by remember { viewModel.categories }
 
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(
         key1 = viewModel.notesListWithCategories,
         key2 = viewModel.notesListNoCategories,
@@ -51,7 +52,7 @@ fun AllNotesScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        backgroundColor = Powder,
+        backgroundColor = MaterialTheme.colors.background,
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerContent = {
@@ -86,7 +87,16 @@ fun AllNotesScreen(
                     ),
                 ),
                 categoriesList = categories,
-                onSettingClick = { onOptionsClick(it) },
+                onSettingClick = {
+
+
+                    scope.launch {
+
+                        scaffoldState.drawerState.close()
+                        onOptionsClick(it)
+                    }
+
+                                 },
                 onCategoryClick = {}
             )
         },
@@ -95,7 +105,14 @@ fun AllNotesScreen(
             SearchBarWithMenu(
                 input = state.value,
                 scaffoldState = scaffoldState,
-                onInputChange = { viewModel.onSearchChange(state.value) }
+                onInputChange = { viewModel.onSearchChange(state.value) },
+                onMenuIconClick = {
+
+                    scope.launch {
+
+                        scaffoldState.drawerState.open()
+                    }
+                }
             )
 
         },
@@ -193,7 +210,7 @@ fun AllNotesScreen(
                 onClick = {
                     onNoteClick(0L)
                 },
-                backgroundColor = Pine,
+                backgroundColor = MaterialTheme.colors.primaryVariant,
                 icon = {
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_add_24),

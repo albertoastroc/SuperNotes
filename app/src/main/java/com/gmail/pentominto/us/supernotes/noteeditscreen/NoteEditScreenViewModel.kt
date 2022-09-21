@@ -81,8 +81,17 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            val categoriesToUpdate = databaseDao.getNotesOfThisCategory(category.categoryTitle)
+
             databaseDao.deleteCategory(category.categoryId)
-            saveNoteCategory(Category("No Category"))
+
+            categoriesToUpdate.collect() {
+
+                it.forEach {
+
+                    databaseDao.updateNoteCategory("No Category", it.noteId)
+                }
+            }
         }
     }
 
@@ -104,7 +113,7 @@ class NoteEditScreenViewModel @Inject constructor(
             saveNoteText()
             _noteCategory.value.let {
                 databaseDao.updateNoteCategory(
-                    chosenCategory = category.categoryTitle.toString(),
+                    chosenCategory = category.categoryTitle,
                     noteId = note.value.noteId
                 )
             }
