@@ -1,5 +1,3 @@
-
-
 package com.gmail.pentominto.us.supernotes
 
 import android.content.Context
@@ -21,29 +19,42 @@ import androidx.navigation.navArgument
 import com.gmail.pentominto.us.supernotes.Utility.Constants.PREFERENCES_STORE_NAME
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.optionsscreen.OptionsScreen
+import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_STORE_NAME)
+val isDark = true
+
+val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_STORE_NAME)
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity(){
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             SuperNotesTheme(
-                darkTheme = false
+                darkTheme = isDark
             ) {
 
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
-                    systemUiController.setSystemBarsColor(
-                        color = Color.White,
-                        darkIcons = true
-                    )
+
+                    if (!isDark) {
+
+                        systemUiController.setSystemBarsColor(
+                            color = Color.White,
+                            darkIcons = true
+                        )
+                    } else {
+
+                        systemUiController.setSystemBarsColor(
+                            color = Spider,
+                            darkIcons = false
+                        )
+                    }
                 }
                 SuperNotesApp()
             }
@@ -56,11 +67,11 @@ fun SuperNotesApp() {
 
     val navController = rememberNavController()
 
-   NavHost(
+    NavHost(
         navController = navController,
         startDestination = "allNotes",
 
-    ) {
+        ) {
         composable(
             "allNotes"
         ) {
@@ -97,10 +108,10 @@ fun SuperNotesApp() {
             }
         }
 
-       composable("options"){
+        composable("options") {
 
-           OptionsScreen()
-       }
+            OptionsScreen()
+        }
 
     }
 }

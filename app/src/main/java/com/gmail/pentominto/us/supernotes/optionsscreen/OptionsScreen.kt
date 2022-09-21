@@ -30,11 +30,11 @@ fun OptionsScreen(
                 .padding(16.dp)
         )
 
-        OptionsRow(
-            optionsTitle = "Theme",
-            optionSelected = "Light mode",
-        ) {}
 
+//        OptionsRow(
+//            optionsTitle = "Theme",
+//            optionSelected = "Light mode",
+//        ) {}
 
         OptionsRow(
             optionsTitle = "Note font size",

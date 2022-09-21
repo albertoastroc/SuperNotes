@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -25,16 +26,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.ui.theme.BrownBark
 import com.gmail.pentominto.us.supernotes.ui.theme.Pine
-import com.gmail.pentominto.us.supernotes.ui.theme.Powder
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -97,7 +95,7 @@ fun NoteEditScreen(
 
     BottomSheetScaffold(
         modifier = Modifier
-            .background(Powder)
+            .background(MaterialTheme.colors.background)
             .fillMaxSize()
             .padding(
                 top = 16.dp,
@@ -129,7 +127,10 @@ fun NoteEditScreen(
                         TextField(
                             value = note.noteTitle.toString(),
                             singleLine = true,
-                            placeholder = { Text(text = "Enter a Title...") },
+                            placeholder = { Text(
+                                text = "Enter a Title...",
+                                color = MaterialTheme.colors.onBackground
+                            ) },
                             onValueChange = { viewModel.onTitleInputChange(it) },
                             modifier = Modifier
                                 .weight(1f)
@@ -142,7 +143,7 @@ fun NoteEditScreen(
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent
-                            )
+                            ),
                         )
 
                         Icon(
@@ -155,12 +156,13 @@ fun NoteEditScreen(
                                     indication = null
                                 ),
                             contentDescription = null,
+                            tint = MaterialTheme.colors.onBackground
                         )
                     }
                 }
 
                 Divider(
-                    color = BrownBark
+                    color = MaterialTheme.colors.onBackground
                 )
 
                 Card(
@@ -173,7 +175,10 @@ fun NoteEditScreen(
 
                     TextField(
                         value = note.noteBody.toString(),
-                        placeholder = { Text(text = "Enter Text...") },
+                        placeholder = { Text(
+                            text = "Enter Text...",
+                            color = MaterialTheme.colors.onBackground
+                        ) },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
                             .focusRequester(focusRequester)
@@ -192,7 +197,7 @@ fun NoteEditScreen(
                 }
 
                 Divider(
-                    color = BrownBark
+                    color = MaterialTheme.colors.onBackground
                 )
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> {
@@ -224,10 +229,10 @@ fun NoteEditScreen(
                                         .clip(CircleShape)
                                         .widthIn(max = 200.dp)
                                         .heightIn(max = 100.dp),
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
                                 ) {
                                     Text(
-                                        text = viewModel.noteCategory.value.categoryTitle.toString(),
+                                        text = viewModel.noteCategory.value.categoryTitle,
                                         modifier = Modifier
                                             .padding(
                                                 top = 8.dp,
@@ -308,16 +313,11 @@ fun CategoriesList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .background(MaterialTheme.colors.primaryVariant)
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-                Text(
-                    text = "Categories",
-                    fontSize = 18.sp
-                )
 
                 Image(
                     painter = painterResource(id = R.drawable.ic_baseline_add_24),
@@ -329,7 +329,8 @@ fun CategoriesList(
                             onClick = {
                                 openCategoryDialog.value = true
                             }
-                        )
+                        ),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
                 )
 
                 if (openCategoryDialog.value) {
@@ -408,7 +409,7 @@ fun CategoriesList(
                     .fillMaxWidth()
                     .background(
                         color = if (category == currentCategory)
-                            MaterialTheme.colors.primary else MaterialTheme.colors.background
+                            MaterialTheme.colors.secondary else MaterialTheme.colors.primaryVariant
                     )
                     .height(60.dp)
                     .clickable {
@@ -418,7 +419,7 @@ fun CategoriesList(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = category.categoryTitle.toString(),
+                    text = category.categoryTitle,
                     modifier = Modifier
                         .padding(
                             top = 8.dp,

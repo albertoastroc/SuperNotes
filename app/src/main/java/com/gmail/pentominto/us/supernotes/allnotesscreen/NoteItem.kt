@@ -74,7 +74,8 @@ fun NoteItem(
                     ),
                 fontSize = 18.sp,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
             Divider(
                 modifier = Modifier.height(1.dp)

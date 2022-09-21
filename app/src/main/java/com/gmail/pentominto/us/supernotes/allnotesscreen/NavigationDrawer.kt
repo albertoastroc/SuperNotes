@@ -32,6 +32,7 @@ fun Drawer(
     ) {
 
         item {
+
             DrawerHeader()
         }
         items(drawerOptionsList) { item ->
@@ -66,7 +67,8 @@ fun Drawer(
 }
 
 @Composable
-fun DrawerHeader() {
+fun DrawerHeader(
+) {
 
     Box(
         modifier = Modifier

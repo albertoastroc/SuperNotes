@@ -42,7 +42,7 @@ fun SearchBarWithMenu(
                 bottom = 8.dp
             )
             .clip(CircleShape)
-            .background(MaterialTheme.colors.primary),
+            .background(MaterialTheme.colors.primaryVariant),
 
         ) {
 
@@ -64,6 +64,7 @@ fun SearchBarWithMenu(
                         indication = null
                     ),
                 contentDescription = null,
+                tint = MaterialTheme.colors.onBackground
             )
 
             TextField(
@@ -71,7 +72,7 @@ fun SearchBarWithMenu(
                 value = input,
                 colors = TextFieldDefaults.textFieldColors(
                     disabledTextColor = Color.Transparent,
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
@@ -79,7 +80,8 @@ fun SearchBarWithMenu(
                 singleLine = true,
                 placeholder = {
                     Text(
-                        text = "Search Notes..."
+                        text = "Search Notes...",
+                        color = MaterialTheme.colors.onBackground
                     )
                 },
                 onValueChange = { onInputChange(it) },
