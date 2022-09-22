@@ -23,9 +23,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -113,9 +115,9 @@ fun NoteEditScreen(
 
                 Card(
                     modifier = Modifier,
-                    shape = RoundedCornerShape(4.dp),
+                    shape = RoundedCornerShape(2.dp),
                     elevation = 1.dp,
-                    backgroundColor = MaterialTheme.colors.secondary
+                    backgroundColor = MaterialTheme.colors.primary
                 ) {
 
                     Row(
@@ -129,7 +131,8 @@ fun NoteEditScreen(
                             singleLine = true,
                             placeholder = { Text(
                                 text = "Enter a Title...",
-                                color = MaterialTheme.colors.onBackground
+                                color = MaterialTheme.colors.onPrimary,
+                                fontSize = 18.sp
                             ) },
                             onValueChange = { viewModel.onTitleInputChange(it) },
                             modifier = Modifier
@@ -144,6 +147,10 @@ fun NoteEditScreen(
                                 unfocusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent
                             ),
+                            textStyle = TextStyle(
+                                color = MaterialTheme.colors.onBackground,
+                                fontSize = 18.sp
+                            )
                         )
 
                         Icon(
@@ -162,22 +169,24 @@ fun NoteEditScreen(
                 }
 
                 Divider(
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.padding(horizontal = 2.dp)
                 )
 
                 Card(
                     modifier = Modifier
                         .weight(1f),
                     elevation = 1.dp,
-                    shape = RoundedCornerShape(4.dp),
-                    backgroundColor = MaterialTheme.colors.secondary
+                    shape = RoundedCornerShape(2.dp),
+                    backgroundColor = MaterialTheme.colors.primary
                 ) {
 
                     TextField(
                         value = note.noteBody.toString(),
                         placeholder = { Text(
                             text = "Enter Text...",
-                            color = MaterialTheme.colors.onBackground
+                            color = MaterialTheme.colors.onPrimary,
+                            fontSize = 18.sp
                         ) },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
@@ -193,11 +202,16 @@ fun NoteEditScreen(
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent
                         ),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colors.onBackground,
+                            fontSize = 18.sp
+                        )
                     )
                 }
 
                 Divider(
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.padding(horizontal = 2.dp)
                 )
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> {
@@ -206,7 +220,7 @@ fun NoteEditScreen(
                             modifier = Modifier,
                             elevation = 0.dp,
                             shape = RoundedCornerShape(2.dp),
-                            backgroundColor = MaterialTheme.colors.secondary
+                            backgroundColor = MaterialTheme.colors.primary
                         ) {
 
                             Row(
@@ -229,7 +243,7 @@ fun NoteEditScreen(
                                         .clip(CircleShape)
                                         .widthIn(max = 200.dp)
                                         .heightIn(max = 100.dp),
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
                                 ) {
                                     Text(
                                         text = viewModel.noteCategory.value.categoryTitle,
@@ -242,7 +256,7 @@ fun NoteEditScreen(
                                             ),
                                         overflow = TextOverflow.Ellipsis,
                                         maxLines = 1,
-                                        color = MaterialTheme.colors.onBackground
+                                        color = MaterialTheme.colors.onSecondary
                                     )
                                 }
                                 Column(
@@ -252,12 +266,14 @@ fun NoteEditScreen(
 
                                     Text(
                                         text = "Created : 4/13/22",
-                                        fontStyle = FontStyle.Italic
+                                        fontStyle = FontStyle.Italic,
+                                        color = MaterialTheme.colors.onBackground
                                     )
 
                                     Text(
                                         text = "Last Modified : 5/1/22",
-                                        fontStyle = FontStyle.Italic
+                                        fontStyle = FontStyle.Italic,
+                                        color = MaterialTheme.colors.onBackground
                                     )
                                 }
                             }
@@ -395,7 +411,8 @@ fun CategoriesList(
 
             Divider(
                 modifier = Modifier
-                    .height(1.dp)
+                    .height(.5.dp),
+                color = MaterialTheme.colors.onPrimary
             )
         }
 

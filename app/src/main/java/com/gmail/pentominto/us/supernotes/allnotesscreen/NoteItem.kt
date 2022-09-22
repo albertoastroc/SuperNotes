@@ -34,7 +34,7 @@ fun NoteItem(
             .padding(4.dp),
         elevation = 1.dp,
         shape = RoundedCornerShape(4.dp),
-        backgroundColor = MaterialTheme.colors.secondary
+        backgroundColor = MaterialTheme.colors.primary
 
     ) {
 
@@ -44,7 +44,7 @@ fun NoteItem(
                 .border(
                     border = BorderStroke(
                         2.dp,
-                        MaterialTheme.colors.secondaryVariant
+                        MaterialTheme.colors.primary
                     )
                 )
         ) {
@@ -54,9 +54,9 @@ fun NoteItem(
                     .height(10.dp)
             )
             Divider(
-                modifier = Modifier.height(1.dp)
+                modifier = Modifier.height(.5.dp)
                     .padding(horizontal = 12.dp),
-                color = MaterialTheme.colors.secondaryVariant
+                color = MaterialTheme.colors.primaryVariant
             )
 
             Text(
@@ -78,9 +78,9 @@ fun NoteItem(
                 color = MaterialTheme.colors.onBackground
             )
             Divider(
-                modifier = Modifier.height(1.dp)
+                modifier = Modifier.height(.5.dp)
                     .padding(horizontal = 12.dp),
-                color = MaterialTheme.colors.secondaryVariant
+                color = MaterialTheme.colors.primaryVariant
             )
             Spacer(
                 modifier = Modifier

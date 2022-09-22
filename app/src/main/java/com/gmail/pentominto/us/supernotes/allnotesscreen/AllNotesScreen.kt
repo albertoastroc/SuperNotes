@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -210,14 +209,13 @@ fun AllNotesScreen(
                 onClick = {
                     onNoteClick(0L)
                 },
-                backgroundColor = MaterialTheme.colors.primaryVariant,
+                backgroundColor = MaterialTheme.colors.secondary,
                 icon = {
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_add_24),
                         contentDescription = null,
                     )
                 },
-                contentColor = Color.White
             )
         }
     )

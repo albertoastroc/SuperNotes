@@ -20,6 +20,7 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.ui.theme.LightLimeGreen
 
+
 @Composable
 fun SearchBarWithMenu(
     input : String,
@@ -42,7 +43,7 @@ fun SearchBarWithMenu(
                 bottom = 8.dp
             )
             .clip(CircleShape)
-            .background(MaterialTheme.colors.primaryVariant),
+            .background(MaterialTheme.colors.secondaryVariant),
 
         ) {
 
@@ -64,7 +65,7 @@ fun SearchBarWithMenu(
                         indication = null
                     ),
                 contentDescription = null,
-                tint = MaterialTheme.colors.onBackground
+                tint = MaterialTheme.colors.onSecondary
             )
 
             TextField(
@@ -72,7 +73,7 @@ fun SearchBarWithMenu(
                 value = input,
                 colors = TextFieldDefaults.textFieldColors(
                     disabledTextColor = Color.Transparent,
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    backgroundColor = MaterialTheme.colors.secondaryVariant,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
@@ -81,7 +82,7 @@ fun SearchBarWithMenu(
                 placeholder = {
                     Text(
                         text = "Search Notes...",
-                        color = MaterialTheme.colors.onBackground
+                        color = MaterialTheme.colors.onSecondary
                     )
                 },
                 onValueChange = { onInputChange(it) },

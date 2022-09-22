@@ -21,4 +21,12 @@ val Spider = Color(0xFF040200)
 val Metal = Color(0xFF0E0C0A)
 val Charcoal = Color(0xFF28231D)
 val Fossil = Color(0xFF787276)
+val Cloud = Color(0xFFC5c6d0)
+
+//Light theme test
+val almond = Color(0xFFefdecd)
+val sage = Color(0xFFbbb8a2)
+val huntergreen = Color(0xFF536b4a)
+val artichoke = Color(0xFF879176)
+
 

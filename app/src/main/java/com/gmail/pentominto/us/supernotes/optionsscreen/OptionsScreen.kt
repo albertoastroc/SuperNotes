@@ -1,8 +1,10 @@
 package com.gmail.pentominto.us.supernotes.optionsscreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,20 +23,25 @@ fun OptionsScreen(
     viewModel : OptionsScreenViewModel = hiltViewModel()
 ) {
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    ) {
 
         Text(
             text = "Options",
             fontSize = 36.sp,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(16.dp),
+            color = MaterialTheme.colors.onBackground
         )
 
 
-//        OptionsRow(
-//            optionsTitle = "Theme",
-//            optionSelected = "Light mode",
-//        ) {}
+        OptionsRow(
+            optionsTitle = "Theme",
+            optionSelected = "Light mode",
+        ) {}
 
         OptionsRow(
             optionsTitle = "Note font size",
@@ -96,12 +103,14 @@ fun OptionsRow(
 
             Text(
                 text = optionsTitle,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground
             )
             if (optionSelected != null) {
                 Text(
                     text = optionSelected,
-                    fontWeight = FontWeight.Light
+                    fontWeight = FontWeight.Light,
+                    color = MaterialTheme.colors.onBackground
                 )
             }
         }
@@ -138,13 +147,15 @@ fun OptionsRowWithSwitch(
 
             Text(
                 text = optionsTitle,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground
             )
             if (optionSelected != null) {
                 Text(
                     text = optionSelected,
                     fontWeight = FontWeight.Light,
                     overflow = TextOverflow.Clip,
+                    color = MaterialTheme.colors.onBackground
                 )
             }
         }

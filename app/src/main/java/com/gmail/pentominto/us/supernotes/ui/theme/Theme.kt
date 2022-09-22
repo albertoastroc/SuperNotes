@@ -13,17 +13,21 @@ private val DarkColorPalette = darkColors(
     secondary = Fossil,
     secondaryVariant = Color.White,
     background = Spider,
-    onBackground = Color.White
+    onBackground = Color.White,
+    surface = Cloud,
+    onSurface = Color.White
 )
 
 
 private val LightColorPalette = lightColors(
-    primary = LightLimeGreen,
-    primaryVariant = Pine,
-    secondary = LightWalnutBrown,
-    secondaryVariant = BrownBark,
+    primary = almond,
+    primaryVariant = sage,
+    onPrimary = Color.Black,
+    secondary = huntergreen,
+    secondaryVariant = artichoke,
+    onSecondary = Color.White,
     background = Color.White,
-    onBackground = Color.Black
+    onBackground = Color.Black,
 
     /* Other default colors to override
     background = Color.White,
