@@ -24,7 +24,7 @@ import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
-val isDark = false
+val isDark = true
 
 val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_STORE_NAME)
 

@@ -54,7 +54,7 @@ fun AllNotesScreen(
         backgroundColor = MaterialTheme.colors.background,
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-        drawerBackgroundColor = MaterialTheme.colors.primaryVariant,
+        drawerBackgroundColor = MaterialTheme.colors.secondaryVariant,
         drawerContent = {
 
             Drawer(

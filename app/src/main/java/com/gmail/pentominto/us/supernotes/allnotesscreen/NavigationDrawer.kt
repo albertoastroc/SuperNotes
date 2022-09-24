@@ -48,13 +48,14 @@ fun Drawer(
                 Icon(
                     imageVector = item.icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colors.primary
+                    tint = MaterialTheme.colors.onBackground
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = item.title,
                     modifier = Modifier.weight(1f),
-                    style = itemTextStyle
+                    style = itemTextStyle,
+                    color = MaterialTheme.colors.onBackground
                 )
 
             }
