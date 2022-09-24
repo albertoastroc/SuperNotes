@@ -3,10 +3,7 @@ package com.gmail.pentominto.us.supernotes.optionsscreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -167,12 +164,14 @@ fun OptionsRowWithSwitch(
             },
             modifier = Modifier
                 .padding(end = 16.dp),
-//            colors = SwitchDefaults.colors(
-//                checkedThumbColor = MaterialTheme.colors.onBackground,
-//                uncheckedThumbColor = MaterialTheme.colors.onBackground,
-//                checkedTrackColor = MaterialTheme.colors.background,
-//                uncheckedTrackColor = MaterialTheme.colors.background
-//            )
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colors.primary,
+                uncheckedThumbColor = MaterialTheme.colors.primary,
+                checkedTrackColor = MaterialTheme.colors.primaryVariant,
+                uncheckedTrackColor = MaterialTheme.colors.primaryVariant,
+                checkedTrackAlpha = 1f,
+                uncheckedTrackAlpha = 1f,
+            )
         )
     }
 
