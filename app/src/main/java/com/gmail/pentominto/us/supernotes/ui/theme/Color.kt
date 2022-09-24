@@ -18,8 +18,9 @@ val LightLimeGreen = Color(0xFFB7E1B6)
 //Dark color theme
 
 val Spider = Color(0xFF040200)
-val Metal = Color(0xFF0E0C0A)
+val smokeyblack = Color(0xFF16130F)
 val Charcoal = Color(0xFF28231D)
+val blackchocolate = Color(0xFF1f1b16)
 val Fossil = Color(0xFF787276)
 val Cloud = Color(0xFFC5c6d0)
 
