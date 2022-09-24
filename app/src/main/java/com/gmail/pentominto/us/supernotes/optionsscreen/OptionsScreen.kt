@@ -127,7 +127,7 @@ fun OptionsRowWithSwitch(
     onClick : (Boolean) -> Unit
 ) {
 
-    val checkedState = remember { mutableStateOf( switchState ) }
+    val checkedState = remember { mutableStateOf(switchState) }
 
     Row(
         modifier = Modifier
@@ -159,16 +159,21 @@ fun OptionsRowWithSwitch(
                 )
             }
         }
-            Switch(
-                checked = checkedState.value,
-                onCheckedChange = {
-                    onClick(checkedState.value)
-                    checkedState.value = it
-                },
-                modifier = Modifier
-                    .padding(end = 16.dp)
-            )
-
+        Switch(
+            checked = checkedState.value,
+            onCheckedChange = {
+                onClick(checkedState.value)
+                checkedState.value = it
+            },
+            modifier = Modifier
+                .padding(end = 16.dp),
+//            colors = SwitchDefaults.colors(
+//                checkedThumbColor = MaterialTheme.colors.onBackground,
+//                uncheckedThumbColor = MaterialTheme.colors.onBackground,
+//                checkedTrackColor = MaterialTheme.colors.background,
+//                uncheckedTrackColor = MaterialTheme.colors.background
+//            )
+        )
     }
 
     Divider()

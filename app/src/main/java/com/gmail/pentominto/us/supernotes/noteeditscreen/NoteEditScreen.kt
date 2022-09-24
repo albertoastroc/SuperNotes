@@ -329,7 +329,7 @@ fun CategoriesList(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.primaryVariant)
+                    .background(MaterialTheme.colors.secondaryVariant)
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
@@ -426,7 +426,7 @@ fun CategoriesList(
                     .fillMaxWidth()
                     .background(
                         color = if (category == currentCategory)
-                            MaterialTheme.colors.secondary else MaterialTheme.colors.primaryVariant
+                            MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
                     )
                     .height(60.dp)
                     .clickable {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,9 +28,7 @@ fun Drawer(
     itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
 ) {
 
-    LazyColumn(
-
-    ) {
+    LazyColumn() {
 
         item {
 
@@ -48,7 +47,8 @@ fun Drawer(
 
                 Icon(
                     imageVector = item.icon,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.primary
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
@@ -70,11 +70,12 @@ fun Drawer(
 fun DrawerHeader(
 ) {
 
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 24.dp),
-        contentAlignment = Alignment.Center
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment =  Alignment.CenterVertically
     )
     {
         Image(
@@ -82,7 +83,7 @@ fun DrawerHeader(
             modifier = Modifier
                 .height(50.dp)
                 .width(50.dp),
-            contentDescription = null
+            contentDescription = null,
         )
 
     }
