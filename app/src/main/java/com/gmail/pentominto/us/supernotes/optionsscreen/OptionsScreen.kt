@@ -36,8 +36,8 @@ fun OptionsScreen(
 
 
         OptionsRowWithSwitch(
-            optionsTitle = "Theme",
-            optionSelected = "Light mode",
+            optionsTitle = "Enable Dark Mode",
+            optionSelected = "App specific theme",
             viewModel.useDarkThemeState.value
         ) {
             viewModel.themeToggle()

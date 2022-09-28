@@ -43,12 +43,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            val userTheme = themeFlow.collectAsState(initial = false)
-
             val savedTheme : MutableState<Boolean> = runBlocking{ mutableStateOf(themeFlow.first()) }
 
-            val themeState: MutableState<Boolean> =  remember(key1 = userTheme.value) { mutableStateOf(savedTheme.value) }
-//            val themeState: MutableState<Boolean> = runBlocking {  mutableStateOf(themeFlow.first())}
+            val latestTheme = themeFlow.collectAsState(initial = false)
+
+            val themeState: MutableState<Boolean> = remember(key1 = latestTheme.value) { mutableStateOf(savedTheme.value) }
 
             SuperNotesTheme(
                 darkTheme = themeState.value
@@ -57,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
 
-                    if (!userTheme.value) {
+                    if (!themeState.value) {
 
                         systemUiController.setSystemBarsColor(
                             color = Color.White,
