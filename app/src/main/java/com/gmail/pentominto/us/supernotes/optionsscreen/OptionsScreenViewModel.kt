@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.optionsscreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +21,11 @@ class OptionsScreenViewModel @Inject constructor(
     private val _categoriesOptionState : MutableState<Boolean> = mutableStateOf(false)
     val categoriesOptionsState : State<Boolean> = _categoriesOptionState
 
+    private val _useDarkThemeState : MutableState<Boolean> = mutableStateOf(false)
+    val useDarkThemeState : State<Boolean> = _useDarkThemeState
+
     val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+    val userDarkThemeKey = booleanPreferencesKey("user_theme")
 
     fun categoriesPrefToggle() {
 
@@ -32,11 +35,18 @@ class OptionsScreenViewModel @Inject constructor(
 
                 _categoriesOptionState.value = !_categoriesOptionState.value
                 settings[hideCategoriesKey] = categoriesOptionsState.value
+            }
+        }
+    }
 
-                Log.d(
-                    "TAG",
-                    "categoriesPrefToggle: ${categoriesOptionsState.value}"
-                )
+    fun themeToggle() {
+
+        viewModelScope.launch {
+
+            dataStore.edit { settings ->
+
+                _useDarkThemeState.value = !_useDarkThemeState.value
+                settings[userDarkThemeKey] = useDarkThemeState.value
             }
         }
     }
@@ -49,8 +59,14 @@ class OptionsScreenViewModel @Inject constructor(
 
                 if (preferences.contains(hideCategoriesKey)) {
 
-                    _categoriesOptionState.value = preferences[hideCategoriesKey] !!
+                    _categoriesOptionState.value = preferences[hideCategoriesKey] ?: false
                 }
+
+                if (preferences.contains(userDarkThemeKey)) {
+
+                    _useDarkThemeState.value = preferences[userDarkThemeKey] ?: false
+                }
+
             }
         }
     }

@@ -20,12 +20,12 @@ import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-val isDark = false
-
-val USER_THEME = booleanPreferencesKey("user_theme")
+val userDarkThemeKey = booleanPreferencesKey("user_theme")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,22 +36,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        lifecycleScope.launch {
-//
-//            dataStore.data.first()
-//        }
-
         val themeFlow: Flow<Boolean> = dataStore.data
             .map { preferences ->
-                preferences[USER_THEME] ?: false
+                preferences[userDarkThemeKey] ?: false
             }
-
 
         setContent {
 
             val userTheme = themeFlow.collectAsState(initial = false)
 
-            val themeState: MutableState<Boolean> = remember { mutableStateOf(userTheme.value) }
+            val savedTheme : MutableState<Boolean> = runBlocking{ mutableStateOf(themeFlow.first()) }
+
+            val themeState: MutableState<Boolean> =  remember(key1 = userTheme.value) { mutableStateOf(savedTheme.value) }
+//            val themeState: MutableState<Boolean> = runBlocking {  mutableStateOf(themeFlow.first())}
 
             SuperNotesTheme(
                 darkTheme = themeState.value
@@ -60,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
 
-                    if (!isDark) {
+                    if (!userTheme.value) {
 
                         systemUiController.setSystemBarsColor(
                             color = Color.White,

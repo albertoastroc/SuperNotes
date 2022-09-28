@@ -35,10 +35,13 @@ fun OptionsScreen(
         )
 
 
-        OptionsRow(
+        OptionsRowWithSwitch(
             optionsTitle = "Theme",
             optionSelected = "Light mode",
-        ) {}
+            viewModel.useDarkThemeState.value
+        ) {
+            viewModel.themeToggle()
+        }
 
         OptionsRow(
             optionsTitle = "Note font size",
