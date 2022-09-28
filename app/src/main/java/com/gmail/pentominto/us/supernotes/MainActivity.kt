@@ -1,42 +1,60 @@
 package com.gmail.pentominto.us.supernotes
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.gmail.pentominto.us.supernotes.Utility.Constants.PREFERENCES_STORE_NAME
 import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.optionsscreen.OptionsScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 val isDark = false
 
-val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_STORE_NAME)
+val USER_THEME = booleanPreferencesKey("user_theme")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    @Inject
+    lateinit var dataStore : DataStore<Preferences>
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        lifecycleScope.launch {
+//
+//            dataStore.data.first()
+//        }
+
+        val themeFlow: Flow<Boolean> = dataStore.data
+            .map { preferences ->
+                preferences[USER_THEME] ?: false
+            }
+
+
         setContent {
+
+            val userTheme = themeFlow.collectAsState(initial = false)
+
+            val themeState: MutableState<Boolean> = remember { mutableStateOf(userTheme.value) }
+
             SuperNotesTheme(
-                darkTheme = isDark
+                darkTheme = themeState.value
             ) {
 
                 val systemUiController = rememberSystemUiController()
