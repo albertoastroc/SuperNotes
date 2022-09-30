@@ -36,57 +36,89 @@ fun OptionsScreen(
 
 
         OptionsRowWithSwitch(
-            optionsTitle = "Enable Dark Mode",
-            optionSelected = "App specific theme",
+            title = "Enable Dark Mode",
+            subTitle = "App specific theme",
             viewModel.useDarkThemeState.value
         ) {
             viewModel.themeToggle()
         }
 
-        OptionsRow(
-            optionsTitle = "Note font size",
-            optionSelected = "Medium",
-        ) {}
-
         OptionsRowWithSwitch(
-            optionsTitle = "Enable categories",
-            optionSelected = "When disabled one uncategorized list will be shown",
+            title = "Enable categories",
+            subTitle = "When disabled one uncategorized list will be shown",
             switchState = viewModel.categoriesOptionsState.value
         ) {
             viewModel.categoriesPrefToggle()
         }
-        OptionsRow(
-            optionsTitle = "Export all notes",
-            optionSelected = null,
-        ) {}
-        OptionsRow(
-            optionsTitle = "Import notes",
-            optionSelected = null,
-        ) {}
-        OptionsRow(
-            optionsTitle = "Delete all notes",
-            optionSelected = null,
-        ) {}
-        OptionsRow(
-            optionsTitle = "Delete all categories",
-            optionSelected = null,
-        ) {}
+
+        OptionsRowWithAlertDialog(
+            title = "Export all notes",
+            subTitle = "You can export individual notes in the edit note screen",
+            message = "null"
+        ) {
+
+        }
+        OptionsRowWithAlertDialog(
+            title = "Import notes",
+            subTitle = null,
+            message = "null"
+        ) {
+
+        }
+        OptionsRowWithAlertDialog(
+            title = "Delete all notes",
+            subTitle = null,
+            message = "Are you sure you want to delete all notes?"
+        ) {
+            viewModel.deleteAllNotes()
+        }
     }
 }
 
 @Composable
-fun OptionsRow(
-    optionsTitle : String,
-    optionSelected : String?,
-    onClick : (Boolean) -> Unit
+fun OptionsRowWithAlertDialog(
+    title : String,
+    subTitle : String?,
+    message : String,
+    onClick : () -> Unit,
 ) {
 
-    val checkedState = remember { mutableStateOf(false) }
+    val openConfirmDialog = remember { mutableStateOf(false) }
+
+    if (openConfirmDialog.value) {
+
+        AlertDialog(onDismissRequest = { openConfirmDialog.value = false },
+            title = { Text(text = message) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onClick()
+                        openConfirmDialog.value = false
+                    },
+                    modifier = Modifier.width(100.dp)
+                ) {
+                    Text(text = "Delete")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        openConfirmDialog.value = false
+                    },
+                    modifier = Modifier.width(100.dp)
+                ) {
+                    Text(text = "Cancel")
+                }
+            }
+
+        )
+    }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
+                openConfirmDialog.value = true
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -102,13 +134,13 @@ fun OptionsRow(
         ) {
 
             Text(
-                text = optionsTitle,
+                text = title,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.onBackground
             )
-            if (optionSelected != null) {
+            if (subTitle != null) {
                 Text(
-                    text = optionSelected,
+                    text = subTitle,
                     fontWeight = FontWeight.Light,
                     color = MaterialTheme.colors.onBackground
                 )
@@ -121,8 +153,8 @@ fun OptionsRow(
 
 @Composable
 fun OptionsRowWithSwitch(
-    optionsTitle : String,
-    optionSelected : String?,
+    title : String,
+    subTitle : String?,
     switchState : Boolean,
     onClick : (Boolean) -> Unit
 ) {
@@ -146,13 +178,13 @@ fun OptionsRowWithSwitch(
         ) {
 
             Text(
-                text = optionsTitle,
+                text = title,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.onBackground
             )
-            if (optionSelected != null) {
+            if (subTitle != null) {
                 Text(
-                    text = optionSelected,
+                    text = subTitle,
                     fontWeight = FontWeight.Light,
                     overflow = TextOverflow.Clip,
                     color = MaterialTheme.colors.onBackground

@@ -151,7 +151,7 @@ fun SuperNotesApp() {
  * delete all categories
  * select font size
  *
- * dark mode - working on it
+ * dark mode - done
  *
  * single note settings
  *

@@ -6,7 +6,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,8 +37,6 @@ fun AllNotesScreen(
     val showCategories = remember { viewModel.categoriesOptionsState }
 
     val notes by remember { viewModel.notesListWithCategories }
-
-    val categories by remember { viewModel.categories }
 
     val scope = rememberCoroutineScope()
 
@@ -70,11 +71,6 @@ fun AllNotesScreen(
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
-                        id = 3,
-                        title = "Backup settings",
-                        icon = Icons.Default.Build
-                    ),
-                    MenuItem(
                         id = 4,
                         title = "Privacy policy and info",
                         icon = Icons.Default.Info
@@ -86,9 +82,7 @@ fun AllNotesScreen(
                         icon = Icons.Default.Star
                     ),
                 ),
-                categoriesList = categories,
                 onSettingClick = {
-
 
                     scope.launch {
 
@@ -97,15 +91,13 @@ fun AllNotesScreen(
                     }
 
                                  },
-                onCategoryClick = {}
             )
         },
 
         topBar = {
             SearchBarWithMenu(
                 input = state.value,
-                scaffoldState = scaffoldState,
-                onInputChange = { viewModel.onSearchChange(state.value) },
+                onInputChange = { viewModel.onSearchChange(it) },
                 onMenuIconClick = {
 
                     scope.launch {
@@ -128,7 +120,7 @@ fun AllNotesScreen(
 
                         item {
                             Text(
-                                text = category.categoryTitle.toString(),
+                                text = category.categoryTitle,
                                 modifier = Modifier
                                     .padding(
                                         start = 16.dp,
@@ -137,7 +129,7 @@ fun AllNotesScreen(
                                     ),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                fontSize = 24.sp
+                                fontSize = 22.sp
                             )
                         }
 
@@ -206,7 +198,10 @@ fun AllNotesScreen(
         floatingActionButton = {
 
             ExtendedFloatingActionButton(
-                text = { Text(text = "New Note") },
+                text = { Text(
+                    text = "New Note",
+                    fontSize = 16.sp
+                ) },
                 onClick = {
                     onNoteClick(0L)
                 },

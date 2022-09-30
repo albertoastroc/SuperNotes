@@ -9,13 +9,15 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val databaseDao : DatabaseDao
 ) : ViewModel() {
 
     private val _categoriesOptionState : MutableState<Boolean> = mutableStateOf(false)
@@ -26,6 +28,10 @@ class OptionsScreenViewModel @Inject constructor(
 
     val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     val userDarkThemeKey = booleanPreferencesKey("user_theme")
+
+    init {
+        getPrefs()
+    }
 
     fun categoriesPrefToggle() {
 
@@ -66,12 +72,16 @@ class OptionsScreenViewModel @Inject constructor(
 
                     _useDarkThemeState.value = preferences[userDarkThemeKey] ?: false
                 }
-
             }
         }
     }
 
-    init {
-        getPrefs()
+    fun deleteAllNotes() {
+
+        viewModelScope.launch {
+
+            databaseDao.deleteAllNotes()
+        }
     }
+
 }

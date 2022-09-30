@@ -34,7 +34,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.ui.theme.Pine
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -132,11 +131,12 @@ fun NoteEditScreen(
                             placeholder = { Text(
                                 text = "Enter a Title...",
                                 color = MaterialTheme.colors.onPrimary,
-                                fontSize = 18.sp
+                                fontSize = 16.sp
                             ) },
                             onValueChange = { viewModel.onTitleInputChange(it) },
                             modifier = Modifier
                                 .weight(1f)
+                                .padding(vertical = 10.dp)
                                 .background(
                                     color = Color.Transparent
                                 ),
@@ -145,7 +145,8 @@ fun NoteEditScreen(
                                 backgroundColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
+                                disabledIndicatorColor = Color.Transparent,
+                                cursorColor = MaterialTheme.colors.onPrimary
                             ),
                             textStyle = TextStyle(
                                 color = MaterialTheme.colors.onBackground,
@@ -200,7 +201,8 @@ fun NoteEditScreen(
                             backgroundColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
+                            disabledIndicatorColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colors.onPrimary
                         ),
                         textStyle = TextStyle(
                             color = MaterialTheme.colors.onBackground,
@@ -383,7 +385,6 @@ fun CategoriesList(
                                 },
                                 modifier = Modifier.width(100.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Pine,
                                     contentColor = Color.White
                                 )
                             ) {
@@ -396,7 +397,6 @@ fun CategoriesList(
                             Button(
                                 onClick = { openCategoryDialog.value = false },
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Pine,
                                     contentColor = Color.White
                                 ),
                                 modifier = Modifier.width(100.dp)

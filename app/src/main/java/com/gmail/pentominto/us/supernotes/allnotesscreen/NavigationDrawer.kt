@@ -16,15 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.Category
 
 
 @Composable
 fun Drawer(
     drawerOptionsList : List<MenuItem>,
-    categoriesList : List<Category>,
     onSettingClick : (Int) -> Unit,
-    onCategoryClick : (String) -> Unit,
     itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
 ) {
 

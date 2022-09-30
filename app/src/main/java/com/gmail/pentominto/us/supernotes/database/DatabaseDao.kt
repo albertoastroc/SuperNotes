@@ -50,6 +50,9 @@ interface DatabaseDao {
     @Query("SELECT * FROM category_table")
     fun getAllCategories() : Flow<List<Category>>
 
+    @Query("DELETE FROM note_table ")
+    suspend fun deleteAllNotes()
+
 }
 
 

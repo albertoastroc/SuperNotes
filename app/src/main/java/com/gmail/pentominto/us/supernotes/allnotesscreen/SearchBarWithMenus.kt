@@ -9,29 +9,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
-import com.gmail.pentominto.us.supernotes.ui.theme.LightLimeGreen
 
 
 @Composable
 fun SearchBarWithMenu(
     input : String,
     onInputChange : (String) -> Unit,
-    scaffoldState : ScaffoldState,
     onMenuIconClick : () -> Unit
 ) {
-
-    val searchBarBackGroundColor = LightLimeGreen
-    val scope = rememberCoroutineScope()
-    //var menuExpanded = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -82,48 +77,13 @@ fun SearchBarWithMenu(
                 placeholder = {
                     Text(
                         text = "Search Notes...",
-                        color = MaterialTheme.colors.onSecondary
+                        color = MaterialTheme.colors.onSecondary,
+                        fontSize = 16.sp
                     )
                 },
                 onValueChange = { onInputChange(it) },
+                textStyle = TextStyle.Default.copy(fontSize = 16.sp)
             )
-
-//            Column() {
-//
-//                Icon(
-//                    painterResource(id = R.drawable.ic_baseline_more_vert_24),
-//                    modifier = Modifier
-//                        .padding(end = 20.dp)
-//                        .clickable(
-//                            interactionSource = NoRippleInteractionSource(),
-//                            onClick = {
-//                                menuExpanded.value = ! menuExpanded.value
-//                            },
-//                            indication = null
-//                        ),
-//                    contentDescription = null,
-//                )
-//
-//                DropdownMenu(
-//                    expanded = menuExpanded.value,
-//                    offset = DpOffset(
-//                        x = 0.dp,
-//                        y = 8.dp
-//                    ),
-//                    onDismissRequest = { menuExpanded.value = false }) {
-//
-//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-//                        Text(text = "Item 1")
-//                    }
-//
-//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-//                        Text(text = "Item 2")
-//                    }
-//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-//                        Text(text = "Item 3")
-//                    }
-//                }
-//            }
         }
     }
 }

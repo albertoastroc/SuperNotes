@@ -72,7 +72,7 @@ fun NoteItem(
                     .background(
                         color = Color.Transparent
                     ),
-                fontSize = 18.sp,
+                fontSize = 22.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 color = MaterialTheme.colors.onBackground

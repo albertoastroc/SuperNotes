@@ -30,7 +30,7 @@ class AllNotesViewModel @Inject constructor(
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
     val categories : State<List<Category>> = _categories
 
-    private val _searchBarText : MutableState<String> = mutableStateOf("")
+    private val _searchBarText : MutableState<String> = mutableStateOf(String())
     val searchBarText : State<String> = _searchBarText
 
     private val _categoriesOptionState : MutableState<Boolean> = mutableStateOf(false)
