@@ -145,22 +145,18 @@ fun SuperNotesApp() {
  *
  * restore tutorial note - need to know what all to include in tutorial first, for prepopulating https://developer.android.com/training/data-storage/room/prepopulate
  * disable categories - done
- * export all notes
- * import txt file
- * delete all notes
- * delete all categories
- * select font size
+ * export all notes - for v2
+ * import txt file - for v2
+ * delete all notes - done
  *
  * dark mode - done
  *
  * single note settings
  *
- * reminder
- * share note
- * create email with note (through share)
- * search
- * export
- * backup
+ * copy to clipboard - done
+ * reminder - working
+ * share note - done
  *
  *
  */
+

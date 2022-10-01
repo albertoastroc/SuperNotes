@@ -42,6 +42,11 @@ class NoteEditScreenViewModel @Inject constructor(
         getCategories()
     }
 
+    fun copyToClipboard() {
+
+
+    }
+
     fun getCategories() {
 
         viewModelScope.launch {

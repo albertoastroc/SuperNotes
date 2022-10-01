@@ -51,20 +51,20 @@ fun OptionsScreen(
             viewModel.categoriesPrefToggle()
         }
 
-        OptionsRowWithAlertDialog(
-            title = "Export all notes",
-            subTitle = "You can export individual notes in the edit note screen",
-            message = "null"
-        ) {
-
-        }
-        OptionsRowWithAlertDialog(
-            title = "Import notes",
-            subTitle = null,
-            message = "null"
-        ) {
-
-        }
+//        OptionsRowWithAlertDialog(
+//            title = "Export all notes",
+//            subTitle = "You can export individual notes in the edit note screen",
+//            message = "null"
+//        ) {
+//
+//        }
+//        OptionsRowWithAlertDialog(
+//            title = "Import notes",
+//            subTitle = null,
+//            message = "null"
+//        ) {
+//
+//        }
         OptionsRowWithAlertDialog(
             title = "Delete all notes",
             subTitle = null,

@@ -1,6 +1,8 @@
 package com.gmail.pentominto.us.supernotes.noteeditscreen
 
+import android.content.Intent
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,13 +21,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +48,10 @@ fun NoteEditScreen(
 
 ) {
 
+    val context = LocalContext.current
+
+    val clipboardManager = LocalClipboardManager.current
+
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
 
     val configuration = LocalConfiguration.current
@@ -63,6 +69,8 @@ fun NoteEditScreen(
     val note by remember { viewModel.note }
 
     val categories by remember { viewModel.categories }
+
+    var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
 
 
@@ -128,11 +136,13 @@ fun NoteEditScreen(
                         TextField(
                             value = note.noteTitle.toString(),
                             singleLine = true,
-                            placeholder = { Text(
-                                text = "Enter a Title...",
-                                color = MaterialTheme.colors.onPrimary,
-                                fontSize = 16.sp
-                            ) },
+                            placeholder = {
+                                Text(
+                                    text = "Enter a Title...",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontSize = 16.sp
+                                )
+                            },
                             onValueChange = { viewModel.onTitleInputChange(it) },
                             modifier = Modifier
                                 .weight(1f)
@@ -154,18 +164,66 @@ fun NoteEditScreen(
                             )
                         )
 
-                        Icon(
-                            painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                            modifier = Modifier
-                                .padding(end = 20.dp)
-                                .clickable(
-                                    interactionSource = NoRippleInteractionSource(),
-                                    onClick = {},
-                                    indication = null
-                                ),
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.onBackground
-                        )
+                        Column() {
+
+                            Icon(
+                                painterResource(id = R.drawable.ic_baseline_more_vert_24),
+                                modifier = Modifier
+                                    .padding(20.dp)
+                                    .clickable(
+                                        interactionSource = NoRippleInteractionSource(),
+                                        onClick = {
+
+                                            dropDownMenuExpanded = true
+                                        },
+                                        indication = null
+                                    ),
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.onBackground
+                            )
+
+                            DropdownMenu(
+                                expanded = dropDownMenuExpanded,
+                                onDismissRequest = { dropDownMenuExpanded = false },
+                                offset = DpOffset(x = 0.dp, y = 4.dp)
+                            ) {
+
+                                DropdownMenuItem(onClick = {
+
+                                    clipboardManager.setText(
+                                        AnnotatedString(
+                                            note.noteBody ?: "")
+                                    )
+                                    dropDownMenuExpanded = false
+                                    Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+
+                                }) {
+                                    Text(text = "Copy to clipboard")
+                                }
+
+                                DropdownMenuItem(onClick = {
+
+                                    val sendIntent : Intent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_TEXT, note.noteBody ?: "")
+                                        type = "text/plain"
+                                    }
+                                    val shareIntent = Intent.createChooser(sendIntent, null)
+
+                                    context.startActivity(shareIntent)
+                                    dropDownMenuExpanded = false
+
+                                }) {
+                                    Text(text = "Share")
+                                }
+
+                                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                                    Text(text = "Item 3")
+                                }
+                            }
+
+                        }
+
                     }
                 }
 
@@ -184,11 +242,13 @@ fun NoteEditScreen(
 
                     TextField(
                         value = note.noteBody.toString(),
-                        placeholder = { Text(
-                            text = "Enter Text...",
-                            color = MaterialTheme.colors.onPrimary,
-                            fontSize = 18.sp
-                        ) },
+                        placeholder = {
+                            Text(
+                                text = "Enter Text...",
+                                color = MaterialTheme.colors.onPrimary,
+                                fontSize = 18.sp
+                            )
+                        },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
                             .focusRequester(focusRequester)
@@ -228,7 +288,7 @@ fun NoteEditScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(4.dp),
+                                    .padding(10.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -369,7 +429,8 @@ fun CategoriesList(
                                 onValueChange = {
                                     dialogInput.value = it
                                     dialogTitleState.value = ""
-                                })
+                                },
+                            )
                         },
                         confirmButton = {
                             Button(
