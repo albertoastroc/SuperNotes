@@ -70,6 +70,8 @@ fun NoteEditScreen(
 
     val categories by remember { viewModel.categories }
 
+    val dateCreatedState by remember { viewModel.createdDate }
+
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
 
@@ -140,13 +142,13 @@ fun NoteEditScreen(
                                 Text(
                                     text = "Enter a Title...",
                                     color = MaterialTheme.colors.onPrimary,
-                                    fontSize = 16.sp
+                                    fontSize = 18.sp
                                 )
                             },
                             onValueChange = { viewModel.onTitleInputChange(it) },
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(vertical = 10.dp)
+                                .padding(8.dp)
                                 .background(
                                     color = Color.Transparent
                                 ),
@@ -195,6 +197,7 @@ fun NoteEditScreen(
                                             note.noteBody ?: "")
                                     )
                                     dropDownMenuExpanded = false
+                                    viewModel.getCurrentDate()
                                     Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
 
                                 }) {
@@ -255,6 +258,7 @@ fun NoteEditScreen(
                         },
                         onValueChange = { viewModel.onBodyInputChange(it) },
                         modifier = Modifier
+                            .padding(8.dp)
                             .focusRequester(focusRequester)
                             .fillMaxWidth()
                             .background(
@@ -331,7 +335,7 @@ fun NoteEditScreen(
                                 ) {
 
                                     Text(
-                                        text = "Created : 4/13/22",
+                                        text = "Created: $dateCreatedState",
                                         fontStyle = FontStyle.Italic,
                                         color = MaterialTheme.colors.onBackground
                                     )

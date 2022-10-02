@@ -10,6 +10,8 @@ import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +28,9 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _noteCategory : MutableState<Category> = mutableStateOf(Category())
     val noteCategory : State<Category> = _noteCategory
 
+    private val _createdDate : MutableState<String> = mutableStateOf(String())
+    val createdDate : State<String> = _createdDate
+
     fun getNote(noteId : Long){
 
         viewModelScope.launch {
@@ -40,11 +45,6 @@ class NoteEditScreenViewModel @Inject constructor(
             }
         }
         getCategories()
-    }
-
-    fun copyToClipboard() {
-
-
     }
 
     fun getCategories() {
@@ -138,4 +138,13 @@ class NoteEditScreenViewModel @Inject constructor(
             noteBody = newInput
         )
     }
+
+    fun getCurrentDate() {
+
+        val currentTime = Calendar.getInstance().time
+        val dateFormatter = SimpleDateFormat("M/d/yy")
+        _createdDate.value = dateFormatter.format(currentTime)
+
+    }
+
 }
