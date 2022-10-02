@@ -36,7 +36,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.notifications.CounterNotificationService
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -50,8 +49,6 @@ fun NoteEditScreen(
 ) {
 
     val context = LocalContext.current
-
-    val notificationManager = CounterNotificationService(context)
 
     val clipboardManager = LocalClipboardManager.current
 
@@ -220,12 +217,13 @@ fun NoteEditScreen(
                                     Text(text = "Share")
                                 }
 
-                                DropdownMenuItem(onClick = {
-
-                                    notificationManager.showNotification("Yo")
-                                }) {
-                                    Text(text = "Set reminder")
-                                }
+//                                DropdownMenuItem(onClick = {
+//
+//
+//                                    notificationManager.showNotification("Yo")
+//                                }) {
+//                                    Text(text = "Set reminder")
+//                                }
                             }
 
                         }
