@@ -70,8 +70,6 @@ fun NoteEditScreen(
 
     val categories by remember { viewModel.categories }
 
-    val dateCreatedState by remember { viewModel.createdDate }
-
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
 
@@ -335,15 +333,17 @@ fun NoteEditScreen(
                                 ) {
 
                                     Text(
-                                        text = "Created: $dateCreatedState",
+                                        text = "Created: ${viewModel.note.value.createdDate}",
                                         fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colors.onBackground
+                                        color = MaterialTheme.colors.onBackground,
+                                        fontSize = 18.sp
                                     )
 
                                     Text(
-                                        text = "Last Modified : 5/1/22",
+                                        text = "Last Modified: ${viewModel.note.value.lastModified}",
                                         fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colors.onBackground
+                                        color = MaterialTheme.colors.onBackground,
+                                        fontSize = 18.sp
                                     )
                                 }
                             }

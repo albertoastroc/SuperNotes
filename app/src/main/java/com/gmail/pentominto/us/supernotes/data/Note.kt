@@ -13,6 +13,10 @@ data class Note(
 
     var category : String? = "No Category",
 
+    var createdDate : String = "",
+
+    var lastModified : String = "",
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")
     var noteId : Long = 0,

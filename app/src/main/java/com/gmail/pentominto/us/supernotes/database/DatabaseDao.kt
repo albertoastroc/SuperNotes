@@ -14,8 +14,8 @@ interface DatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note : Note) : Long
 
-    @Query("UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody WHERE note_db_id = :noteId")
-    suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Long)
+    @Query("UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody, lastModified = :lastModified WHERE note_db_id = :noteId")
+    suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Long, lastModified : String)
 
     @Query("UPDATE note_table SET category = :chosenCategory WHERE note_db_id = :noteId")
     suspend fun updateNoteCategory(chosenCategory : String, noteId : Long)

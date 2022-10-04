@@ -31,6 +31,9 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _createdDate : MutableState<String> = mutableStateOf(String())
     val createdDate : State<String> = _createdDate
 
+    private val _lastModified : MutableState<String> = mutableStateOf(String())
+    val lastModified : State<String> = _lastModified
+
     fun getNote(noteId : Long){
 
         viewModelScope.launch {
@@ -67,8 +70,14 @@ class NoteEditScreenViewModel @Inject constructor(
                 insertCategory("No Category")
             }
 
+            getCurrentDate()
+
             getNote(
-                databaseDao.insertNote(Note(category = "No Category"))
+                databaseDao.insertNote(Note(
+                    category = "No Category",
+                    createdDate = _createdDate.value,
+                    lastModified = _createdDate.value
+                ))
             )
         }
     }
@@ -103,10 +112,12 @@ class NoteEditScreenViewModel @Inject constructor(
     fun saveNoteText() {
 
         viewModelScope.launch {
+            getCurrentDate()
             databaseDao.updateNote(
                 noteTitle = _note.value.noteTitle.toString(),
                 noteBody = _note.value.noteBody.toString(),
-                noteId = note.value.noteId
+                noteId = note.value.noteId,
+                lastModified = createdDate.value
             )
         }
     }
@@ -144,6 +155,7 @@ class NoteEditScreenViewModel @Inject constructor(
         val currentTime = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("M/d/yy")
         _createdDate.value = dateFormatter.format(currentTime)
+        _lastModified.value = dateFormatter.format(currentTime)
 
     }
 
