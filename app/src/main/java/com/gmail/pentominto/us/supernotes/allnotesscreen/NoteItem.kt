@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -126,12 +127,14 @@ fun NoteItem(
                         ) {
 
                             Text(
-                                text = "created 5/10/22",
-                                fontSize = 12.sp
+                                text = "Created ${note.createdDate}",
+                                fontSize = 12.sp,
+                                fontStyle = FontStyle.Italic
                             )
                             Text(
-                                text = "last accessed 6/23/23",
-                                fontSize = 12.sp
+                                text = "Last Accessed ${note.lastModified}",
+                                fontSize = 12.sp,
+                                fontStyle = FontStyle.Italic
                             )
 
                         }
