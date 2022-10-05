@@ -75,8 +75,7 @@ fun NoteItem(
                             .padding(
                                 start = 24.dp,
                                 end = 12.dp,
-                                top = 12.dp,
-                                bottom = 12.dp
+                                top = 12.dp
                             )
                             .background(
                                 color = Color.Transparent

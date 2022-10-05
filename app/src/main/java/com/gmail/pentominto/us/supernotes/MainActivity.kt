@@ -148,13 +148,14 @@ fun SuperNotesApp() {
  * export all notes - for v2
  * import txt file - for v2
  * delete all notes - done
+ * search notes - working
  *
  * dark mode - done
  *
  * single note settings
  *
  * copy to clipboard - done
- * reminder - working
+ * reminder - wait until calendar api is easy to use
  * share note - done
  *
  *

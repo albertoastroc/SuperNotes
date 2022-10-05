@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
     val databaseDao : DatabaseDao,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore : DataStore<Preferences>
 ) : ViewModel() {
 
     private val _notesListWithCategories : MutableState<Map<Category, List<Note>>> = mutableStateOf(emptyMap())
@@ -37,6 +38,92 @@ class AllNotesViewModel @Inject constructor(
     val categoriesOptionsState : State<Boolean> = _categoriesOptionState
 
     val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+
+    fun getSearchResults() : List<List<String>?> {
+
+
+
+
+        val query = "sample string"
+
+//        val resultsList = notesListNoCategories.value.map {
+//
+//            var add = ""
+//
+//           if (it.noteBody.toString().contains(query)) {
+//
+//               add = it.noteBody.toString()
+//           }
+//
+//            add
+//
+//        }
+//
+//        Log.d(
+//            "TAG",
+//            "getSearchResults: ${resultsList.toList()}"
+//        )
+
+        val notesThatHaveQuery = notesListNoCategories.value.filter { note ->
+
+            note.noteBody?.contains(query) ?: false
+        }
+
+        val chunkedNotes = notesThatHaveQuery.map {
+
+            it.noteBody?.chunked(30)
+
+//            Log.d(
+//                "TAG",
+//                "getSearchResults: ${ it.noteBody?.chunked(30)}"
+//            )
+
+        }
+
+//        Log.d(
+//            "TAG",
+//            "getSearchResults: ${highlighted}"
+//        )
+
+//        Log.d(
+//            "TAG",
+//            "getSearchResults: ${chunkedNotes}"
+//        )
+
+        return chunkedNotes
+    }
+
+    fun highlighted(chunkedNotes :  List<List<String>?>){
+
+
+        val query = "sample string"
+
+        var list = mutableListOf<String>()
+
+        if (chunkedNotes.isNotEmpty()) {
+
+        chunkedNotes.forEach {
+
+            it?.withIndex()?.forEach {
+
+                if (it.value.contains(query)) {
+
+                    list.add(it.value)
+
+                }
+
+            }
+        }
+
+        }
+
+        Log.d(
+            "TAG",
+            "highlighted: $list"
+        )
+
+    }
+
 
     fun onSearchChange(input : String) {
 
@@ -57,7 +144,7 @@ class AllNotesViewModel @Inject constructor(
 
     fun getNotesNoCategories() = viewModelScope.launch {
 
-        databaseDao.getAllNotes().collect(){
+        databaseDao.getAllNotes().collect() {
             _notesListNoCategories.value = it
         }
 

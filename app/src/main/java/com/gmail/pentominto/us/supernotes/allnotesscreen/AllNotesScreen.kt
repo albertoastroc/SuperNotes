@@ -36,7 +36,9 @@ fun AllNotesScreen(
 
     val showCategories = remember { viewModel.categoriesOptionsState }
 
-    val notes by remember { viewModel.notesListWithCategories }
+    val notesWithCategories by remember { viewModel.notesListWithCategories }
+
+    val notesWithNoCategories by remember { viewModel.notesListNoCategories }
 
     val scope = rememberCoroutineScope()
 
@@ -46,6 +48,7 @@ fun AllNotesScreen(
         block = {
             viewModel.getNotesWithCategories()
             viewModel.getNotesNoCategories()
+            viewModel.highlighted(viewModel.getSearchResults())
         }
     )
 
@@ -116,7 +119,7 @@ fun AllNotesScreen(
 
                 if (showCategories.value) {
 
-                    notes.entries.forEach { (category, notes) ->
+                    notesWithCategories.entries.forEach { (category, notes) ->
 
                         item {
                             Text(
@@ -165,7 +168,7 @@ fun AllNotesScreen(
                 } else {
 
                     items(
-                        items = viewModel.notesListNoCategories.value,
+                        items = notesWithNoCategories,
                         key = { it.noteId }
                     ) { note ->
 
@@ -215,5 +218,20 @@ fun AllNotesScreen(
             )
         }
     )
+}
+
+@Composable
+fun ListWithCategories() {
+    
+}
+
+@Composable
+fun ListWithNoCategories() {
+    
+}
+
+@Composable
+fun ListSearchResults() {
+    
 }
 
