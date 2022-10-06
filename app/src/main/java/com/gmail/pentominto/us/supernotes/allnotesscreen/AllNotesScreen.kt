@@ -30,7 +30,7 @@ fun AllNotesScreen(
     onOptionsClick : (Int) -> Unit,
 ) {
 
-    var state by remember { mutableStateOf(viewModel.searchBarText) }
+    var searchState by remember { mutableStateOf(viewModel.searchBarText) }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -40,6 +40,8 @@ fun AllNotesScreen(
 
     val notesWithNoCategories by remember { viewModel.notesListNoCategories }
 
+    val notesSearchResult by remember { viewModel.notesListSearchResults }
+
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(
@@ -48,7 +50,6 @@ fun AllNotesScreen(
         block = {
             viewModel.getNotesWithCategories()
             viewModel.getNotesNoCategories()
-            viewModel.highlighted(viewModel.getSearchResults())
         }
     )
 
@@ -93,13 +94,13 @@ fun AllNotesScreen(
                         onOptionsClick(it)
                     }
 
-                                 },
+                },
             )
         },
 
         topBar = {
             SearchBarWithMenu(
-                input = state.value,
+                input = searchState.value,
                 onInputChange = { viewModel.onSearchChange(it) },
                 onMenuIconClick = {
 
@@ -117,27 +118,72 @@ fun AllNotesScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
 
-                if (showCategories.value) {
+                if (searchState.value.length >= 3) {
 
-                    notesWithCategories.entries.forEach { (category, notes) ->
+                    items(notesSearchResult) { note ->
 
-                        item {
-                            Text(
-                                text = category.categoryTitle,
-                                modifier = Modifier
-                                    .padding(
-                                        start = 16.dp,
-                                        top = 8.dp,
-                                        bottom = 8.dp
-                                    ),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = 22.sp
-                            )
+                        NoteItem(
+                            note = note,
+                            modifier = Modifier,
+                            onClick = { onNoteClick(note.noteId) }
+                        )
+
+                    }
+
+                }
+
+                    else if (showCategories.value) {
+
+                        notesWithCategories.entries.forEach { (category, notes) ->
+
+                            item {
+                                Text(
+                                    text = category.categoryTitle,
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 16.dp,
+                                            top = 8.dp,
+                                            bottom = 8.dp
+                                        ),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    fontSize = 22.sp
+                                )
+                            }
+
+                            items(
+                                items = notes,
+                                key = { it.noteId }
+                            ) { note ->
+
+                                val dismissState = rememberDismissState(
+                                    confirmStateChange = {
+                                        if (it == DismissValue.DismissedToEnd) {
+                                            viewModel.deleteNote(note.noteId)
+                                        }
+                                        true
+                                    }
+                                )
+
+                                SwipeToDismiss(
+                                    state = dismissState,
+                                    directions = setOf(DismissDirection.StartToEnd),
+                                    dismissThresholds = { FractionalThreshold(.6f) },
+                                    background = {},
+                                ) {
+
+                                    NoteItem(
+                                        note = note,
+                                        modifier = Modifier,
+                                        onClick = { onNoteClick(note.noteId) }
+                                    )
+                                }
+                            }
                         }
+                    } else {
 
                         items(
-                            items = notes,
+                            items = notesWithNoCategories,
                             key = { it.noteId }
                         ) { note ->
 
@@ -165,46 +211,18 @@ fun AllNotesScreen(
                             }
                         }
                     }
-                } else {
 
-                    items(
-                        items = notesWithNoCategories,
-                        key = { it.noteId }
-                    ) { note ->
-
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToEnd) {
-                                    viewModel.deleteNote(note.noteId)
-                                }
-                                true
-                            }
-                        )
-
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(DismissDirection.StartToEnd),
-                            dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {},
-                        ) {
-
-                            NoteItem(
-                                note = note,
-                                modifier = Modifier,
-                                onClick = { onNoteClick(note.noteId) }
-                            )
-                        }
-                    }
-                }
             }
         },
         floatingActionButton = {
 
             ExtendedFloatingActionButton(
-                text = { Text(
-                    text = "New Note",
-                    fontSize = 16.sp
-                ) },
+                text = {
+                    Text(
+                        text = "New Note",
+                        fontSize = 16.sp
+                    )
+                },
                 onClick = {
                     onNoteClick(0L)
                 },
@@ -222,16 +240,13 @@ fun AllNotesScreen(
 
 @Composable
 fun ListWithCategories() {
-    
 }
 
 @Composable
 fun ListWithNoCategories() {
-    
 }
 
 @Composable
 fun ListSearchResults() {
-    
 }
 

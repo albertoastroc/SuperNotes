@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +27,9 @@ class AllNotesViewModel @Inject constructor(
     private val _notesListNoCategories : MutableState<List<Note>> = mutableStateOf(emptyList())
     val notesListNoCategories : State<List<Note>> = _notesListNoCategories
 
+    private val _notesListSearchResults : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val notesListSearchResults : State<List<Note>> = _notesListSearchResults
+
     private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
     val categories : State<List<Category>> = _categories
 
@@ -39,95 +41,17 @@ class AllNotesViewModel @Inject constructor(
 
     val hideCategoriesKey = booleanPreferencesKey("hide_categories")
 
-    fun getSearchResults() : List<List<String>?> {
-
-
-
-
-        val query = "sample string"
-
-//        val resultsList = notesListNoCategories.value.map {
-//
-//            var add = ""
-//
-//           if (it.noteBody.toString().contains(query)) {
-//
-//               add = it.noteBody.toString()
-//           }
-//
-//            add
-//
-//        }
-//
-//        Log.d(
-//            "TAG",
-//            "getSearchResults: ${resultsList.toList()}"
-//        )
-
-        val notesThatHaveQuery = notesListNoCategories.value.filter { note ->
-
-            note.noteBody?.contains(query) ?: false
-        }
-
-        val chunkedNotes = notesThatHaveQuery.map {
-
-            it.noteBody?.chunked(30)
-
-//            Log.d(
-//                "TAG",
-//                "getSearchResults: ${ it.noteBody?.chunked(30)}"
-//            )
-
-        }
-
-//        Log.d(
-//            "TAG",
-//            "getSearchResults: ${highlighted}"
-//        )
-
-//        Log.d(
-//            "TAG",
-//            "getSearchResults: ${chunkedNotes}"
-//        )
-
-        return chunkedNotes
-    }
-
-    fun highlighted(chunkedNotes :  List<List<String>?>){
-
-
-        val query = "sample string"
-
-        var list = mutableListOf<String>()
-
-        if (chunkedNotes.isNotEmpty()) {
-
-        chunkedNotes.forEach {
-
-            it?.withIndex()?.forEach {
-
-                if (it.value.contains(query)) {
-
-                    list.add(it.value)
-
-                }
-
-            }
-        }
-
-        }
-
-        Log.d(
-            "TAG",
-            "highlighted: $list"
-        )
-
-    }
-
-
     fun onSearchChange(input : String) {
 
         _searchBarText.value = input
+
+            viewModelScope.launch {
+
+                _notesListSearchResults.value = notesListNoCategories.value.filter { note ->
+
+                    note.noteBody?.contains(input) ?: false
+                }
+        }
     }
 
     fun getNotesWithCategories() = viewModelScope.launch {
