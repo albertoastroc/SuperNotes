@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -93,25 +94,25 @@ fun NoteItem(
                         verticalAlignment = Alignment.Bottom
                     ) {
 
-                       Column(
-                           modifier = Modifier
-                               .fillMaxHeight()
-                               .weight(1f),
-                           verticalArrangement = Arrangement.Bottom
-                       ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                            verticalArrangement = Arrangement.Bottom
+                        ) {
 
-                           Divider(
-                               modifier = Modifier
-                                   .height(.5.dp)
-                                   .padding(horizontal = 12.dp),
-                               color = MaterialTheme.colors.primaryVariant
+                            Divider(
+                                modifier = Modifier
+                                    .height(.5.dp)
+                                    .padding(horizontal = 12.dp),
+                                color = MaterialTheme.colors.primaryVariant
 
-                           )
-                           Spacer(
-                               modifier = Modifier
-                                   .height(10.dp)
-                           )
-                       }
+                            )
+                            Spacer(
+                                modifier = Modifier
+                                    .height(10.dp)
+                            )
+                        }
 
 
                         Column(
@@ -152,26 +153,37 @@ fun NoteItem(
 @Composable
 fun NoteItemSearchResult(
     note : Note,
+    query : String,
     modifier : Modifier,
     onClick : (Long) -> Unit
 ) {
 
     var chunkedString : List<String>? by remember { mutableStateOf(emptyList()) }
 
-    chunkedString = note.noteBody?.chunked(30)
+    chunkedString = note.noteBody?.chunked(15)
 
     var textToShow by remember { mutableStateOf(String()) }
 
-    chunkedString?.forEach {
+    val queryString by remember { mutableStateOf(query) }
 
-        if (it.contains("tofu")) {
+    Log.d(
+        "TAG",
+        "NoteItemSearchResult: $chunkedString"
+    )
 
-            textToShow = it
+    if (queryString.length >= 3) {
+
+        chunkedString?.forEach {
+
+            if (it.contains(
+                    queryString,
+                    true
+                )
+            ) {
+                textToShow = it
+            }
         }
-
     }
-
-
 
     Card(
         modifier = modifier
@@ -215,7 +227,7 @@ fun NoteItemSearchResult(
                 ) {
 
                     Text(
-                        text = note.noteTitle.toString(),
+                        text = textToShow,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(

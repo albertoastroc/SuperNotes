@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
 import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItem
+import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItemSearchResult
 import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
 import kotlinx.coroutines.launch
 
@@ -30,7 +31,7 @@ fun AllNotesScreen(
     onOptionsClick : (Int) -> Unit,
 ) {
 
-    var searchState by remember { mutableStateOf(viewModel.searchBarText) }
+    val searchState by remember { mutableStateOf(viewModel.searchBarText) }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -122,68 +123,35 @@ fun AllNotesScreen(
 
                     items(notesSearchResult) { note ->
 
-                        NoteItem(
+                        NoteItemSearchResult(
                             note = note,
+                            query = searchState.value,
                             modifier = Modifier,
                             onClick = { onNoteClick(note.noteId) }
                         )
 
                     }
+                } else if (showCategories.value) {
 
-                }
+                    notesWithCategories.entries.forEach { (category, notes) ->
 
-                    else if (showCategories.value) {
-
-                        notesWithCategories.entries.forEach { (category, notes) ->
-
-                            item {
-                                Text(
-                                    text = category.categoryTitle,
-                                    modifier = Modifier
-                                        .padding(
-                                            start = 16.dp,
-                                            top = 8.dp,
-                                            bottom = 8.dp
-                                        ),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    fontSize = 22.sp
-                                )
-                            }
-
-                            items(
-                                items = notes,
-                                key = { it.noteId }
-                            ) { note ->
-
-                                val dismissState = rememberDismissState(
-                                    confirmStateChange = {
-                                        if (it == DismissValue.DismissedToEnd) {
-                                            viewModel.deleteNote(note.noteId)
-                                        }
-                                        true
-                                    }
-                                )
-
-                                SwipeToDismiss(
-                                    state = dismissState,
-                                    directions = setOf(DismissDirection.StartToEnd),
-                                    dismissThresholds = { FractionalThreshold(.6f) },
-                                    background = {},
-                                ) {
-
-                                    NoteItem(
-                                        note = note,
-                                        modifier = Modifier,
-                                        onClick = { onNoteClick(note.noteId) }
-                                    )
-                                }
-                            }
+                        item {
+                            Text(
+                                text = category.categoryTitle,
+                                modifier = Modifier
+                                    .padding(
+                                        start = 16.dp,
+                                        top = 8.dp,
+                                        bottom = 8.dp
+                                    ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = 22.sp
+                            )
                         }
-                    } else {
 
                         items(
-                            items = notesWithNoCategories,
+                            items = notes,
                             key = { it.noteId }
                         ) { note ->
 
@@ -211,6 +179,37 @@ fun AllNotesScreen(
                             }
                         }
                     }
+                } else {
+
+                    items(
+                        items = notesWithNoCategories,
+                        key = { it.noteId }
+                    ) { note ->
+
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                if (it == DismissValue.DismissedToEnd) {
+                                    viewModel.deleteNote(note.noteId)
+                                }
+                                true
+                            }
+                        )
+
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.StartToEnd),
+                            dismissThresholds = { FractionalThreshold(.6f) },
+                            background = {},
+                        ) {
+
+                            NoteItem(
+                                note = note,
+                                modifier = Modifier,
+                                onClick = { onNoteClick(note.noteId) }
+                            )
+                        }
+                    }
+                }
 
             }
         },

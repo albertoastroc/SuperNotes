@@ -82,7 +82,9 @@ fun SearchBarWithMenu(
                     )
                 },
                 onValueChange = { onInputChange(it) },
-                textStyle = TextStyle.Default.copy(fontSize = 16.sp)
+                textStyle = TextStyle.Default.copy(
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colors.onSecondary)
             )
         }
     }

@@ -45,12 +45,12 @@ class AllNotesViewModel @Inject constructor(
 
         _searchBarText.value = input
 
-            viewModelScope.launch {
+        viewModelScope.launch {
 
-                _notesListSearchResults.value = notesListNoCategories.value.filter { note ->
+            _notesListSearchResults.value = notesListNoCategories.value.filter { note ->
 
-                    note.noteBody?.contains(input) ?: false
-                }
+                note.noteBody?.contains(input) ?: false
+            }
         }
     }
 
