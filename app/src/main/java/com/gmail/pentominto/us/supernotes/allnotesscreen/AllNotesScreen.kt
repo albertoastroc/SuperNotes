@@ -119,6 +119,7 @@ fun AllNotesScreen(
                 modifier = Modifier.padding(paddingValues)
             ) {
 
+
                 if (searchState.value.length >= 3) {
 
                     items(notesSearchResult) { note ->
@@ -131,6 +132,7 @@ fun AllNotesScreen(
                         )
 
                     }
+
                 } else if (showCategories.value) {
 
                     notesWithCategories.entries.forEach { (category, notes) ->

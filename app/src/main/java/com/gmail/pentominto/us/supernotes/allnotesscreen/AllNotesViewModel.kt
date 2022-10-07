@@ -49,7 +49,7 @@ class AllNotesViewModel @Inject constructor(
 
             _notesListSearchResults.value = notesListNoCategories.value.filter { note ->
 
-                note.noteBody?.contains(input) ?: false
+                note.noteBody?.contains(input, true) ?: false
             }
         }
     }

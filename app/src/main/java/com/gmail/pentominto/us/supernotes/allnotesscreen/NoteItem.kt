@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.allnotesscreen
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -164,24 +163,11 @@ fun NoteItemSearchResult(
 
     var textToShow by remember { mutableStateOf(String()) }
 
-    val queryString by remember { mutableStateOf(query) }
+    chunkedString?.forEach {
 
-    Log.d(
-        "TAG",
-        "NoteItemSearchResult: $chunkedString"
-    )
-
-    if (queryString.length >= 3) {
-
-        chunkedString?.forEach {
-
-            if (it.contains(
-                    queryString,
-                    true
-                )
-            ) {
-                textToShow = it
-            }
+        if (it.contains(query, true))
+         {
+            textToShow = it
         }
     }
 
