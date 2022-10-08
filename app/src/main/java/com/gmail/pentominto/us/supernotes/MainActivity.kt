@@ -157,6 +157,9 @@ fun SuperNotesApp() {
  * copy to clipboard - done
  * reminder - wait until calendar api is easy to use
  * share note - done
+ * make title textfield dissapear if user clicks on note text while in landscape mode? just like the bottom card is hidden
+ * text not being saved in orientation change
+ * new note is being saved on orientation change if its a new note, no problem with existing notes
  *
  *
  */

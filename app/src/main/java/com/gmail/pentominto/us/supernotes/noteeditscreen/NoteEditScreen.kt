@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -72,7 +74,10 @@ fun NoteEditScreen(
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
-
+    val customTextSelectionColors = TextSelectionColors(
+        handleColor = Color.Transparent,
+        backgroundColor = Color.Transparent
+    )
 
     if (noteId != 0L) {
         viewModel.getNote(noteId)
@@ -133,36 +138,39 @@ fun NoteEditScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        TextField(
-                            value = note.noteTitle.toString(),
-                            singleLine = true,
-                            placeholder = {
-                                Text(
-                                    text = "Enter a Title...",
-                                    color = MaterialTheme.colors.onPrimary,
+                        CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+
+                            TextField(
+                                value = note.noteTitle.toString(),
+                                singleLine = true,
+                                placeholder = {
+                                    Text(
+                                        text = "Enter a Title...",
+                                        color = MaterialTheme.colors.onPrimary,
+                                        fontSize = 18.sp
+                                    )
+                                },
+                                onValueChange = { viewModel.onTitleInputChange(it) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp)
+                                    .background(
+                                        color = Color.Transparent
+                                    ),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    disabledTextColor = Color.Transparent,
+                                    backgroundColor = Color.Transparent,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                    cursorColor = MaterialTheme.colors.onPrimary
+                                ),
+                                textStyle = TextStyle(
+                                    color = MaterialTheme.colors.onBackground,
                                     fontSize = 18.sp
                                 )
-                            },
-                            onValueChange = { viewModel.onTitleInputChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(8.dp)
-                                .background(
-                                    color = Color.Transparent
-                                ),
-                            colors = TextFieldDefaults.textFieldColors(
-                                disabledTextColor = Color.Transparent,
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent,
-                                cursorColor = MaterialTheme.colors.onPrimary
-                            ),
-                            textStyle = TextStyle(
-                                color = MaterialTheme.colors.onBackground,
-                                fontSize = 18.sp
                             )
-                        )
+                        }
 
                         Column() {
 
@@ -245,36 +253,39 @@ fun NoteEditScreen(
                     backgroundColor = MaterialTheme.colors.primary
                 ) {
 
-                    TextField(
-                        value = note.noteBody.toString(),
-                        placeholder = {
-                            Text(
-                                text = "Enter Text...",
-                                color = MaterialTheme.colors.onPrimary,
+                    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+
+                        TextField(
+                            value = note.noteBody.toString(),
+                            placeholder = {
+                                Text(
+                                    text = "Enter Text...",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontSize = 18.sp
+                                )
+                            },
+                            onValueChange = { viewModel.onBodyInputChange(it) },
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .focusRequester(focusRequester)
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color.Transparent
+                                ),
+                            colors = TextFieldDefaults.textFieldColors(
+                                disabledTextColor = Color.Transparent,
+                                backgroundColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent,
+                                cursorColor = MaterialTheme.colors.onPrimary
+                            ),
+                            textStyle = TextStyle(
+                                color = MaterialTheme.colors.onBackground,
                                 fontSize = 18.sp
                             )
-                        },
-                        onValueChange = { viewModel.onBodyInputChange(it) },
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .focusRequester(focusRequester)
-                            .fillMaxWidth()
-                            .background(
-                                color = Color.Transparent
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            disabledTextColor = Color.Transparent,
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colors.onPrimary
-                        ),
-                        textStyle = TextStyle(
-                            color = MaterialTheme.colors.onBackground,
-                            fontSize = 18.sp
                         )
-                    )
+                    }
                 }
 
                 Divider(

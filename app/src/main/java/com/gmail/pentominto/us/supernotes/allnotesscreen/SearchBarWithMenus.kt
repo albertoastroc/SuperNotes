@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +30,11 @@ fun SearchBarWithMenu(
     onInputChange : (String) -> Unit,
     onMenuIconClick : () -> Unit
 ) {
+
+    val customTextSelectionColors = TextSelectionColors(
+        handleColor = Color.Transparent,
+        backgroundColor = Color.Transparent
+    )
 
     Box(
         modifier = Modifier
@@ -63,29 +71,34 @@ fun SearchBarWithMenu(
                 tint = MaterialTheme.colors.onSecondary
             )
 
-            TextField(
-                modifier = Modifier.weight(1f),
-                value = input,
-                colors = TextFieldDefaults.textFieldColors(
-                    disabledTextColor = Color.Transparent,
-                    backgroundColor = MaterialTheme.colors.secondaryVariant,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Search Notes...",
-                        color = MaterialTheme.colors.onSecondary,
-                        fontSize = 16.sp
+            CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+
+                TextField(
+                    modifier = Modifier.weight(1f),
+                    value = input,
+                    colors = TextFieldDefaults.textFieldColors(
+                        disabledTextColor = Color.Transparent,
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSecondary,
+                    ),
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Search Notes...",
+                            color = MaterialTheme.colors.onSecondary,
+                            fontSize = 16.sp
+                        )
+                    },
+                    onValueChange = { onInputChange(it) },
+                    textStyle = TextStyle.Default.copy(
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colors.onSecondary
                     )
-                },
-                onValueChange = { onInputChange(it) },
-                textStyle = TextStyle.Default.copy(
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colors.onSecondary)
-            )
+                )
+            }
         }
     }
 }
