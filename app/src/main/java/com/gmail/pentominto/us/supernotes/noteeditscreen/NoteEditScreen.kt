@@ -251,7 +251,7 @@ fun NoteEditScreen(
                     color = MaterialTheme.colors.onBackground,
                     modifier = Modifier.padding(horizontal = 2.dp)
                 )
-                
+
                 Card(
                     modifier = Modifier
                         .weight(1f),
@@ -295,13 +295,13 @@ fun NoteEditScreen(
                     }
                 }
 
+                Divider(
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.padding(horizontal = 2.dp)
+                )
+
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> {
-
-                        Divider(
-                            color = MaterialTheme.colors.onBackground,
-                            modifier = Modifier.padding(horizontal = 2.dp)
-                        )
 
                         Card(
                             modifier = Modifier,
@@ -368,7 +368,6 @@ fun NoteEditScreen(
                             }
                         }
                     }
-                    else                               -> {}
                 }
             }
         },
