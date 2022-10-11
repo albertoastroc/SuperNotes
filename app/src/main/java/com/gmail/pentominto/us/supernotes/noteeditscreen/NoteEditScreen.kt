@@ -187,18 +187,26 @@ fun NoteEditScreen(
                             DropdownMenu(
                                 expanded = dropDownMenuExpanded,
                                 onDismissRequest = { dropDownMenuExpanded = false },
-                                offset = DpOffset(x = 0.dp, y = 4.dp)
+                                offset = DpOffset(
+                                    x = 0.dp,
+                                    y = 4.dp
+                                )
                             ) {
 
                                 DropdownMenuItem(onClick = {
 
                                     clipboardManager.setText(
                                         AnnotatedString(
-                                            note.noteBody ?: "")
+                                            note.noteBody ?: ""
+                                        )
                                     )
                                     dropDownMenuExpanded = false
                                     viewModel.getCurrentDate()
-                                    Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Copied to clipboard",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
                                 }) {
                                     Text(text = "Copy to clipboard")
@@ -208,10 +216,16 @@ fun NoteEditScreen(
 
                                     val sendIntent : Intent = Intent().apply {
                                         action = Intent.ACTION_SEND
-                                        putExtra(Intent.EXTRA_TEXT, note.noteBody ?: "")
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            note.noteBody ?: ""
+                                        )
                                         type = "text/plain"
                                     }
-                                    val shareIntent = Intent.createChooser(sendIntent, null)
+                                    val shareIntent = Intent.createChooser(
+                                        sendIntent,
+                                        null
+                                    )
 
                                     context.startActivity(shareIntent)
                                     dropDownMenuExpanded = false
@@ -230,7 +244,6 @@ fun NoteEditScreen(
                             }
 
                         }
-
                     }
                 }
 
@@ -238,7 +251,7 @@ fun NoteEditScreen(
                     color = MaterialTheme.colors.onBackground,
                     modifier = Modifier.padding(horizontal = 2.dp)
                 )
-
+                
                 Card(
                     modifier = Modifier
                         .weight(1f),
@@ -282,12 +295,13 @@ fun NoteEditScreen(
                     }
                 }
 
-                Divider(
-                    color = MaterialTheme.colors.onBackground,
-                    modifier = Modifier.padding(horizontal = 2.dp)
-                )
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> {
+
+                        Divider(
+                            color = MaterialTheme.colors.onBackground,
+                            modifier = Modifier.padding(horizontal = 2.dp)
+                        )
 
                         Card(
                             modifier = Modifier,
