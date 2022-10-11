@@ -3,6 +3,7 @@ package com.gmail.pentominto.us.supernotes.noteeditscreen
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
@@ -16,8 +17,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
-    private val databaseDao : DatabaseDao
+    private val databaseDao : DatabaseDao,
+    savedStateHandle : SavedStateHandle
 ) : ViewModel() {
+
+    val noteId : Long? = savedStateHandle["noteId"]
 
     private val _note : MutableState<Note> = mutableStateOf(Note())
     val note : State<Note> = _note
@@ -33,27 +37,22 @@ class NoteEditScreenViewModel @Inject constructor(
 
     fun getNote(noteId : Long){
 
-        viewModelScope.launch {
+        if (noteId == 0L){
 
-            databaseDao.getNoteWithCategory(noteId).collect() {
+            insertNewNote()
 
-                it.forEach {
+        } else {
 
-                    _noteCategory.value = it.key
-                    _note.value = it.value
+            viewModelScope.launch {
+
+                databaseDao.getNoteWithCategory(noteId).collect() {
+
+                    it.forEach {
+
+                        _noteCategory.value = it.key
+                        _note.value = it.value
+                    }
                 }
-            }
-        }
-        getCategories()
-    }
-
-    fun getCategories() {
-
-        viewModelScope.launch {
-
-            databaseDao.getAllCategories().collect() {
-
-                _categories.value = it
             }
         }
     }
@@ -67,15 +66,24 @@ class NoteEditScreenViewModel @Inject constructor(
                 insertCategory("No Category")
             }
 
-            getCurrentDate()
-
             getNote(
                 databaseDao.insertNote(Note(
                     category = "No Category",
-                    createdDate = _currentDate.value,
-                    lastModified = _currentDate.value
+                    createdDate = currentDate.value,
+                    lastModified = currentDate.value
                 ))
             )
+        }
+    }
+
+    fun getCategories() {
+
+        viewModelScope.launch {
+
+            databaseDao.getAllCategories().collect() {
+
+                _categories.value = it
+            }
         }
     }
 
@@ -109,7 +117,6 @@ class NoteEditScreenViewModel @Inject constructor(
     fun saveNoteText() {
 
         viewModelScope.launch {
-            getCurrentDate()
             databaseDao.updateNote(
                 noteTitle = _note.value.noteTitle.toString(),
                 noteBody = _note.value.noteBody.toString(),
@@ -152,7 +159,14 @@ class NoteEditScreenViewModel @Inject constructor(
         val currentTime = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("M/d/yy")
         _currentDate.value = dateFormatter.format(currentTime)
+    }
 
+    init {
+        if (noteId != null) {
+            getNote(noteId)
+        }
+        getCategories()
+        getCurrentDate()
     }
 
 }

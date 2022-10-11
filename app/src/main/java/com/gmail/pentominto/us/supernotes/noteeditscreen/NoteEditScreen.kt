@@ -79,12 +79,6 @@ fun NoteEditScreen(
         backgroundColor = Color.Transparent
     )
 
-    if (noteId != 0L) {
-        viewModel.getNote(noteId)
-    } else {
-        viewModel.insertNewNote()
-    }
-
     DisposableEffect(lifeCycleOwner) {
 
         val observer = LifecycleEventObserver { _, event ->
