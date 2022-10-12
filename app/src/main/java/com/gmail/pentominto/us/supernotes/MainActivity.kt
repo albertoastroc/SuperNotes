@@ -3,6 +3,7 @@ package com.gmail.pentominto.us.supernotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.datastore.core.DataStore
@@ -25,29 +26,34 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
+enum class WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
+
 val userDarkThemeKey = booleanPreferencesKey("user_theme")
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var dataStore : DataStore<Preferences>
 
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val themeFlow: Flow<Boolean> = dataStore.data
+        val themeFlow : Flow<Boolean> = dataStore.data
             .map { preferences ->
                 preferences[userDarkThemeKey] ?: false
             }
 
+
         setContent {
 
-            val savedTheme : MutableState<Boolean> = runBlocking{ mutableStateOf(themeFlow.first()) }
+            val savedTheme : MutableState<Boolean> = runBlocking { mutableStateOf(themeFlow.first()) }
 
             val latestTheme = themeFlow.collectAsState(initial = false)
 
-            val themeState: MutableState<Boolean> = remember(key1 = latestTheme.value) { mutableStateOf(savedTheme.value) }
+            val themeState : MutableState<Boolean> = remember(key1 = latestTheme.value) { mutableStateOf(savedTheme.value) }
 
             SuperNotesTheme(
                 darkTheme = themeState.value
@@ -56,7 +62,7 @@ class MainActivity : ComponentActivity() {
                 val systemUiController = rememberSystemUiController()
                 SideEffect {
 
-                    if (!themeState.value) {
+                    if (! themeState.value) {
 
                         systemUiController.setSystemBarsColor(
                             color = Color.White,
@@ -148,7 +154,7 @@ fun SuperNotesApp() {
  * export all notes - for v2
  * import txt file - for v2
  * delete all notes - done
- * search notes - working
+ * search notes - done
  *
  * dark mode - done
  *
@@ -157,9 +163,13 @@ fun SuperNotesApp() {
  * copy to clipboard - done
  * reminder - wait until calendar api is easy to use
  * share note - done
- * make title textfield dissapear if user clicks on note text while in landscape mode? just like the bottom card is hidden
+ * make title textfield dissapear if user clicks on note text while in landscape mode? just like the bottom card is hidden - waiting on google bug fix
  * text not being saved in orientation change - fixed
  * new note is being saved on orientation change if its a new note, no problem with existing notes - fixed
+ * dialogbackground looks wrong, text on light container on dark
+ *
+ * find a way to implement screen for tablets
+ * maybe redo how categories are interacted with in note edit mode
  *
  *
  */

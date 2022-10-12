@@ -1,12 +1,10 @@
 package com.gmail.pentominto.us.supernotes.noteeditscreen
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,7 +25,6 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -43,6 +40,7 @@ import kotlinx.coroutines.launch
 @OptIn(
     ExperimentalMaterialApi::class,
 )
+
 @Composable
 fun NoteEditScreen(
     noteId : Long,
@@ -73,6 +71,8 @@ fun NoteEditScreen(
     val categories by remember { viewModel.categories }
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
+
+
 
     val customTextSelectionColors = TextSelectionColors(
         handleColor = Color.Transparent,
@@ -254,6 +254,11 @@ fun NoteEditScreen(
 
                 Card(
                     modifier = Modifier
+                        .scrollable(
+                            rememberScrollState(),
+                            Orientation.Vertical,
+                            enabled = true
+                        )
                         .weight(1f),
                     elevation = 1.dp,
                     shape = RoundedCornerShape(2.dp),
@@ -299,75 +304,51 @@ fun NoteEditScreen(
                     color = MaterialTheme.colors.onBackground,
                     modifier = Modifier.padding(horizontal = 2.dp)
                 )
+                Card(
+                    modifier = Modifier,
+                    elevation = 0.dp,
+                    shape = RoundedCornerShape(2.dp),
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
 
-                when (configuration.orientation) {
-                    Configuration.ORIENTATION_PORTRAIT -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
-                        Card(
-                            modifier = Modifier,
-                            elevation = 0.dp,
-                            shape = RoundedCornerShape(2.dp),
-                            backgroundColor = MaterialTheme.colors.primary
+                        Button(
+                            onClick = {
+                                coroutineScope.launch {
+
+                                    bottomSheetState.expand()
+                                    focusManager.clearFocus()
+                                }
+                            },
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .widthIn(max = 200.dp)
+                                .heightIn(max = 100.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
                         ) {
-
-                            Row(
+                            Text(
+                                text = viewModel.noteCategory.value.categoryTitle,
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(10.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-
-                                Button(
-                                    onClick = {
-                                        coroutineScope.launch {
-
-                                            bottomSheetState.expand()
-                                            focusManager.clearFocus()
-                                        }
-                                    },
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                        .widthIn(max = 200.dp)
-                                        .heightIn(max = 100.dp),
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
-                                ) {
-                                    Text(
-                                        text = viewModel.noteCategory.value.categoryTitle,
-                                        modifier = Modifier
-                                            .padding(
-                                                top = 8.dp,
-                                                bottom = 8.dp,
-                                                start = 12.dp,
-                                                end = 12.dp
-                                            ),
-                                        overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1,
-                                        color = MaterialTheme.colors.onSecondary
-                                    )
-                                }
-                                Column(
-                                    horizontalAlignment = Alignment.End,
-                                    modifier = Modifier
-                                ) {
-
-                                    Text(
-                                        text = "Created: ${viewModel.note.value.createdDate}",
-                                        fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontSize = 18.sp
-                                    )
-
-                                    Text(
-                                        text = "Last Modified: ${viewModel.note.value.lastModified}",
-                                        fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontSize = 18.sp
-                                    )
-                                }
-                            }
+                                    .padding(
+                                        top = 8.dp,
+                                        bottom = 8.dp,
+                                        start = 12.dp,
+                                        end = 12.dp
+                                    ),
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                color = MaterialTheme.colors.onSecondary
+                            )
                         }
                     }
+
                 }
             }
         },
