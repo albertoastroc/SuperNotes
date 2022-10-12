@@ -2,13 +2,13 @@ package com.gmail.pentominto.us.supernotes.noteeditscreen
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -16,12 +16,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -53,8 +55,6 @@ fun NoteEditScreen(
     val clipboardManager = LocalClipboardManager.current
 
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
-
-    val configuration = LocalConfiguration.current
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -104,12 +104,7 @@ fun NoteEditScreen(
     BottomSheetScaffold(
         modifier = Modifier
             .background(MaterialTheme.colors.background)
-            .fillMaxSize()
-            .padding(
-                top = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            ),
+            .fillMaxSize(),
         scaffoldState = bottomSheetScaffoldState,
         sheetGesturesEnabled = true,
         sheetPeekHeight = 0.dp,
@@ -147,7 +142,6 @@ fun NoteEditScreen(
                                 onValueChange = { viewModel.onTitleInputChange(it) },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(8.dp)
                                     .background(
                                         color = Color.Transparent
                                     ),
@@ -211,6 +205,16 @@ fun NoteEditScreen(
                                 }) {
                                     Text(text = "Copy to clipboard")
                                 }
+                                
+                                DropdownMenuItem(onClick = {
+                                    coroutineScope.launch {
+
+                                    bottomSheetState.expand()
+                                    focusManager.clearFocus()
+                                }
+                                }) {
+                                    Text(text = "Set category")
+                                }
 
                                 DropdownMenuItem(onClick = {
 
@@ -254,11 +258,6 @@ fun NoteEditScreen(
 
                 Card(
                     modifier = Modifier
-                        .scrollable(
-                            rememberScrollState(),
-                            Orientation.Vertical,
-                            enabled = true
-                        )
                         .weight(1f),
                     elevation = 1.dp,
                     shape = RoundedCornerShape(2.dp),
@@ -278,7 +277,6 @@ fun NoteEditScreen(
                             },
                             onValueChange = { viewModel.onBodyInputChange(it) },
                             modifier = Modifier
-                                .padding(8.dp)
                                 .focusRequester(focusRequester)
                                 .fillMaxWidth()
                                 .background(
@@ -299,59 +297,59 @@ fun NoteEditScreen(
                         )
                     }
                 }
-
-                Divider(
-                    color = MaterialTheme.colors.onBackground,
-                    modifier = Modifier.padding(horizontal = 2.dp)
-                )
-                Card(
-                    modifier = Modifier,
-                    elevation = 0.dp,
-                    shape = RoundedCornerShape(2.dp),
-                    backgroundColor = MaterialTheme.colors.primary
-                ) {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Button(
-                            onClick = {
-                                coroutineScope.launch {
-
-                                    bottomSheetState.expand()
-                                    focusManager.clearFocus()
-                                }
-                            },
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .widthIn(max = 200.dp)
-                                .heightIn(max = 100.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
-                        ) {
-                            Text(
-                                text = viewModel.noteCategory.value.categoryTitle,
-                                modifier = Modifier
-                                    .padding(
-                                        top = 8.dp,
-                                        bottom = 8.dp,
-                                        start = 12.dp,
-                                        end = 12.dp
-                                    ),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                color = MaterialTheme.colors.onSecondary
-                            )
-                        }
-                    }
-
-                }
             }
         },
+
+//                Divider(
+//                    color = MaterialTheme.colors.onBackground,
+//                    modifier = Modifier.padding(horizontal = 2.dp)
+//                )
+//                Card(
+//                    modifier = Modifier,
+//                    elevation = 0.dp,
+//                    shape = RoundedCornerShape(2.dp),
+//                    backgroundColor = MaterialTheme.colors.primary
+//                ) {
+
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(10.dp),
+//                        horizontalArrangement = Arrangement.SpaceBetween,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//
+//                        Button(
+//                            onClick = {
+//                                coroutineScope.launch {
+//
+//                                    bottomSheetState.expand()
+//                                    focusManager.clearFocus()
+//                                }
+//                            },
+//                            modifier = Modifier
+//                                .clip(CircleShape)
+//                                .widthIn(max = 200.dp)
+//                                .heightIn(max = 100.dp),
+//                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
+//                        ) {
+//                            Text(
+//                                text = viewModel.noteCategory.value.categoryTitle,
+//                                modifier = Modifier
+//                                    .padding(
+//                                        top = 8.dp,
+//                                        bottom = 8.dp,
+//                                        start = 12.dp,
+//                                        end = 12.dp
+//                                    ),
+//                                overflow = TextOverflow.Ellipsis,
+//                                maxLines = 1,
+//                                color = MaterialTheme.colors.onSecondary
+//                            )
+//                        }
+//                    }
+
+
         sheetContent = {
 
             CategoriesList(
