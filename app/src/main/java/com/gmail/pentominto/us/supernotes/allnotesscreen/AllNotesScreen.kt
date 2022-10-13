@@ -23,6 +23,7 @@ import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItemSearchResult
 import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AllNotesScreen(
@@ -60,7 +61,7 @@ fun AllNotesScreen(
         backgroundColor = MaterialTheme.colors.background,
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-        drawerBackgroundColor = MaterialTheme.colors.secondaryVariant,
+        drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
 
             Drawer(
@@ -116,7 +117,7 @@ fun AllNotesScreen(
         content = { paddingValues ->
 
             LazyColumn(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
             ) {
 
 

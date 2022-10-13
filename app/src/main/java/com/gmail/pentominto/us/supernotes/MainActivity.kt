@@ -163,13 +163,12 @@ fun SuperNotesApp() {
  * copy to clipboard - done
  * reminder - wait until calendar api is easy to use
  * share note - done
- * make title textfield dissapear if user clicks on note text while in landscape mode? just like the bottom card is hidden - waiting on google bug fix
+ * waiting on google bug fix to put category on bottom of screen, bug makes screen not function in landscape mode
  * text not being saved in orientation change - fixed
  * new note is being saved on orientation change if its a new note, no problem with existing notes - fixed
- * dialogbackground looks wrong, text on light container on dark
- *
- * find a way to implement screen for tablets
- * maybe redo how categories are interacted with in note edit mode
+ * dialogbackground looks wrong, text on light container on dark - fixed
+ * find a way to implement screen for tablets - fixed
+ * make fab dissapear when scrolling
  *
  *
  */

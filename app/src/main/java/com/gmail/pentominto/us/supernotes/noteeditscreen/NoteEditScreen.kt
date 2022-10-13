@@ -72,11 +72,9 @@ fun NoteEditScreen(
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
-
-
     val customTextSelectionColors = TextSelectionColors(
-        handleColor = Color.Transparent,
-        backgroundColor = Color.Transparent
+        handleColor = MaterialTheme.colors.secondary,
+        backgroundColor = MaterialTheme.colors.secondary.copy(alpha = .5f)
     )
 
     DisposableEffect(lifeCycleOwner) {
@@ -111,7 +109,13 @@ fun NoteEditScreen(
         content = {
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        top = 16.dp,
+                        end = 16.dp
+                    )
             ) {
 
                 Card(
@@ -205,13 +209,14 @@ fun NoteEditScreen(
                                 }) {
                                     Text(text = "Copy to clipboard")
                                 }
-                                
+
                                 DropdownMenuItem(onClick = {
                                     coroutineScope.launch {
 
-                                    bottomSheetState.expand()
-                                    focusManager.clearFocus()
-                                }
+                                        bottomSheetState.expand()
+                                        focusManager.clearFocus()
+                                        dropDownMenuExpanded = false
+                                    }
                                 }) {
                                     Text(text = "Set category")
                                 }
@@ -348,7 +353,6 @@ fun NoteEditScreen(
 //                            )
 //                        }
 //                    }
-
 
         sheetContent = {
 
