@@ -1,9 +1,11 @@
 package com.gmail.pentominto.us.supernotes
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -11,6 +13,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -54,6 +57,18 @@ fun AllNotesScreen(
             viewModel.getNotesNoCategories()
         }
     )
+
+    val verticalScroll = rememberScrollState()
+    var fabExtended by remember { mutableStateOf(true) }
+
+    LaunchedEffect(verticalScroll) {
+        var prev = 0
+        snapshotFlow { verticalScroll.value }
+            .collect {
+                fabExtended = it <= prev
+                prev = it
+            }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -117,13 +132,15 @@ fun AllNotesScreen(
         content = { paddingValues ->
 
             LazyColumn(
-                modifier = Modifier.padding(paddingValues),
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(verticalScroll)
+                ,
             ) {
-
 
                 if (searchState.value.length >= 3) {
 
-                    items(notesSearchResult) { note ->
+                    items(notesSearchResult,) { note ->
 
                         NoteItemSearchResult(
                             note = note,
@@ -218,27 +235,74 @@ fun AllNotesScreen(
         },
         floatingActionButton = {
 
-            ExtendedFloatingActionButton(
-                text = {
-                    Text(
-                        text = "New Note",
-                        fontSize = 16.sp
-                    )
-                },
-                onClick = {
-                    onNoteClick(0L)
-                },
-                backgroundColor = MaterialTheme.colors.secondary,
+            ExtendableFloatingActionButton(
+                extended = fabExtended,
+                text = { Text(text = "New Note") },
                 icon = {
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_add_24),
                         contentDescription = null,
                     )
-                },
+                }
+
             )
+
+//            ExtendedFloatingActionButton(
+//                text = {
+//                    Text(
+//                        text = "New Note",
+//                        fontSize = 16.sp
+//                    )
+//                },
+//                onClick = {
+//                    onNoteClick(0L)
+//                },
+//                backgroundColor = MaterialTheme.colors.secondary,
+//                icon = {
+//                    Icon(
+//                        painterResource(id = R.drawable.ic_baseline_add_24),
+//                        contentDescription = null,
+//                    )
+//                },
+//            )
         }
     )
 }
+
+@Composable
+fun ExtendableFloatingActionButton(
+    modifier: Modifier = Modifier,
+    extended: Boolean,
+    text: @Composable () -> Unit,
+    icon: @Composable () -> Unit,
+    onClick: () -> Unit = {}
+) {
+
+    val paddingSize = 16.dp
+
+    FloatingActionButton(
+        modifier = modifier,
+        onClick = onClick,
+    ) {
+        Row(
+            modifier = Modifier.padding(
+                start = paddingSize,
+                end = paddingSize
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            icon()
+
+            AnimatedVisibility(visible = extended) {
+                Row {
+                    Spacer(Modifier.width(12.dp))
+                    text()
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun ListWithCategories() {

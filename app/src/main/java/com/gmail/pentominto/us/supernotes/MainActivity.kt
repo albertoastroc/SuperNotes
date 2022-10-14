@@ -169,6 +169,7 @@ fun SuperNotesApp() {
  * dialogbackground looks wrong, text on light container on dark - fixed
  * find a way to implement screen for tablets - fixed
  * make fab dissapear when scrolling
+ * dialoge background appearance
  *
  *
  */
