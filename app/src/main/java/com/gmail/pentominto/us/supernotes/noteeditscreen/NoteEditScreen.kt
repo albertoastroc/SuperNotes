@@ -242,16 +242,7 @@ fun NoteEditScreen(
                                 }) {
                                     Text(text = "Share")
                                 }
-
-//                                DropdownMenuItem(onClick = {
-//
-//
-//                                    notificationManager.showNotification("Yo")
-//                                }) {
-//                                    Text(text = "Set reminder")
-//                                }
                             }
-
                         }
                     }
                 }
@@ -304,55 +295,6 @@ fun NoteEditScreen(
                 }
             }
         },
-
-//                Divider(
-//                    color = MaterialTheme.colors.onBackground,
-//                    modifier = Modifier.padding(horizontal = 2.dp)
-//                )
-//                Card(
-//                    modifier = Modifier,
-//                    elevation = 0.dp,
-//                    shape = RoundedCornerShape(2.dp),
-//                    backgroundColor = MaterialTheme.colors.primary
-//                ) {
-
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(10.dp),
-//                        horizontalArrangement = Arrangement.SpaceBetween,
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//
-//                        Button(
-//                            onClick = {
-//                                coroutineScope.launch {
-//
-//                                    bottomSheetState.expand()
-//                                    focusManager.clearFocus()
-//                                }
-//                            },
-//                            modifier = Modifier
-//                                .clip(CircleShape)
-//                                .widthIn(max = 200.dp)
-//                                .heightIn(max = 100.dp),
-//                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
-//                        ) {
-//                            Text(
-//                                text = viewModel.noteCategory.value.categoryTitle,
-//                                modifier = Modifier
-//                                    .padding(
-//                                        top = 8.dp,
-//                                        bottom = 8.dp,
-//                                        start = 12.dp,
-//                                        end = 12.dp
-//                                    ),
-//                                overflow = TextOverflow.Ellipsis,
-//                                maxLines = 1,
-//                                color = MaterialTheme.colors.onSecondary
-//                            )
-//                        }
-//                    }
 
         sheetContent = {
 
@@ -423,58 +365,110 @@ fun CategoriesList(
                 if (openCategoryDialog.value) {
 
                     AlertDialog(
+
+                        modifier = Modifier.width(400.dp),
                         onDismissRequest = { openCategoryDialog.value = false },
                         title = {
                             Text(
                                 text = dialogTitleState.value
                             )
+
                         },
                         text = {
-                            TextField(
-                                value = dialogInput.value,
-                                modifier = Modifier
-                                    .padding(top = 8.dp),
-                                placeholder = { Text(text = "New Category Name...") },
-                                onValueChange = {
-                                    dialogInput.value = it
-                                    dialogTitleState.value = ""
-                                },
-                            )
-                        },
-                        confirmButton = {
-                            Button(
-                                onClick = {
 
-                                    if (dialogInput.value.isNotEmpty()) {
-                                        onClickDialog(dialogInput.value)
-                                        openCategoryDialog.value = false
-                                        dialogInput.value = ""
-                                    } else {
-                                        dialogTitleState.value = "Category name is empty"
-                                    }
-                                },
-                                modifier = Modifier.width(100.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    contentColor = Color.White
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+
+                                TextField(
+                                    value = dialogInput.value,
+                                    modifier = Modifier
+                                        .padding(top = 8.dp),
+                                    placeholder = { Text(text = "New Category Name...") },
+                                    onValueChange = {
+                                        dialogInput.value = it
+                                        dialogTitleState.value = ""
+                                    },
                                 )
-                            ) {
-
-                                Text(text = "Add")
-
                             }
+
                         },
-                        dismissButton = {
-                            Button(
-                                onClick = { openCategoryDialog.value = false },
-                                colors = ButtonDefaults.buttonColors(
-                                    contentColor = Color.White
-                                ),
-                                modifier = Modifier.width(100.dp)
-
+                        buttons = {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(text = "Cancel")
+
+                                Button(
+                                    onClick = {
+
+                                        if (dialogInput.value.isNotEmpty()) {
+                                            onClickDialog(dialogInput.value)
+                                            openCategoryDialog.value = false
+                                            dialogInput.value = ""
+                                        } else {
+                                            dialogTitleState.value = "Category name is empty"
+                                        }
+                                    },
+                                    modifier = Modifier.width(100.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        contentColor = Color.White
+                                    )
+                                ) {
+
+                                    Text(text = "Add")
+
+                                }
+
+
+                                Button(
+                                    onClick = { openCategoryDialog.value = false },
+                                    colors = ButtonDefaults.buttonColors(
+                                        contentColor = Color.White
+                                    ),
+                                    modifier = Modifier.width(100.dp)
+
+                                ) {
+                                    Text(text = "Cancel")
+                                }
                             }
+
                         }
+//                        confirmButton = {
+//                            Button(
+//                                onClick = {
+//
+//                                    if (dialogInput.value.isNotEmpty()) {
+//                                        onClickDialog(dialogInput.value)
+//                                        openCategoryDialog.value = false
+//                                        dialogInput.value = ""
+//                                    } else {
+//                                        dialogTitleState.value = "Category name is empty"
+//                                    }
+//                                },
+//                                modifier = Modifier.width(100.dp),
+//                                colors = ButtonDefaults.buttonColors(
+//                                    contentColor = Color.White
+//                                )
+//                            ) {
+//
+//                                Text(text = "Add")
+//
+//                            }
+//                        },
+//                        dismissButton = {
+//                            Button(
+//                                onClick = { openCategoryDialog.value = false },
+//                                colors = ButtonDefaults.buttonColors(
+//                                    contentColor = Color.White
+//                                ),
+//                                modifier = Modifier.width(100.dp)
+//
+//                            ) {
+//                                Text(text = "Cancel")
+//                            }
+//                        }
                     )
                 }
             }
