@@ -3,7 +3,6 @@ package com.gmail.pentominto.us.supernotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.datastore.core.DataStore
@@ -30,7 +29,6 @@ enum class WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
 
 val userDarkThemeKey = booleanPreferencesKey("user_theme")
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
