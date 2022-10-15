@@ -166,8 +166,8 @@ fun SuperNotesApp() {
  * new note is being saved on orientation change if its a new note, no problem with existing notes - fixed
  * dialogbackground looks wrong, text on light container on dark - fixed
  * find a way to implement screen for tablets - fixed
- * make fab dissapear when scrolling
- * dialoge background appearance
+ * make fab dissapear when scrolling - fixed
+ * dialoge background appearance - need cursor on texfield
  *
  *
  */

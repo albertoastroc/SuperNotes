@@ -365,9 +365,9 @@ fun CategoriesList(
                 if (openCategoryDialog.value) {
 
                     AlertDialog(
-
                         modifier = Modifier.width(400.dp),
                         onDismissRequest = { openCategoryDialog.value = false },
+                        backgroundColor = MaterialTheme.colors.background,
                         title = {
                             Text(
                                 text = dialogTitleState.value
@@ -390,6 +390,9 @@ fun CategoriesList(
                                         dialogInput.value = it
                                         dialogTitleState.value = ""
                                     },
+                                    colors  = TextFieldDefaults.textFieldColors(
+                                        cursorColor = MaterialTheme.colors.onPrimary
+                                    )
                                 )
                             }
 
@@ -398,6 +401,7 @@ fun CategoriesList(
                             Row(
                                 horizontalArrangement = Arrangement.SpaceEvenly,
                                 modifier = Modifier.fillMaxWidth()
+                                    .padding(bottom = 16.dp)
                             ) {
 
                                 Button(
@@ -413,7 +417,8 @@ fun CategoriesList(
                                     },
                                     modifier = Modifier.width(100.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        contentColor = Color.White
+                                        contentColor = MaterialTheme.colors.onSecondary,
+                                        backgroundColor = MaterialTheme.colors.secondary
                                     )
                                 ) {
 
@@ -425,7 +430,8 @@ fun CategoriesList(
                                 Button(
                                     onClick = { openCategoryDialog.value = false },
                                     colors = ButtonDefaults.buttonColors(
-                                        contentColor = Color.White
+                                        contentColor = MaterialTheme.colors.onSecondary,
+                                        backgroundColor = MaterialTheme.colors.secondary
                                     ),
                                     modifier = Modifier.width(100.dp)
 
