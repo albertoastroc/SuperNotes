@@ -167,7 +167,43 @@ fun SuperNotesApp() {
  * dialogbackground looks wrong, text on light container on dark - fixed
  * find a way to implement screen for tablets - fixed
  * make fab dissapear when scrolling - fixed
- * dialoge background appearance - need cursor on texfield
+ * maybe animate search bar to something smaller and compact while scrolling
+ * screen transition animations
+ *
+ *
+ *
+ * ORGANIZATION
+ * repository - not done
+ * set up events for all notes especially
+ * stateholder class
+ *      for all notes - not done
+ *      for notedit - not done
+ *      for options - not done
+ *
+ * string resources - not done
+ * image resources - not done
+ * functions -
+ *      for all notes - not done
+ *      for note edit - not done
+ *      for options - not done
+ *
+ * separate composables -
+ *      for all notes - not done
+ *      for note edit - not done
+ *      for options - not done
+ * check for proper state hoisting
+ *      for all notes - not done
+ *      for note edit - not done
+ *      for options - not done
+ * check for work that can be done in the background
+ *      for all notes - not done
+ *      for note edit - not done
+ *      for options - not done
+ * naming conventions
+ *      for all notes - not done
+ *      for note edit - not done
+ *      for options - not done
+ *
  *
  *
  */

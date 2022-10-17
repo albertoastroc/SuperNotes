@@ -123,9 +123,9 @@ fun AllNotesScreen(
 
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize(1f)
-                    .padding(paddingValues),
-                state = listState
+                    .fillMaxSize(1f),
+                state = listState,
+                contentPadding = paddingValues
             ) {
 
                 if (searchState.value.length >= 3) {
