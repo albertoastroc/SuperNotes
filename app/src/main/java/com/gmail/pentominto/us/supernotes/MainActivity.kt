@@ -167,7 +167,6 @@ fun SuperNotesApp() {
  * dialogbackground looks wrong, text on light container on dark - fixed
  * find a way to implement screen for tablets - fixed
  * make fab dissapear when scrolling - fixed
- * maybe animate search bar to something smaller and compact while scrolling
  * screen transition animations
  *
  *

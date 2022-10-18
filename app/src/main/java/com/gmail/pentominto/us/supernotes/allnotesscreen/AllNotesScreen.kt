@@ -106,17 +106,17 @@ fun AllNotesScreen(
         },
 
         topBar = {
-            SearchBarWithMenu(
-                input = searchState.value,
-                onInputChange = { viewModel.onSearchChange(it) },
-                onMenuIconClick = {
-
-                    scope.launch {
-
-                        scaffoldState.drawerState.open()
-                    }
-                }
-            )
+//            SearchBarWithMenu(
+//                input = searchState.value,
+//                onInputChange = { viewModel.onSearchChange(it) },
+//                onMenuIconClick = {
+//
+//                    scope.launch {
+//
+//                        scaffoldState.drawerState.open()
+//                    }
+//                }
+//            )
 
         },
         content = { paddingValues ->
@@ -127,6 +127,20 @@ fun AllNotesScreen(
                 state = listState,
                 contentPadding = paddingValues
             ) {
+
+                item {
+                    SearchBarWithMenu(
+                        input = searchState.value,
+                        onInputChange = { viewModel.onSearchChange(it) },
+                        onMenuIconClick = {
+
+                            scope.launch {
+
+                                scaffoldState.drawerState.open()
+                            }
+                        }
+                    )
+                }
 
                 if (searchState.value.length >= 3) {
 

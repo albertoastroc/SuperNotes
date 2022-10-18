@@ -2,11 +2,8 @@ package com.gmail.pentominto.us.supernotes.allnotesscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
@@ -40,25 +37,30 @@ fun SearchBarWithMenu(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = 16.dp,
                 top = 16.dp,
+                start = 16.dp,
                 end = 16.dp,
                 bottom = 8.dp
             )
-            .clip(CircleShape)
+            .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.secondaryVariant),
-
         ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
 
             Icon(
-                painterResource(id = R.drawable.ic_baseline_menu_24),
+                painter = painterResource(id = R.drawable.ic_baseline_menu_24),
+                contentDescription = null,
                 modifier = Modifier
-                    .padding(start = 20.dp)
+                    .padding(
+                        start = 20.dp,
+                        top = 20.dp,
+                        bottom = 20.dp
+                    )
                     .clickable(
                         interactionSource = NoRippleInteractionSource(),
                         onClick = {
@@ -67,14 +69,14 @@ fun SearchBarWithMenu(
                         },
                         indication = null
                     ),
-                contentDescription = null,
                 tint = MaterialTheme.colors.onSecondary
             )
 
             CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
 
                 TextField(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f),
                     value = input,
                     colors = TextFieldDefaults.textFieldColors(
                         disabledTextColor = Color.Transparent,
@@ -100,5 +102,6 @@ fun SearchBarWithMenu(
                 )
             }
         }
+
     }
 }

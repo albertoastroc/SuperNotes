@@ -3,7 +3,6 @@ package com.gmail.pentominto.us.supernotes.noteeditscreen
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -28,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -145,6 +142,7 @@ fun NoteEditScreen(
                                 },
                                 onValueChange = { viewModel.onTitleInputChange(it) },
                                 modifier = Modifier
+                                    .padding(start = 8.dp)
                                     .weight(1f)
                                     .background(
                                         color = Color.Transparent
@@ -184,11 +182,7 @@ fun NoteEditScreen(
 
                             DropdownMenu(
                                 expanded = dropDownMenuExpanded,
-                                onDismissRequest = { dropDownMenuExpanded = false },
-                                offset = DpOffset(
-                                    x = 0.dp,
-                                    y = 4.dp
-                                )
+                                onDismissRequest = { dropDownMenuExpanded = false }
                             ) {
 
                                 DropdownMenuItem(onClick = {
@@ -273,6 +267,10 @@ fun NoteEditScreen(
                             },
                             onValueChange = { viewModel.onBodyInputChange(it) },
                             modifier = Modifier
+                                .padding(
+                                    start = 8.dp,
+                                    top = 8.dp
+                                )
                                 .focusRequester(focusRequester)
                                 .fillMaxWidth()
                                 .background(
@@ -338,20 +336,21 @@ fun CategoriesList(
             .heightIn(max = 450.dp)
     ) {
 
-        stickyHeader {
+        item {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.secondaryVariant)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
+                    .background(MaterialTheme.colors.secondaryVariant),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
 
-                Image(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_add_24),
                     contentDescription = null,
                     modifier = Modifier
+                        .padding(20.dp)
                         .clickable(
                             interactionSource = NoRippleInteractionSource(),
                             indication = null,
@@ -359,124 +358,88 @@ fun CategoriesList(
                                 openCategoryDialog.value = true
                             }
                         ),
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onBackground)
+                    tint = MaterialTheme.colors.onBackground
                 )
+            }
 
-                if (openCategoryDialog.value) {
 
-                    AlertDialog(
-                        modifier = Modifier.width(400.dp),
-                        onDismissRequest = { openCategoryDialog.value = false },
-                        backgroundColor = MaterialTheme.colors.background,
-                        title = {
-                            Text(
-                                text = dialogTitleState.value
-                            )
+            if (openCategoryDialog.value) {
 
-                        },
-                        text = {
+                AlertDialog(
+                    modifier = Modifier.width(400.dp),
+                    onDismissRequest = { openCategoryDialog.value = false },
+                    backgroundColor = MaterialTheme.colors.background,
+                    title = {
+                        Text(
+                            text = dialogTitleState.value
+                        )
 
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
+                    },
+                    text = {
 
-                                TextField(
-                                    value = dialogInput.value,
-                                    modifier = Modifier
-                                        .padding(top = 8.dp),
-                                    placeholder = { Text(text = "New Category Name...") },
-                                    onValueChange = {
-                                        dialogInput.value = it
-                                        dialogTitleState.value = ""
-                                    },
-                                    colors  = TextFieldDefaults.textFieldColors(
-                                        cursorColor = MaterialTheme.colors.onPrimary
-                                    )
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+
+                            TextField(
+                                value = dialogInput.value,
+                                modifier = Modifier
+                                    .padding(top = 8.dp),
+                                placeholder = { Text(text = "New Category Name...") },
+                                onValueChange = {
+                                    dialogInput.value = it
+                                    dialogTitleState.value = ""
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    cursorColor = MaterialTheme.colors.onPrimary
                                 )
-                            }
-
-                        },
-                        buttons = {
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                modifier = Modifier.fillMaxWidth()
-                                    .padding(bottom = 16.dp)
-                            ) {
-
-                                Button(
-                                    onClick = {
-
-                                        if (dialogInput.value.isNotEmpty()) {
-                                            onClickDialog(dialogInput.value)
-                                            openCategoryDialog.value = false
-                                            dialogInput.value = ""
-                                        } else {
-                                            dialogTitleState.value = "Category name is empty"
-                                        }
-                                    },
-                                    modifier = Modifier.width(100.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        contentColor = MaterialTheme.colors.onSecondary,
-                                        backgroundColor = MaterialTheme.colors.secondary
-                                    )
-                                ) {
-
-                                    Text(text = "Add")
-
-                                }
-
-
-                                Button(
-                                    onClick = { openCategoryDialog.value = false },
-                                    colors = ButtonDefaults.buttonColors(
-                                        contentColor = MaterialTheme.colors.onSecondary,
-                                        backgroundColor = MaterialTheme.colors.secondary
-                                    ),
-                                    modifier = Modifier.width(100.dp)
-
-                                ) {
-                                    Text(text = "Cancel")
-                                }
-                            }
-
+                            )
                         }
-//                        confirmButton = {
-//                            Button(
-//                                onClick = {
-//
-//                                    if (dialogInput.value.isNotEmpty()) {
-//                                        onClickDialog(dialogInput.value)
-//                                        openCategoryDialog.value = false
-//                                        dialogInput.value = ""
-//                                    } else {
-//                                        dialogTitleState.value = "Category name is empty"
-//                                    }
-//                                },
-//                                modifier = Modifier.width(100.dp),
-//                                colors = ButtonDefaults.buttonColors(
-//                                    contentColor = Color.White
-//                                )
-//                            ) {
-//
-//                                Text(text = "Add")
-//
-//                            }
-//                        },
-//                        dismissButton = {
-//                            Button(
-//                                onClick = { openCategoryDialog.value = false },
-//                                colors = ButtonDefaults.buttonColors(
-//                                    contentColor = Color.White
-//                                ),
-//                                modifier = Modifier.width(100.dp)
-//
-//                            ) {
-//                                Text(text = "Cancel")
-//                            }
-//                        }
-                    )
-                }
+
+                    },
+                    buttons = {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp)
+                        ) {
+
+                            Button(
+                                onClick = { openCategoryDialog.value = false },
+                                colors = ButtonDefaults.buttonColors(
+                                    contentColor = MaterialTheme.colors.onSecondary,
+                                    backgroundColor = MaterialTheme.colors.secondary
+                                ),
+                                modifier = Modifier.width(100.dp)
+
+                            ) {
+                                Text(text = "Cancel")
+                            }
+
+                            Button(
+                                onClick = {
+
+                                    if (dialogInput.value.isNotEmpty()) {
+                                        onClickDialog(dialogInput.value)
+                                        openCategoryDialog.value = false
+                                        dialogInput.value = ""
+                                    } else {
+                                        dialogTitleState.value = "Category name is empty"
+                                    }
+                                },
+                                modifier = Modifier.width(100.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    contentColor = MaterialTheme.colors.onSecondary,
+                                    backgroundColor = MaterialTheme.colors.secondary
+                                )
+                            ) {
+                                Text(text = "Add")
+                            }
+                        }
+                    }
+                )
             }
 
             Divider(
@@ -523,10 +486,7 @@ fun CategoriesList(
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_delete_24),
                         modifier = Modifier
-                            .padding(
-                                end = 16.dp,
-                                start = 8.dp
-                            )
+                            .padding(20.dp)
                             .clickable(
                                 interactionSource = NoRippleInteractionSource(),
                                 onClick = {
