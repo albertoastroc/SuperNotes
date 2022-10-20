@@ -104,21 +104,6 @@ fun AllNotesScreen(
                 },
             )
         },
-
-        topBar = {
-//            SearchBarWithMenu(
-//                input = searchState.value,
-//                onInputChange = { viewModel.onSearchChange(it) },
-//                onMenuIconClick = {
-//
-//                    scope.launch {
-//
-//                        scaffoldState.drawerState.open()
-//                    }
-//                }
-//            )
-
-        },
         content = { paddingValues ->
 
             LazyColumn(

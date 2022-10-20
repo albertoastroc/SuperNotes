@@ -57,6 +57,7 @@ class AllNotesViewModel @Inject constructor(
     fun getNotesWithCategories() = viewModelScope.launch {
 
         databaseDao.getAllCategoriesAndNotes().collect() {
+
             _notesListWithCategories.value = it
         }
     }
@@ -69,6 +70,7 @@ class AllNotesViewModel @Inject constructor(
     fun getNotesNoCategories() = viewModelScope.launch {
 
         databaseDao.getAllNotes().collect() {
+
             _notesListNoCategories.value = it
         }
 

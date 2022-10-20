@@ -83,7 +83,7 @@ fun NoteItem(
                         fontSize = 22.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        color = MaterialTheme.colors.onBackground
+                        color = MaterialTheme.colors.onBackground,
                     )
 
                     Row(
@@ -157,19 +157,13 @@ fun NoteItemSearchResult(
     onClick : (Long) -> Unit
 ) {
 
-    var chunkedString : List<String>? by remember { mutableStateOf(emptyList()) }
+    val finder = note.noteBody?.indexOf(query)
 
-    chunkedString = note.noteBody?.chunked(15)
+    val noteLength = note.noteBody?.length
 
-    var textToShow by remember { mutableStateOf(String()) }
+    val queryResult = finder?.let { note.noteBody?.substring(it, noteLength ?: query.length) }
 
-    chunkedString?.forEach {
-
-        if (it.contains(query, true))
-         {
-            textToShow = it
-        }
-    }
+    var queryResultState by remember { mutableStateOf(queryResult) }
 
     Card(
         modifier = modifier
@@ -213,7 +207,25 @@ fun NoteItemSearchResult(
                 ) {
 
                     Text(
-                        text = textToShow,
+                        text = note.noteTitle.toString(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                start = 24.dp,
+                                end = 12.dp,
+                                top = 8.dp
+                            )
+                            .background(
+                                color = Color.Transparent
+                            ),
+                        fontSize = 20.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        color = MaterialTheme.colors.onBackground
+                    )
+
+                    Text(
+                        text = queryResultState.toString(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
@@ -224,7 +236,7 @@ fun NoteItemSearchResult(
                             .background(
                                 color = Color.Transparent
                             ),
-                        fontSize = 22.sp,
+                        fontSize = 24.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
                         color = MaterialTheme.colors.onBackground
