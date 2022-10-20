@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.Utility
+package com.gmail.pentominto.us.supernotes.utility
 
 object Constants {
 

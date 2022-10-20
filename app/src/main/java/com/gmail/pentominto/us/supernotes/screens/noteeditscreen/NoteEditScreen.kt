@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.noteeditscreen
+package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
 import android.content.Intent
 import android.widget.Toast
@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
+import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
 import kotlinx.coroutines.launch
 

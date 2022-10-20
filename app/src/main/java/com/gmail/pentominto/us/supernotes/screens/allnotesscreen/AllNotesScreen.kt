@@ -20,10 +20,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.supernotes.allnotesscreen.AllNotesViewModel
-import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItem
-import com.gmail.pentominto.us.supernotes.allnotesscreen.NoteItemSearchResult
-import com.gmail.pentominto.us.supernotes.allnotesscreen.SearchBarWithMenu
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.NoteItem
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.NoteItemSearchResult
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
+import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 import kotlinx.coroutines.launch
 
 

@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.Utility.NoRippleInteractionSource
+import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 
 
 @Composable

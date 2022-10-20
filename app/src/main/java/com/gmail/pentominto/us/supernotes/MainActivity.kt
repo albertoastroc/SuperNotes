@@ -13,8 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.gmail.pentominto.us.supernotes.noteeditscreen.NoteEditScreen
-import com.gmail.pentominto.us.supernotes.optionsscreen.OptionsScreen
+import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
+import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -24,8 +24,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-
-enum class WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
 
 val userDarkThemeKey = booleanPreferencesKey("user_theme")
 

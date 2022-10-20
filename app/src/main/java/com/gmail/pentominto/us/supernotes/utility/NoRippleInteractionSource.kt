@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.Utility
+package com.gmail.pentominto.us.supernotes.utility
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource

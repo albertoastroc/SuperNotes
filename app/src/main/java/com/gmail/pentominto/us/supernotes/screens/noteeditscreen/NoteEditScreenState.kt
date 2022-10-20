@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.noteeditscreen
+package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
 import com.gmail.pentominto.us.supernotes.data.Note
 

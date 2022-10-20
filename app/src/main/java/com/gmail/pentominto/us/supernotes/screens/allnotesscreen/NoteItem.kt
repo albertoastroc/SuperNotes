@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

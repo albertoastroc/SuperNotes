@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.optionsscreen
+package com.gmail.pentominto.us.supernotes.screens.optionsscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

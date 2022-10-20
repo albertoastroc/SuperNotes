@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -20,6 +20,9 @@ class AllNotesViewModel @Inject constructor(
     val databaseDao : DatabaseDao,
     private val dataStore : DataStore<Preferences>
 ) : ViewModel() {
+
+    private val _allNotesState : MutableState<AllNotesState> = mutableStateOf(AllNotesState())
+    val allNotesState : State<AllNotesState> = _allNotesState
 
     private val _notesListWithCategories : MutableState<Map<Category, List<Note>>> = mutableStateOf(emptyMap())
     val notesListWithCategories : State<Map<Category, List<Note>>> = _notesListWithCategories
