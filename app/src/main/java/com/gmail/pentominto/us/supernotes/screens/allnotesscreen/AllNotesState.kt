@@ -9,5 +9,13 @@ data class AllNotesState(
     val notesSearchResults : List<Note> = emptyList(),
     val categories : List<Category> = emptyList(),
     val searchBarInput : String = String(),
-    val showCategories : Boolean = true
+    val showCategories : Boolean = true,
+    val currentList : CurrentList = CurrentList.CATEGORIES
 )
+
+enum class CurrentList {
+
+    NO_CATEGORIES,
+    CATEGORIES,
+    SEARCH_RESULTS
+}

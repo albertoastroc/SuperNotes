@@ -45,11 +45,9 @@ fun AllNotesScreen(
     val listState = rememberLazyListState()
 
     LaunchedEffect(
-        key1 = allNotesState.value.notesWithCategory,
-        key2 = allNotesState.value.notesWithNoCategories,
+        key1 = allNotesState.value.notesWithCategory.size,
         block = {
-            viewModel.getNotesWithCategories()
-//            viewModel.getNotesNoCategories()
+            viewModel.getNotesList()
         }
     )
 
@@ -265,5 +263,7 @@ fun ListWithNoCategories() {
 
 @Composable
 fun ListSearchResults() {
+
+
 }
 

@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,8 +8,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras.Empty.map
-import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,11 +28,9 @@ class AllNotesViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
+            _allNotesState.value = _allNotesState.value.copy(searchBarInput = input, currentList = CurrentList.SEARCH_RESULTS)
 
-            val notesSearchResults = _allNotesState.value.notesWithNoCategories.filter {
-
-                    note ->
+            val notesSearchResults = _allNotesState.value.notesWithNoCategories.filter { note ->
 
                 note.noteBody?.contains(
                     input,
@@ -48,21 +43,13 @@ class AllNotesViewModel @Inject constructor(
         }
     }
 
-    fun getNotesWithCategories() = viewModelScope.launch {
+    fun getNotesList() = viewModelScope.launch {
 
-        databaseDao.getAllCategoriesAndNotes().collect() {
+        databaseDao.getAllCategoriesAndNotes().collect() { categoryNotesMap ->
 
-            _allNotesState.value = _allNotesState.value.copy(notesWithCategory = it)
+            _allNotesState.value = _allNotesState.value.copy(notesWithCategory = categoryNotesMap)
 
-
-            val withNoCat = it.mapValues { map -> map.value }
-
-            Log.d(
-                "TAG",
-                "getNotesWithCategories: ${withNoCat.toList()}"
-            )
-
-            _allNotesState.value = _allNotesState.value.copy(notesWithNoCategories = withNoCat)
+            _allNotesState.value = _allNotesState.value.copy(notesWithNoCategories = categoryNotesMap.values.flatten())
 
         }
     }
@@ -71,15 +58,6 @@ class AllNotesViewModel @Inject constructor(
 
         databaseDao.deleteNote(noteId)
     }
-
-//    fun getNotesNoCategories() = viewModelScope.launch {
-//
-//        databaseDao.getAllNotes().collect() {
-//
-////            _allNotesState.value = _allNotesState.value.copy(notesWithNoCategories = it)
-//
-//        }
-//    }
 
     fun getPrefs() {
 
@@ -92,6 +70,10 @@ class AllNotesViewModel @Inject constructor(
                     _allNotesState.value = _allNotesState.value.copy(
                         showCategories = preferences[hideCategoriesKey] ?: true
                     )
+
+                    if (_allNotesState.value.showCategories){
+                        _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.CATEGORIES)
+                    } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.NO_CATEGORIES)
                 }
             }
         }
