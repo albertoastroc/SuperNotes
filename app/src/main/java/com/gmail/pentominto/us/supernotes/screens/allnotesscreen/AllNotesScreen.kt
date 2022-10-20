@@ -36,28 +36,20 @@ fun AllNotesScreen(
     onOptionsClick : (Int) -> Unit,
 ) {
 
-    val searchState by remember { mutableStateOf(viewModel.searchBarText) }
+    val allNotesState by remember { mutableStateOf(viewModel.allNotesState) }
 
     val scaffoldState = rememberScaffoldState()
-
-    val showCategories = remember { viewModel.categoriesOptionsState }
-
-    val notesWithCategories by remember { viewModel.notesListWithCategories }
-
-    val notesWithNoCategories by remember { viewModel.notesListNoCategories }
-
-    val notesSearchResult by remember { viewModel.notesListSearchResults }
 
     val scope = rememberCoroutineScope()
 
     val listState = rememberLazyListState()
 
     LaunchedEffect(
-        key1 = viewModel.notesListWithCategories,
-        key2 = viewModel.notesListNoCategories,
+        key1 = allNotesState.value.notesWithCategory,
+        key2 = allNotesState.value.notesWithNoCategories,
         block = {
             viewModel.getNotesWithCategories()
-            viewModel.getNotesNoCategories()
+//            viewModel.getNotesNoCategories()
         }
     )
 
@@ -116,7 +108,7 @@ fun AllNotesScreen(
 
                 item {
                     SearchBarWithMenu(
-                        input = searchState.value,
+                        input = allNotesState.value.searchBarInput,
                         onInputChange = { viewModel.onSearchChange(it) },
                         onMenuIconClick = {
 
@@ -128,21 +120,21 @@ fun AllNotesScreen(
                     )
                 }
 
-                if (searchState.value.length >= 3) {
+                if (allNotesState.value.searchBarInput.length >= 3) {
 
-                    items(notesSearchResult) { note ->
+                    items(allNotesState.value.notesSearchResults) { note ->
 
                         NoteItemSearchResult(
                             note = note,
-                            query = searchState.value,
+                            query = allNotesState.value.searchBarInput,
                             modifier = Modifier,
                             onClick = { onNoteClick(note.noteId) }
                         )
 
                     }
-                } else if (showCategories.value) {
+                } else if (allNotesState.value.showCategories) {
 
-                    notesWithCategories.entries.forEach { (category, notes) ->
+                    allNotesState.value.notesWithCategory.entries.forEach { (category, notes) ->
 
                         item {
                             Text(
@@ -191,7 +183,7 @@ fun AllNotesScreen(
                 } else {
 
                     items(
-                        items = notesWithNoCategories,
+                        items = allNotesState.value.notesWithNoCategories,
                         key = { it.noteId }
                     ) { note ->
 
