@@ -28,7 +28,7 @@ class AllNotesViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            _allNotesState.value = _allNotesState.value.copy(searchBarInput = input, currentList = CurrentList.SEARCH_RESULTS)
+            _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
 
             val notesSearchResults = _allNotesState.value.notesWithNoCategories.filter { note ->
 

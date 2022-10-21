@@ -1,5 +1,8 @@
 package com.gmail.pentominto.us.supernotes
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +18,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -122,12 +126,29 @@ fun AllNotesScreen(
 
                     items(allNotesState.value.notesSearchResults) { note ->
 
-                        NoteItemSearchResult(
-                            note = note,
-                            query = allNotesState.value.searchBarInput,
-                            modifier = Modifier,
-                            onClick = { onNoteClick(note.noteId) }
+                        val dismissState = rememberDismissState(
+                            confirmStateChange = {
+                                if (it == DismissValue.DismissedToEnd) {
+                                    viewModel.deleteNote(note.noteId)
+                                }
+                                true
+                            }
                         )
+
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.StartToEnd),
+                            dismissThresholds = { FractionalThreshold(.6f) },
+                            background = {},
+                        ) {
+
+                            NoteItemSearchResult(
+                                note = note,
+                                query = allNotesState.value.searchBarInput,
+                                modifier = Modifier,
+                                onClick = { onNoteClick(note.noteId) }
+                            )
+                        }
 
                     }
                 } else if (allNotesState.value.showCategories) {
@@ -198,7 +219,24 @@ fun AllNotesScreen(
                             state = dismissState,
                             directions = setOf(DismissDirection.StartToEnd),
                             dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {},
+                            background = {
+
+                                if (dismissState.progress.fraction <= .99f) {
+                                    Row {
+                                        Box(modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(
+                                                MaterialTheme.colors.secondary
+                                            ))
+                                    }
+                                } else {
+                                    Row {
+                                        Box(modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(Color.Transparent))
+                                    }
+                                }
+                            },
                         ) {
 
                             NoteItem(
@@ -215,10 +253,12 @@ fun AllNotesScreen(
         floatingActionButton = {
 
             ExtendedFloatingActionButton(
-                text = { Text(
-                    text = "New Note",
-                    color = MaterialTheme.colors.onSecondary
-                ) },
+                text = {
+                    Text(
+                        text = "New Note",
+                        color = MaterialTheme.colors.onSecondary
+                    )
+                },
                 icon = {
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_add_24),
@@ -251,19 +291,5 @@ fun LazyListState.isScrollingUp() : Boolean {
             }
         }
     }.value
-}
-
-@Composable
-fun ListWithCategories() {
-}
-
-@Composable
-fun ListWithNoCategories() {
-}
-
-@Composable
-fun ListSearchResults() {
-
-
 }
 

@@ -16,6 +16,5 @@ data class AllNotesState(
 enum class CurrentList {
 
     NO_CATEGORIES,
-    CATEGORIES,
-    SEARCH_RESULTS
+    CATEGORIES
 }
