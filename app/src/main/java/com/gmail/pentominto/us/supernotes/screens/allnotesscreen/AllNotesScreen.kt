@@ -1,10 +1,7 @@
 package com.gmail.pentominto.us.supernotes
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -17,6 +14,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -139,7 +137,12 @@ fun AllNotesScreen(
                             state = dismissState,
                             directions = setOf(DismissDirection.StartToEnd),
                             dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {},
+                            background = {
+
+                                if (dismissState.progress.fraction <= .99f) {
+                                    SwipingBackground()
+                                }
+                            },
                         ) {
 
                             NoteItemSearchResult(
@@ -188,7 +191,12 @@ fun AllNotesScreen(
                                 state = dismissState,
                                 directions = setOf(DismissDirection.StartToEnd),
                                 dismissThresholds = { FractionalThreshold(.6f) },
-                                background = {},
+                                background = {
+
+                                    if (dismissState.progress.fraction <= .99f) {
+                                        SwipingBackground()
+                                    }
+                                },
                             ) {
 
                                 NoteItem(
@@ -222,19 +230,7 @@ fun AllNotesScreen(
                             background = {
 
                                 if (dismissState.progress.fraction <= .99f) {
-                                    Row {
-                                        Box(modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(
-                                                MaterialTheme.colors.secondary
-                                            ))
-                                    }
-                                } else {
-                                    Row {
-                                        Box(modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(Color.Transparent))
-                                    }
+                                    SwipingBackground()
                                 }
                             },
                         ) {
@@ -291,5 +287,39 @@ fun LazyListState.isScrollingUp() : Boolean {
             }
         }
     }.value
+}
+
+@Composable
+fun SwipingBackground(
+    content : @Composable () -> Unit
+) {
+
+    Box(
+        modifier = Modifier
+            .background(
+                MaterialTheme.colors.secondary
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_delete_32),
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSecondary,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_32),
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSecondary
+            )
+        }
+    }
+
 }
 

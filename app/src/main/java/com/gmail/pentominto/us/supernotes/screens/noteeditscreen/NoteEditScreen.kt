@@ -190,7 +190,6 @@ fun NoteEditScreen(
                                         )
                                     )
                                     dropDownMenuExpanded = false
-                                    viewModel.getCurrentDate()
                                     Toast.makeText(
                                         context,
                                         "Copied to clipboard",
@@ -299,10 +298,8 @@ fun NoteEditScreen(
                 onClickDialog = { viewModel.insertCategory(it) },
                 onDeleteCategory = { viewModel.deleteCategory(it) },
                 onClickCategory = {
-
                     viewModel.saveNoteCategory(it)
                     coroutineScope.launch {
-
                         bottomSheetScaffoldState.bottomSheetState.collapse()
                     }
                 }
@@ -322,9 +319,9 @@ fun CategoriesList(
 
     val openCategoryDialog = remember { mutableStateOf(false) }
 
-    val dialogInput = remember { mutableStateOf("") }
+    val dialogInput = remember { mutableStateOf(String()) }
 
-    val dialogTitleState = remember { mutableStateOf("") }
+    val dialogTitleState = remember { mutableStateOf(String()) }
 
     LazyColumn(
         modifier = Modifier

@@ -26,7 +26,7 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState : State<NoteEditState> = _noteEditState
 
-    fun getNote(noteId : Long) {
+    private fun getNote(noteId : Long) {
 
         if (noteId == 0L) {
 
@@ -51,7 +51,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun insertNewNote() {
+    private fun insertNewNote() {
 
         viewModelScope.launch {
 
@@ -72,7 +72,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun getCategories() {
+    private fun getCategories() {
 
         viewModelScope.launch {
 
@@ -81,6 +81,15 @@ class NoteEditScreenViewModel @Inject constructor(
                 _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
         }
+    }
+
+    private fun getCurrentDate() {
+
+        val currentTime = Calendar.getInstance().time
+        val dateFormatter = SimpleDateFormat("M/d/yy")
+        _noteEditState.value = _noteEditState.value.copy(
+            currentDate = dateFormatter.format(currentTime)
+        )
     }
 
     fun insertCategory(categoryName : String) {
@@ -130,13 +139,10 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             saveNoteText()
-
-            _noteEditState.value.noteCategory.let {
-                databaseDao.updateNoteCategory(
-                    chosenCategory = category.categoryTitle,
-                    noteId = _noteEditState.value.note.noteId
-                )
-            }
+            databaseDao.updateNoteCategory(
+                chosenCategory = category.categoryTitle,
+                noteId = _noteEditState.value.note.noteId
+            )
         }
     }
 
@@ -154,20 +160,11 @@ class NoteEditScreenViewModel @Inject constructor(
         )
     }
 
-    fun getCurrentDate() {
-
-        val currentTime = Calendar.getInstance().time
-        val dateFormatter = SimpleDateFormat("M/d/yy")
-        _noteEditState.value = _noteEditState.value.copy(
-            currentDate = dateFormatter.format(currentTime)
-        )
-    }
-
     init {
         if (noteId != null) {
             getNote(noteId)
+            getCategories()
+            getCurrentDate()
         }
-        getCategories()
-        getCurrentDate()
     }
 }
