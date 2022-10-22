@@ -2,7 +2,6 @@ package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,8 +31,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -63,9 +62,7 @@ fun NoteEditScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val note by remember { viewModel.note }
-
-    val categories by remember { viewModel.categories }
+    val noteState by remember { mutableStateOf(viewModel.noteEditState) }
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
@@ -131,7 +128,7 @@ fun NoteEditScreen(
                         CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
 
                             TextField(
-                                value = note.noteTitle.toString(),
+                                value = noteState.value.noteTitle.toString(),
                                 singleLine = true,
                                 placeholder = {
                                     Text(
@@ -189,7 +186,7 @@ fun NoteEditScreen(
 
                                     clipboardManager.setText(
                                         AnnotatedString(
-                                            note.noteBody ?: ""
+                                            noteState.value.noteBody ?: ""
                                         )
                                     )
                                     dropDownMenuExpanded = false
@@ -221,7 +218,7 @@ fun NoteEditScreen(
                                         action = Intent.ACTION_SEND
                                         putExtra(
                                             Intent.EXTRA_TEXT,
-                                            note.noteBody ?: ""
+                                            noteState.value.noteBody ?: ""
                                         )
                                         type = "text/plain"
                                     }
@@ -257,7 +254,7 @@ fun NoteEditScreen(
                     CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
 
                         TextField(
-                            value = note.noteBody.toString(),
+                            value = noteState.value.noteBody.toString(),
                             placeholder = {
                                 Text(
                                     text = "Enter Text...",
@@ -297,8 +294,8 @@ fun NoteEditScreen(
         sheetContent = {
 
             CategoriesList(
-                categories = categories,
-                currentCategory = viewModel.noteCategory.value,
+                categories = noteState.value.categories,
+                currentCategory = noteState.value.noteCategory,
                 onClickDialog = { viewModel.insertCategory(it) },
                 onDeleteCategory = { viewModel.deleteCategory(it) },
                 onClickCategory = {
@@ -314,7 +311,6 @@ fun NoteEditScreen(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoriesList(
     categories : List<Category>,

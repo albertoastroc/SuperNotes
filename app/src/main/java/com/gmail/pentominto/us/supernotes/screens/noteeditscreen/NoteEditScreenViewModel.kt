@@ -23,34 +23,28 @@ class NoteEditScreenViewModel @Inject constructor(
 
     val noteId : Long? = savedStateHandle["noteId"]
 
-    private val _note : MutableState<Note> = mutableStateOf(Note())
-    val note : State<Note> = _note
+    private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
+    val noteEditState : State<NoteEditState> = _noteEditState
 
-    private val _categories : MutableState<List<Category>> = mutableStateOf(emptyList())
-    val categories : State<List<Category>> = _categories
+    fun getNote(noteId : Long) {
 
-    private val _noteCategory : MutableState<Category> = mutableStateOf(Category())
-    val noteCategory : State<Category> = _noteCategory
-
-    private val _currentDate : MutableState<String> = mutableStateOf(String())
-    val currentDate : State<String> = _currentDate
-
-    fun getNote(noteId : Long){
-
-        if (noteId == 0L){
+        if (noteId == 0L) {
 
             insertNewNote()
-
         } else {
 
             viewModelScope.launch {
 
-                databaseDao.getNoteWithCategory(noteId).collect() {
+                databaseDao.getNoteWithCategory(noteId).collect() { categoryNoteMap ->
 
-                    it.forEach {
+                    categoryNoteMap.forEach {
 
-                        _noteCategory.value = it.key
-                        _note.value = it.value
+                        _noteEditState.value = _noteEditState.value.copy(
+                            noteCategory = it.key,
+                            note = it.value,
+                            noteTitle = it.value.noteTitle,
+                            noteBody = it.value.noteBody
+                        )
                     }
                 }
             }
@@ -67,11 +61,13 @@ class NoteEditScreenViewModel @Inject constructor(
             }
 
             getNote(
-                databaseDao.insertNote(Note(
-                    category = "No Category",
-                    createdDate = currentDate.value,
-                    lastModified = currentDate.value
-                ))
+                databaseDao.insertNote(
+                    Note(
+                        category = "No Category",
+                        createdDate = noteEditState.value.currentDate,
+                        lastModified = noteEditState.value.currentDate
+                    )
+                )
             )
         }
     }
@@ -82,7 +78,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
             databaseDao.getAllCategories().collect() {
 
-                _categories.value = it
+                _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
         }
     }
@@ -100,15 +96,18 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val categoriesToUpdate = databaseDao.getNotesOfThisCategory(category.categoryTitle)
+            val notesToUpdate = databaseDao.getNotesOfThisCategory(category.categoryTitle)
 
             databaseDao.deleteCategory(category.categoryId)
 
-            categoriesToUpdate.collect() {
+            notesToUpdate.collect() { notesList ->
 
-                it.forEach {
+                notesList.forEach { note ->
 
-                    databaseDao.updateNoteCategory("No Category", it.noteId)
+                    databaseDao.updateNoteCategory(
+                        "No Category",
+                        note.noteId
+                    )
                 }
             }
         }
@@ -118,10 +117,10 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             databaseDao.updateNote(
-                noteTitle = _note.value.noteTitle.toString(),
-                noteBody = _note.value.noteBody.toString(),
-                noteId = note.value.noteId,
-                lastModified = currentDate.value
+                noteTitle = _noteEditState.value.noteTitle.toString(),
+                noteBody = _noteEditState.value.noteBody.toString(),
+                noteId = _noteEditState.value.note.noteId,
+                lastModified = _noteEditState.value.currentDate
             )
         }
     }
@@ -131,10 +130,11 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             saveNoteText()
-            _noteCategory.value.let {
+
+            _noteEditState.value.noteCategory.let {
                 databaseDao.updateNoteCategory(
                     chosenCategory = category.categoryTitle,
-                    noteId = note.value.noteId
+                    noteId = _noteEditState.value.note.noteId
                 )
             }
         }
@@ -142,14 +142,14 @@ class NoteEditScreenViewModel @Inject constructor(
 
     fun onTitleInputChange(newInput : String) {
 
-        _note.value = _note.value.copy(
+        _noteEditState.value = _noteEditState.value.copy(
             noteTitle = newInput
         )
     }
 
     fun onBodyInputChange(newInput : String) {
 
-        _note.value = _note.value.copy(
+        _noteEditState.value = _noteEditState.value.copy(
             noteBody = newInput
         )
     }
@@ -158,7 +158,9 @@ class NoteEditScreenViewModel @Inject constructor(
 
         val currentTime = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat("M/d/yy")
-        _currentDate.value = dateFormatter.format(currentTime)
+        _noteEditState.value = _noteEditState.value.copy(
+            currentDate = dateFormatter.format(currentTime)
+        )
     }
 
     init {
@@ -168,5 +170,4 @@ class NoteEditScreenViewModel @Inject constructor(
         getCategories()
         getCurrentDate()
     }
-
 }
