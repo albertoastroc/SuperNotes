@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.gmail.pentominto.us.supernotes
 
 import androidx.compose.foundation.background
@@ -75,13 +77,13 @@ fun AllNotesScreen(
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
-                        id = 4,
+                        id = 3,
                         title = "Privacy policy and info",
                         icon = Icons.Default.Info
                     ),
 
                     MenuItem(
-                        id = 5,
+                        id = 4,
                         title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),
@@ -124,25 +126,9 @@ fun AllNotesScreen(
 
                     items(allNotesState.value.notesSearchResults) { note ->
 
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToEnd) {
-                                    viewModel.deleteNote(note.noteId)
-                                }
-                                true
-                            }
-                        )
-
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(DismissDirection.StartToEnd),
-                            dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {
-
-                                if (dismissState.progress.fraction <= .99f) {
-                                    SwipingBackground()
-                                }
-                            },
+                        SwipingBackground(
+                            deleteNote = { viewModel.deleteNote(note.noteId) },
+                            noteId = note.noteId
                         ) {
 
                             NoteItemSearchResult(
@@ -152,7 +138,6 @@ fun AllNotesScreen(
                                 onClick = { onNoteClick(note.noteId) }
                             )
                         }
-
                     }
                 } else if (allNotesState.value.showCategories) {
 
@@ -178,27 +163,10 @@ fun AllNotesScreen(
                             key = { it.noteId }
                         ) { note ->
 
-                            val dismissState = rememberDismissState(
-                                confirmStateChange = {
-                                    if (it == DismissValue.DismissedToEnd) {
-                                        viewModel.deleteNote(note.noteId)
-                                    }
-                                    true
-                                }
-                            )
-
-                            SwipeToDismiss(
-                                state = dismissState,
-                                directions = setOf(DismissDirection.StartToEnd),
-                                dismissThresholds = { FractionalThreshold(.6f) },
-                                background = {
-
-                                    if (dismissState.progress.fraction <= .99f) {
-                                        SwipingBackground()
-                                    }
-                                },
+                            SwipingBackground(
+                                deleteNote = { viewModel.deleteNote(note.noteId) },
+                                noteId = note.noteId
                             ) {
-
                                 NoteItem(
                                     note = note,
                                     modifier = Modifier,
@@ -214,27 +182,10 @@ fun AllNotesScreen(
                         key = { it.noteId }
                     ) { note ->
 
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToEnd) {
-                                    viewModel.deleteNote(note.noteId)
-                                }
-                                true
-                            }
-                        )
-
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(DismissDirection.StartToEnd),
-                            dismissThresholds = { FractionalThreshold(.6f) },
-                            background = {
-
-                                if (dismissState.progress.fraction <= .99f) {
-                                    SwipingBackground()
-                                }
-                            },
+                        SwipingBackground(
+                            deleteNote = { viewModel.deleteNote(note.noteId) },
+                            noteId = note.noteId
                         ) {
-
                             NoteItem(
                                 note = note,
                                 modifier = Modifier,
@@ -243,7 +194,6 @@ fun AllNotesScreen(
                         }
                     }
                 }
-
             }
         },
         floatingActionButton = {
@@ -291,35 +241,59 @@ fun LazyListState.isScrollingUp() : Boolean {
 
 @Composable
 fun SwipingBackground(
+    deleteNote : (Long) -> Unit,
+    noteId : Long,
     content : @Composable () -> Unit
 ) {
 
-    Box(
-        modifier = Modifier
-            .background(
-                MaterialTheme.colors.secondary
-            )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_delete_32),
-                contentDescription = null,
-                tint = MaterialTheme.colors.onSecondary,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_32),
-                contentDescription = null,
-                tint = MaterialTheme.colors.onSecondary
-            )
+    val dismissState = rememberDismissState(
+        confirmStateChange = {
+            if (it == DismissValue.DismissedToEnd) {
+                deleteNote(noteId)
+            }
+            true
         }
-    }
+    )
 
+    SwipeToDismiss(
+        state = dismissState,
+        directions = setOf(DismissDirection.StartToEnd),
+        dismissThresholds = { FractionalThreshold(.6f) },
+        background = {
+
+            if (dismissState.progress.fraction <= .99f) {
+
+                Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colors.secondary
+                        )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Transparent),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_delete_32),
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.padding(horizontal = 24.dp)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_32),
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onSecondary
+                        )
+                    }
+                }
+            }
+        },
+        dismissContent = {
+            content()
+        }
+    )
 }
 
