@@ -29,6 +29,7 @@ val userDarkThemeKey = booleanPreferencesKey("user_theme")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    
 
     @Inject
     lateinit var dataStore : DataStore<Preferences>

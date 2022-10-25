@@ -33,6 +33,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -66,10 +68,14 @@ fun NoteEditScreen(
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
+    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
     val customTextSelectionColors = TextSelectionColors(
         handleColor = MaterialTheme.colors.secondary,
         backgroundColor = MaterialTheme.colors.secondary.copy(alpha = .5f)
     )
+
+
 
     DisposableEffect(lifeCycleOwner) {
 

@@ -20,18 +20,11 @@ class OptionsScreenViewModel @Inject constructor(
     private val databaseDao : DatabaseDao
 ) : ViewModel() {
 
-    private val _categoriesOptionState : MutableState<Boolean> = mutableStateOf(false)
-    val categoriesOptionsState : State<Boolean> = _categoriesOptionState
-
-    private val _useDarkThemeState : MutableState<Boolean> = mutableStateOf(false)
-    val useDarkThemeState : State<Boolean> = _useDarkThemeState
+    private val _optionsScreenState : MutableState<OptionsScreenState> = mutableStateOf(OptionsScreenState())
+    val optionsScreenState : State<OptionsScreenState> = _optionsScreenState
 
     val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     val userDarkThemeKey = booleanPreferencesKey("user_theme")
-
-    init {
-        getPrefs()
-    }
 
     fun categoriesPrefToggle() {
 
@@ -39,8 +32,9 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _categoriesOptionState.value = !_categoriesOptionState.value
-                settings[hideCategoriesKey] = categoriesOptionsState.value
+                _optionsScreenState.value = _optionsScreenState.value.copy(categoriesOption = !_optionsScreenState.value.categoriesOption)
+
+                settings[hideCategoriesKey] = _optionsScreenState.value.categoriesOption
             }
         }
     }
@@ -51,8 +45,9 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _useDarkThemeState.value = !_useDarkThemeState.value
-                settings[userDarkThemeKey] = useDarkThemeState.value
+                _optionsScreenState.value = _optionsScreenState.value.copy(darkThemeOption = !_optionsScreenState.value.darkThemeOption)
+
+                settings[userDarkThemeKey] = _optionsScreenState.value.darkThemeOption
             }
         }
     }
@@ -65,12 +60,16 @@ class OptionsScreenViewModel @Inject constructor(
 
                 if (preferences.contains(hideCategoriesKey)) {
 
-                    _categoriesOptionState.value = preferences[hideCategoriesKey] ?: false
+                    _optionsScreenState.value = _optionsScreenState.value.copy(
+                        categoriesOption = preferences[hideCategoriesKey] ?: false
+                    )
                 }
 
                 if (preferences.contains(userDarkThemeKey)) {
 
-                    _useDarkThemeState.value = preferences[userDarkThemeKey] ?: false
+                    _optionsScreenState.value = _optionsScreenState.value.copy(
+                        darkThemeOption = preferences[userDarkThemeKey] ?: false
+                    )
                 }
             }
         }
@@ -82,6 +81,10 @@ class OptionsScreenViewModel @Inject constructor(
 
             databaseDao.deleteAllNotes()
         }
+    }
+
+    init {
+        getPrefs()
     }
 
 }

@@ -38,7 +38,7 @@ fun OptionsScreen(
         OptionsRowWithSwitch(
             title = "Enable Dark Mode",
             subTitle = "App specific theme",
-            viewModel.useDarkThemeState.value
+            viewModel.optionsScreenState.value.darkThemeOption
         ) {
             viewModel.themeToggle()
         }
@@ -46,7 +46,7 @@ fun OptionsScreen(
         OptionsRowWithSwitch(
             title = "Enable categories",
             subTitle = "When disabled one uncategorized list will be shown",
-            switchState = viewModel.categoriesOptionsState.value
+            switchState = viewModel.optionsScreenState.value.categoriesOption
         ) {
             viewModel.categoriesPrefToggle()
         }
