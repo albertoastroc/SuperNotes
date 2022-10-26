@@ -29,7 +29,7 @@ val userDarkThemeKey = booleanPreferencesKey("user_theme")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    
+
 
     @Inject
     lateinit var dataStore : DataStore<Preferences>
@@ -144,6 +144,8 @@ fun SuperNotesApp() {
  *
  * set up repository
  *
+ * need focus to come up to line being edited
+ *
  * in settings screen/ maybe call it options instead of settings - done
  *
  * restore tutorial note - need to know what all to include in tutorial first, for prepopulating https://developer.android.com/training/data-storage/room/prepopulate
@@ -172,12 +174,7 @@ fun SuperNotesApp() {
  *
  * ORGANIZATION
  * repository - not done
- * set up events for all notes especially
- * stateholder class
- *      for all notes - not done
- *      for notedit - not done
- *      for options - not done
- *
+
  * string resources - not done
  * image resources - not done
  * functions -
