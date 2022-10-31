@@ -112,6 +112,7 @@ fun AllNotesScreen(
                     SearchBarWithMenu(
                         input = allNotesState.value.searchBarInput,
                         onInputChange = { viewModel.onSearchChange(it) },
+                        onXClick = { viewModel.clearSearchBar() },
                         onMenuIconClick = {
 
                             scope.launch {

@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -267,7 +266,6 @@ fun NoteEditScreen(
                                     start = 8.dp,
                                     top = 8.dp
                                 )
-                                .focusRequester(focusRequester)
                                 .fillMaxWidth()
                                 .background(
                                     color = Color.Transparent

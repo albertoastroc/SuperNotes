@@ -25,7 +25,8 @@ import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 fun SearchBarWithMenu(
     input : String,
     onInputChange : (String) -> Unit,
-    onMenuIconClick : () -> Unit
+    onMenuIconClick : () -> Unit,
+    onXClick : () -> Unit
 ) {
 
     val customTextSelectionColors = TextSelectionColors(
@@ -101,6 +102,25 @@ fun SearchBarWithMenu(
                     )
                 )
             }
+            
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(
+                        end = 20.dp,
+                        top = 20.dp,
+                        bottom = 20.dp
+                    )
+                    .clickable(
+                        interactionSource = NoRippleInteractionSource(),
+                        onClick = {
+                            onXClick()
+                        },
+                        indication = null
+                    ),
+                tint = MaterialTheme.colors.onSecondary
+            )
         }
 
     }

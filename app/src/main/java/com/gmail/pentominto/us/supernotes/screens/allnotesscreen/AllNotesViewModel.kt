@@ -59,6 +59,12 @@ class AllNotesViewModel @Inject constructor(
         databaseDao.deleteNote(noteId)
     }
 
+    fun clearSearchBar() {
+
+        _allNotesState.value = _allNotesState.value.copy(searchBarInput = String())
+
+    }
+
     fun getPrefs() {
 
         viewModelScope.launch {
