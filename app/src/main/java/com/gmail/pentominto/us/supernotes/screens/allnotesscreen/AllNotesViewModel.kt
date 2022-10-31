@@ -22,7 +22,8 @@ class AllNotesViewModel @Inject constructor(
     private val _allNotesState : MutableState<AllNotesState> = mutableStateOf(AllNotesState())
     val allNotesState : State<AllNotesState> = _allNotesState
 
-    val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+    private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+    private val trash_enabled = booleanPreferencesKey("trash_enabled")
 
     fun onSearchChange(input : String) {
 
@@ -77,8 +78,15 @@ class AllNotesViewModel @Inject constructor(
                     )
 
                     if (_allNotesState.value.showCategories) {
-                        _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.CATEGORIES)
-                    } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.NO_CATEGORIES)
+                        _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITH_CATEGORIES)
+                    } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITHOUT_CATEGORIES)
+                }
+
+                if (preferences.contains(trash_enabled)) {
+
+                    _allNotesState.value = _allNotesState.value.copy(
+                        trashEnabled = preferences[trash_enabled] ?: true
+                    )
                 }
             }
         }

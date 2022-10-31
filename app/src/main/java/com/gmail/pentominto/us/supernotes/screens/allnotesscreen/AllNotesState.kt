@@ -10,11 +10,12 @@ data class AllNotesState(
     val categories : List<Category> = emptyList(),
     val searchBarInput : String = String(),
     val showCategories : Boolean = true,
-    val currentList : CurrentList = CurrentList.CATEGORIES
+    val trashEnabled : Boolean = true,
+    val currentList : CurrentList = CurrentList.WITH_CATEGORIES
 )
 
 enum class CurrentList {
 
-    NO_CATEGORIES,
-    CATEGORIES
+    WITHOUT_CATEGORIES,
+    WITH_CATEGORIES
 }

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.gmail.pentominto.us.supernotes
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,15 +21,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.NoteItem
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.NoteItemSearchResult
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
+import com.gmail.pentominto.us.supernotes.Drawer
+import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 import kotlinx.coroutines.launch
 
-
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
@@ -130,14 +126,16 @@ fun AllNotesScreen(
 
                         SwipingBackground(
                             deleteNote = { viewModel.deleteNote(note.noteId) },
-                            noteId = note.noteId
+                            noteId = note.noteId,
+                            trashEnabled = allNotesState.value.trashEnabled,
+                            sendToTrash = {}
                         ) {
 
                             NoteItemSearchResult(
                                 note = note,
                                 query = allNotesState.value.searchBarInput,
                                 modifier = Modifier,
-                                onClick = { onNoteClick(note.noteId) }
+                                onClick = { onNoteClick(note.noteId) },
                             )
                         }
                     }
@@ -167,7 +165,9 @@ fun AllNotesScreen(
 
                             SwipingBackground(
                                 deleteNote = { viewModel.deleteNote(note.noteId) },
-                                noteId = note.noteId
+                                noteId = note.noteId,
+                                trashEnabled = allNotesState.value.trashEnabled,
+                                sendToTrash = {}
                             ) {
                                 NoteItem(
                                     note = note,
@@ -186,7 +186,9 @@ fun AllNotesScreen(
 
                         SwipingBackground(
                             deleteNote = { viewModel.deleteNote(note.noteId) },
-                            noteId = note.noteId
+                            noteId = note.noteId,
+                            trashEnabled = allNotesState.value.trashEnabled,
+                            sendToTrash = {}
                         ) {
                             NoteItem(
                                 note = note,
@@ -244,8 +246,10 @@ fun LazyListState.isScrollingUp() : Boolean {
 @Composable
 fun SwipingBackground(
     deleteNote : (Long) -> Unit,
+    sendToTrash : () -> Unit,
     noteId : Long,
-    content : @Composable () -> Unit
+    trashEnabled : Boolean,
+    content : @Composable () -> Unit,
 ) {
 
     val dismissState = rememberDismissState(
