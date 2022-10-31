@@ -10,10 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -77,13 +74,17 @@ fun AllNotesScreen(
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
-                        id = 3,
+                        id =  3,
+                        title = "Trash",
+                        icon = Icons.Default.Delete
+                    ),
+                    MenuItem(
+                        id = 4,
                         title = "Privacy policy and info",
                         icon = Icons.Default.Info
                     ),
-
                     MenuItem(
-                        id = 4,
+                        id = 5,
                         title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),

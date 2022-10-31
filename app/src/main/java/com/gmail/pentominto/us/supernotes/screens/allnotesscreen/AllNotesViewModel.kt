@@ -62,7 +62,6 @@ class AllNotesViewModel @Inject constructor(
     fun clearSearchBar() {
 
         _allNotesState.value = _allNotesState.value.copy(searchBarInput = String())
-
     }
 
     fun getPrefs() {
@@ -77,7 +76,7 @@ class AllNotesViewModel @Inject constructor(
                         showCategories = preferences[hideCategoriesKey] ?: true
                     )
 
-                    if (_allNotesState.value.showCategories){
+                    if (_allNotesState.value.showCategories) {
                         _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.CATEGORIES)
                     } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.NO_CATEGORIES)
                 }

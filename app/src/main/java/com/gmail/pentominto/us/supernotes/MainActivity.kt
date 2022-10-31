@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
@@ -102,6 +103,7 @@ fun SuperNotesApp() {
                     when (menuItemId) {
 
                         2 -> navController.navigate("options")
+                        3 -> navController.navigate("trash")
 
                     }
                 }
@@ -128,6 +130,11 @@ fun SuperNotesApp() {
         composable("options") {
 
             OptionsScreen()
+        }
+
+        composable("trash") {
+
+            TrashNotesScreen()
         }
 
     }
