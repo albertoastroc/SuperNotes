@@ -36,7 +36,7 @@ fun OptionsScreen(
 
 
         OptionsRowWithSwitch(
-            title = "Enable Dark Mode",
+            title = "Dark mode",
             subTitle = "App specific theme",
             viewModel.optionsScreenState.value.darkThemeOption
         ) {
@@ -49,6 +49,14 @@ fun OptionsScreen(
             switchState = viewModel.optionsScreenState.value.categoriesOption
         ) {
             viewModel.categoriesPrefToggle()
+        }
+
+        OptionsRowWithSwitch(
+            title = "Enable trash folder",
+            subTitle = "When disabled notes will be permanently deleted when swiped off the screen",
+            switchState = viewModel.optionsScreenState.value.trashEnabled
+        ) {
+            viewModel.trashFolderToggle()
         }
 
 //        OptionsRowWithAlertDialog(

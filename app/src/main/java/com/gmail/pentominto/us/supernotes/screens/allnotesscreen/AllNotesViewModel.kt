@@ -23,7 +23,7 @@ class AllNotesViewModel @Inject constructor(
     val allNotesState : State<AllNotesState> = _allNotesState
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
-    private val trash_enabled = booleanPreferencesKey("trash_enabled")
+    private val trashEnabled = booleanPreferencesKey("trash_enabled")
 
     fun onSearchChange(input : String) {
 
@@ -60,6 +60,12 @@ class AllNotesViewModel @Inject constructor(
         databaseDao.deleteNote(noteId)
     }
 
+    fun sendNoteToTrash() {
+
+
+
+    }
+
     fun clearSearchBar() {
 
         _allNotesState.value = _allNotesState.value.copy(searchBarInput = String())
@@ -82,10 +88,10 @@ class AllNotesViewModel @Inject constructor(
                     } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITHOUT_CATEGORIES)
                 }
 
-                if (preferences.contains(trash_enabled)) {
+                if (preferences.contains(trashEnabled)) {
 
                     _allNotesState.value = _allNotesState.value.copy(
-                        trashEnabled = preferences[trash_enabled] ?: true
+                        trashEnabled = preferences[trashEnabled] ?: true
                     )
                 }
             }

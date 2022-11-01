@@ -23,8 +23,9 @@ class OptionsScreenViewModel @Inject constructor(
     private val _optionsScreenState : MutableState<OptionsScreenState> = mutableStateOf(OptionsScreenState())
     val optionsScreenState : State<OptionsScreenState> = _optionsScreenState
 
-    val hideCategoriesKey = booleanPreferencesKey("hide_categories")
-    val userDarkThemeKey = booleanPreferencesKey("user_theme")
+    private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+    private val userDarkThemeKey = booleanPreferencesKey("user_theme")
+    private val trashEnabled = booleanPreferencesKey("trash_enabled")
 
     fun categoriesPrefToggle() {
 
@@ -52,6 +53,20 @@ class OptionsScreenViewModel @Inject constructor(
         }
     }
 
+    fun trashFolderToggle() {
+
+        viewModelScope.launch {
+
+            dataStore.edit { settings ->
+
+                _optionsScreenState.value = _optionsScreenState.value.copy(trashEnabled =
+                !_optionsScreenState.value.darkThemeOption)
+
+                settings[trashEnabled] = _optionsScreenState.value.trashEnabled
+            }
+        }
+    }
+
     fun getPrefs() {
 
         viewModelScope.launch {
@@ -69,6 +84,13 @@ class OptionsScreenViewModel @Inject constructor(
 
                     _optionsScreenState.value = _optionsScreenState.value.copy(
                         darkThemeOption = preferences[userDarkThemeKey] ?: false
+                    )
+                }
+
+                if (preferences.contains(trashEnabled)) {
+
+                    _optionsScreenState.value = _optionsScreenState.value.copy(
+                        trashEnabled = preferences[trashEnabled] ?: true
                     )
                 }
             }
