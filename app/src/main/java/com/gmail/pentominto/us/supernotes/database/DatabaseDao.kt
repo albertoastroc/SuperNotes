@@ -16,7 +16,7 @@ interface DatabaseDao {
     suspend fun insertNote(note : Note) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(trashNote : TrashNote) : Long
+    suspend fun insertTrashNote(trashNote : TrashNote) : Long
 
     @Query("UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody, lastModified = :lastModified WHERE note_db_id = :noteId")
     suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Long, lastModified : String)
@@ -47,6 +47,9 @@ interface DatabaseDao {
 
     @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle")
     fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>>
+
+    @Query("SELECT * FROM trash_note_table")
+    fun getAllTrashNotes() : Flow<List<TrashNote>>
 
     @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle WHERE note_db_id = :id")
     fun getNoteWithCategory(id : Long) : Flow<Map<Category, Note>>

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 import kotlinx.coroutines.launch
 
@@ -70,7 +71,7 @@ fun AllNotesScreen(
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
-                        id =  3,
+                        id = 3,
                         title = "Trash",
                         icon = Icons.Default.Delete
                     ),
@@ -126,9 +127,9 @@ fun AllNotesScreen(
 
                         SwipingBackground(
                             deleteNote = { viewModel.deleteNote(note.noteId) },
-                            noteId = note.noteId,
+                            note = note,
                             trashEnabled = allNotesState.value.trashEnabled,
-                            sendToTrash = {}
+                            sendToTrash = { viewModel.sendToTrash(note) }
                         ) {
 
                             NoteItemSearchResult(
@@ -165,9 +166,9 @@ fun AllNotesScreen(
 
                             SwipingBackground(
                                 deleteNote = { viewModel.deleteNote(note.noteId) },
-                                noteId = note.noteId,
+                                note = note,
                                 trashEnabled = allNotesState.value.trashEnabled,
-                                sendToTrash = {}
+                                sendToTrash = { viewModel.sendToTrash(note) }
                             ) {
                                 NoteItem(
                                     note = note,
@@ -186,9 +187,9 @@ fun AllNotesScreen(
 
                         SwipingBackground(
                             deleteNote = { viewModel.deleteNote(note.noteId) },
-                            noteId = note.noteId,
+                            note = note,
                             trashEnabled = allNotesState.value.trashEnabled,
-                            sendToTrash = {}
+                            sendToTrash = { viewModel.sendToTrash(note) }
                         ) {
                             NoteItem(
                                 note = note,
@@ -247,15 +248,25 @@ fun LazyListState.isScrollingUp() : Boolean {
 fun SwipingBackground(
     deleteNote : (Long) -> Unit,
     sendToTrash : () -> Unit,
-    noteId : Long,
+    note : Note,
     trashEnabled : Boolean,
     content : @Composable () -> Unit,
 ) {
 
+
+
     val dismissState = rememberDismissState(
         confirmStateChange = {
+
             if (it == DismissValue.DismissedToEnd) {
-                deleteNote(noteId)
+
+                if (trashEnabled) {
+                    sendToTrash()
+                    deleteNote(note.noteId)
+                } else {
+
+                    deleteNote(note.noteId)
+                }
             }
             true
         }

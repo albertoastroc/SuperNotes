@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.TrashNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -60,10 +62,20 @@ class AllNotesViewModel @Inject constructor(
         databaseDao.deleteNote(noteId)
     }
 
-    fun sendNoteToTrash() {
+    fun sendToTrash(note : Note) {
 
+        viewModelScope.launch {
 
-
+            databaseDao.insertTrashNote(
+                TrashNote(
+                    noteTitle = note.noteTitle,
+                    noteBody = note.noteBody,
+                    category = note.category,
+                    createdDate = note.createdDate,
+                    lastModified = note.lastModified
+                )
+            )
+        }
     }
 
     fun clearSearchBar() {

@@ -60,7 +60,7 @@ class OptionsScreenViewModel @Inject constructor(
             dataStore.edit { settings ->
 
                 _optionsScreenState.value = _optionsScreenState.value.copy(trashEnabled =
-                !_optionsScreenState.value.darkThemeOption)
+                !_optionsScreenState.value.trashEnabled)
 
                 settings[trashEnabled] = _optionsScreenState.value.trashEnabled
             }

@@ -17,6 +17,7 @@ import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
+import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -135,7 +136,14 @@ fun SuperNotesApp() {
 
         composable("trash") {
 
-            TrashNotesScreen()
+            TrashNotesScreen(
+               onTrashNoteClick = { navController.navigate("readOnlyNote")}
+            )
+        }
+
+        composable("readOnlyNote"){
+
+            ReadOnlyNoteScreen()
         }
 
     }

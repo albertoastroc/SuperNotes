@@ -9,16 +9,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.NoteItem
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.TrashNoteItem
+import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNotesViewModel
 
-@Preview
 @Composable
 fun TrashNotesScreen(
-
+    viewModel : TrashNotesViewModel = hiltViewModel(),
+    onTrashNoteClick : () -> Unit
 ) {
 
     val trashNotes = listOf("note1", "note2", "note3", "and so on")
@@ -44,12 +44,14 @@ fun TrashNotesScreen(
             }
         }
 
-        items(trashNotes) { note ->
+        items(viewModel.trashNotesList.value) { note ->
 
-            NoteItem(
-                note = Note(note),
+            TrashNoteItem(
+                note = note,
                 modifier = Modifier,
-                onClick = {}
+                onClick = {
+                    onTrashNoteClick()
+                }
             )
 
         }

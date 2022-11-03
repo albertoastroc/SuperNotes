@@ -154,7 +154,8 @@ fun NoteEditScreen(
                                 textStyle = TextStyle(
                                     color = MaterialTheme.colors.onBackground,
                                     fontSize = 18.sp
-                                )
+                                ),
+
                             )
                         }
 
