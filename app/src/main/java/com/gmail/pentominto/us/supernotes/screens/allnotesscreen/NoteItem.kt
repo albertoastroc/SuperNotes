@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.data.TrashNote
 
 @Composable
 fun NoteItem(

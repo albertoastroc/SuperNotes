@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.SwipeableTrashNoteRow
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNoteItem
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNotesViewModel
 
@@ -20,8 +21,6 @@ fun TrashNotesScreen(
     viewModel : TrashNotesViewModel = hiltViewModel(),
     onTrashNoteClick : () -> Unit
 ) {
-
-    val trashNotes = listOf("note1", "note2", "note3", "and so on")
 
     LazyColumn(
         modifier = Modifier
@@ -46,16 +45,20 @@ fun TrashNotesScreen(
 
         items(viewModel.trashNotesList.value) { note ->
 
-            TrashNoteItem(
-                note = note,
-                modifier = Modifier,
-                onClick = {
-                    onTrashNoteClick()
-                }
-            )
+            SwipeableTrashNoteRow(
+                deleteNote = {},
+                restoreNote = {},
+                trashNote = note
+            ) {
 
+                TrashNoteItem(
+                    note = note,
+                    modifier = Modifier,
+                    onClick = {
+                        onTrashNoteClick()
+                    }
+                )
+            }
         }
-
     }
-
 }

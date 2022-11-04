@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.trashnotescreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -19,6 +20,7 @@ fun ReadOnlyNoteScreen() {
 
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colors.background)
             .fillMaxSize()
             .padding(
                 start = 16.dp,
