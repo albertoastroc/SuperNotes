@@ -11,6 +11,7 @@ data class AllNotesState(
     val searchBarInput : String = String(),
     val showCategories : Boolean = true,
     val trashEnabled : Boolean = true,
+    val currentDate : String = String(),
     val currentList : CurrentList = CurrentList.WITH_CATEGORIES
 )
 

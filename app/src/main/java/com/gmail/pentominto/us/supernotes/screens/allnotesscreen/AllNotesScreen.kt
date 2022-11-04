@@ -25,6 +25,7 @@ import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
+import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 import kotlinx.coroutines.launch
 
 @Composable
@@ -283,7 +284,8 @@ fun SwipingBackground(
                 Box(
                     modifier = Modifier
                         .background(
-                            MaterialTheme.colors.secondary
+                            Scarlet
+//                            MaterialTheme.colors.secondary
                         )
                 ) {
                     Row(

@@ -17,6 +17,8 @@ data class TrashNote(
 
     var lastModified : String = "",
 
+    var dateDeleted : String = "",
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "trash_note_db_id")
     var noteId : Long = 0,

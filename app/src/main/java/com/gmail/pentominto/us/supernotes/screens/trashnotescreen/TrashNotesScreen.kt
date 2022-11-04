@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.TrashNoteItem
+import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNoteItem
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNotesViewModel
 
 @Composable

@@ -13,6 +13,8 @@ import com.gmail.pentominto.us.supernotes.data.TrashNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,10 +74,20 @@ class AllNotesViewModel @Inject constructor(
                     noteBody = note.noteBody,
                     category = note.category,
                     createdDate = note.createdDate,
-                    lastModified = note.lastModified
+                    lastModified = note.lastModified,
+                    dateDeleted = allNotesState.value.currentDate
                 )
             )
         }
+    }
+
+    private fun getCurrentDate() {
+
+        val currentTime = Calendar.getInstance().time
+        val dateFormatter = SimpleDateFormat("M/d/yy")
+        _allNotesState.value = _allNotesState.value.copy(
+            currentDate = dateFormatter.format(currentTime)
+        )
     }
 
     fun clearSearchBar() {
@@ -112,5 +124,6 @@ class AllNotesViewModel @Inject constructor(
 
     init {
         getPrefs()
+        getCurrentDate()
     }
 }
