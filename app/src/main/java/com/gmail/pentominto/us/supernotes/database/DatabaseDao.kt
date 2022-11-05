@@ -39,6 +39,9 @@ interface DatabaseDao {
     @Query("DELETE FROM note_table WHERE note_db_id = :id")
     suspend fun deleteNote(id : Long)
 
+    @Query("DELETE FROM trash_note_table WHERE trash_note_db_id = :id")
+    suspend fun deleteTrashNote(id : Long)
+
     @Query("DELETE FROM category_table WHERE category_db_id = :id")
     suspend fun deleteCategory(id : Long)
 

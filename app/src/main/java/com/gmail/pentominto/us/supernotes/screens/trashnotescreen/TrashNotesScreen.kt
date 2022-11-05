@@ -26,7 +26,7 @@ fun TrashNotesScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
-    ){
+    ) {
 
         item {
             Row(
@@ -36,6 +36,7 @@ fun TrashNotesScreen(
             ) {
                 Text(
                     text = "Trash",
+                    color = MaterialTheme.colors.onPrimary,
                     fontSize = 24.sp,
                     modifier = Modifier
                         .padding(vertical = 8.dp)
@@ -43,11 +44,18 @@ fun TrashNotesScreen(
             }
         }
 
-        items(viewModel.trashNotesList.value) { note ->
+        items(
+            items = viewModel.trashNotesList.value,
+            key = { it.noteId }
+        ) { note ->
 
             SwipeableTrashNoteRow(
-                deleteNote = {},
-                restoreNote = {},
+                deleteNote = {
+                    viewModel.deleteTrashNote(note.noteId)
+                },
+                restoreNote = {
+                    viewModel.restoreTrashNote(note)
+                },
                 trashNote = note
             ) {
 

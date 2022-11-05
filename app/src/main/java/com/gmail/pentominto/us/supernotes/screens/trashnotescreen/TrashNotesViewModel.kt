@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.data.TrashNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,28 @@ class TrashNotesViewModel @Inject constructor(
 
                 _trashNotesList.value = noteList
             }
+        }
+    }
+
+    fun deleteTrashNote(noteId : Long) = viewModelScope.launch {
+
+        databaseDao.deleteTrashNote(noteId)
+    }
+
+    fun restoreTrashNote(note : TrashNote)  {
+
+        viewModelScope.launch {
+
+            databaseDao.insertNote(
+                Note(
+                    noteTitle = note.noteTitle,
+                    noteBody = note.noteBody,
+                    category = note.category,
+                    createdDate = note.createdDate,
+                    lastModified = note.lastModified
+                )
+            )
+            deleteTrashNote(note.noteId)
         }
     }
 
