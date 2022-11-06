@@ -63,7 +63,7 @@ fun TrashNotesScreen(
                     note = note,
                     modifier = Modifier,
                     onClick = {
-                        onTrashNoteClick(it)
+                        onTrashNoteClick(note.noteId)
                     }
                 )
             }

@@ -21,7 +21,7 @@ class NoteEditScreenViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    val noteId : Long? = savedStateHandle["noteId"]
+    private val noteId : Long? = savedStateHandle["noteId"]
 
     private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState : State<NoteEditState> = _noteEditState

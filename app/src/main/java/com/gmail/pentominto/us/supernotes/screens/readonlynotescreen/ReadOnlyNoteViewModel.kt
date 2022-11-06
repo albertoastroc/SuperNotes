@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.readonlynotescreen
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -19,14 +20,14 @@ class ReadOnlyNoteViewModel @Inject constructor(
 
     private val trashNoteId : Long? = savedStateHandle["trashNoteId"]
 
-    private val _trashNoteState = mutableStateOf(TrashNote())
+    private val _trashNoteState : MutableState<TrashNote> = mutableStateOf(TrashNote())
     val trashNoteState : State<TrashNote> = _trashNoteState
 
-    fun getTrashNote(id : Long) {
+    private fun getTrashNote(trashNoteId : Long) {
 
         viewModelScope.launch {
 
-            databaseDao.getTrashNote(id).collect() { trashNote ->
+            databaseDao.getTrashNote(trashNoteId).collect() { trashNote ->
 
                 _trashNoteState.value = trashNote
             }

@@ -116,7 +116,7 @@ fun SuperNotesApp() {
 
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
-                    navController.navigate("noteEdit/${trashNoteId}")
+                    navController.navigate("readOnlyNote/${trashNoteId}")
                 }
             )
         }
