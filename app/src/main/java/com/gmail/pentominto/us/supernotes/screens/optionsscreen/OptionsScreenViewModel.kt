@@ -105,6 +105,14 @@ class OptionsScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteAllTrashNotes() {
+
+        viewModelScope.launch {
+
+            databaseDao.deleteAllTrashNotes()
+        }
+    }
+
     init {
         getPrefs()
     }

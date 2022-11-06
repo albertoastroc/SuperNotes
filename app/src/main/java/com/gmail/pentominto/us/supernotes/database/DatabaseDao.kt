@@ -63,6 +63,9 @@ interface DatabaseDao {
     @Query("DELETE FROM note_table ")
     suspend fun deleteAllNotes()
 
+    @Query("DELETE FROM trash_note_table ")
+    suspend fun deleteAllTrashNotes()
+
 }
 
 

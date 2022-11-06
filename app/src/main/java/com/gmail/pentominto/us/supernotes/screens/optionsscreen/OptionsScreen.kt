@@ -80,6 +80,13 @@ fun OptionsScreen(
         ) {
             viewModel.deleteAllNotes()
         }
+        OptionsRowWithAlertDialog(
+            title = "Delete notes in trash",
+            subTitle = null,
+            message = "Are you sure you want to delete all notes in trash?"
+        ) {
+            viewModel.deleteAllTrashNotes()
+        }
     }
 }
 

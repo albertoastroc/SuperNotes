@@ -46,8 +46,10 @@ fun SwipeableNoteRow(
         directions = setOf(DismissDirection.StartToEnd),
         dismissThresholds = { FractionalThreshold(.6f) },
         background = {
+            if (
+                dismissState.progress.fraction <= .99f
 
-            if (dismissState.progress.fraction <= .99f) {
+            ) {
 
                 Box(
                     modifier = Modifier
