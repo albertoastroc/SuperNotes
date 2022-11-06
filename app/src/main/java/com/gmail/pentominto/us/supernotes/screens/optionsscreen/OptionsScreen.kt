@@ -52,8 +52,8 @@ fun OptionsScreen(
         }
 
         OptionsRowWithSwitch(
-            title = "Enable trash folder",
-            subTitle = "When disabled notes will be permanently deleted when swiped off the screen",
+            title = "Enable Trash folder",
+            subTitle = "When disabled notes will be permanently deleted when swiped off the home screen",
             switchState = viewModel.optionsScreenState.value.trashEnabled
         ) {
             viewModel.trashFolderToggle()
@@ -74,16 +74,16 @@ fun OptionsScreen(
 //
 //        }
         OptionsRowWithAlertDialog(
-            title = "Delete all notes",
-            subTitle = null,
+            title = "Delete home screen notes",
+            subTitle = "Deleting this way will not send notes to the Trash folder",
             message = "Are you sure you want to delete all notes?"
         ) {
             viewModel.deleteAllNotes()
         }
         OptionsRowWithAlertDialog(
-            title = "Delete notes in trash",
+            title = "Delete notes in Trash folder",
             subTitle = null,
-            message = "Are you sure you want to delete all notes in trash?"
+            message = "Are you sure you want to delete all notes in Trash?"
         ) {
             viewModel.deleteAllTrashNotes()
         }

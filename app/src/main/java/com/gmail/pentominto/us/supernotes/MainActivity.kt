@@ -206,29 +206,4 @@ fun SuperNotesApp() {
 
  * string resources - not done
  * image resources - not done
- * functions -
- *      for all notes - not done
- *      for note edit - not done
- *      for options - not done
- *
- * separate composables -
- *      for all notes - not done
- *      for note edit - not done
- *      for options - not done
- * check for proper state hoisting
- *      for all notes - not done
- *      for note edit - not done
- *      for options - not done
- * check for work that can be done in the background
- *      for all notes - not done
- *      for note edit - not done
- *      for options - not done
- * naming conventions
- *      for all notes - not done
- *      for note edit - not done
- *      for options - not done
- *
- *
- *
- */
-
+*/
