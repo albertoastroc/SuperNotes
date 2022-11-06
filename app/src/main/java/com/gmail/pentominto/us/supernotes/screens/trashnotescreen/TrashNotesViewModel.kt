@@ -20,7 +20,7 @@ class TrashNotesViewModel @Inject constructor(
     private val _trashNotesList : MutableState<List<TrashNote>> = mutableStateOf(emptyList())
     val trashNotesList : State<List<TrashNote>> = _trashNotesList
 
-    fun getTrashNotesList(){
+    private fun getTrashNotesList(){
 
         viewModelScope.launch {
 

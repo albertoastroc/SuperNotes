@@ -8,15 +8,21 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.ReadOnlyNoteViewModel
 
-@Preview
 @Composable
-fun ReadOnlyNoteScreen() {
+fun ReadOnlyNoteScreen(
+    trashNoteId : Long,
+    viewModel : ReadOnlyNoteViewModel = hiltViewModel()
+) {
+
+    val trashNoteState = remember { viewModel.trashNoteState }
 
     Column(
         modifier = Modifier
@@ -44,7 +50,7 @@ fun ReadOnlyNoteScreen() {
             ) {
 
                 Text(
-                    text = "Title thing",
+                    text = trashNoteState.value.noteTitle.toString(),
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 18.sp,
                     modifier = Modifier
@@ -72,7 +78,7 @@ fun ReadOnlyNoteScreen() {
         ) {
 
             Text(
-                text = "Title thing",
+                text = trashNoteState.value.noteBody.toString(),
                 color = MaterialTheme.colors.onBackground,
                 fontSize = 18.sp,
                 modifier = Modifier

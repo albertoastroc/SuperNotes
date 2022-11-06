@@ -27,6 +27,9 @@ interface DatabaseDao {
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
     fun getNote(id : Long) : Flow<Note>
 
+    @Query("SELECT * FROM trash_note_table WHERE trash_note_db_id = :id")
+    fun getTrashNote(id : Long) : Flow<TrashNote>
+
     @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No Category')")
     suspend fun defaultCategoryExists() : Boolean
 

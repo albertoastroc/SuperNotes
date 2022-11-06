@@ -112,6 +112,15 @@ fun SuperNotesApp() {
             )
         }
 
+        composable("trash") {
+
+            TrashNotesScreen(
+                onTrashNoteClick = { trashNoteId ->
+                    navController.navigate("noteEdit/${trashNoteId}")
+                }
+            )
+        }
+
         composable(
             "noteEdit/{noteId}",
             arguments = listOf(
@@ -129,23 +138,27 @@ fun SuperNotesApp() {
             }
         }
 
+        composable(
+            "readOnlyNote/{trashNoteId}",
+            arguments = listOf(
+                navArgument("trashNoteId") {
+                    type = NavType.LongType
+                }
+            )
+        ) {
+
+            val trashNoteId = remember {
+                it.arguments?.getLong("trashNoteId")
+            }
+            if (trashNoteId != null) {
+                ReadOnlyNoteScreen(trashNoteId = trashNoteId)
+            }
+        }
+
         composable("options") {
 
             OptionsScreen()
         }
-
-        composable("trash") {
-
-            TrashNotesScreen(
-               onTrashNoteClick = { navController.navigate("readOnlyNote")}
-            )
-        }
-
-        composable("readOnlyNote"){
-
-            ReadOnlyNoteScreen()
-        }
-
     }
 }
 

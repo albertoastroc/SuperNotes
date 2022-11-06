@@ -19,7 +19,7 @@ import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNotesView
 @Composable
 fun TrashNotesScreen(
     viewModel : TrashNotesViewModel = hiltViewModel(),
-    onTrashNoteClick : () -> Unit
+    onTrashNoteClick : (Long) -> Unit
 ) {
 
     LazyColumn(
@@ -63,7 +63,7 @@ fun TrashNotesScreen(
                     note = note,
                     modifier = Modifier,
                     onClick = {
-                        onTrashNoteClick()
+                        onTrashNoteClick(it)
                     }
                 )
             }
