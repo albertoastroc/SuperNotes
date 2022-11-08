@@ -8,9 +8,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.gmail.pentominto.us.supernotes.database.NoteDatabase
 import com.gmail.pentominto.us.supernotes.utility.Constants.DATABASE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREFERENCES_STORE_NAME
-import com.gmail.pentominto.us.supernotes.database.NoteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,8 +33,11 @@ object AppModule {
     ) = Room.databaseBuilder(
         app,
         NoteDatabase::class.java,
-        DATABASE_NAME
-    ).build().getNoteDatabaseDao()
+        DATABASE_NAME)
+
+//    .createFromAsset("notes_database.db")
+        .build()
+        .getNoteDatabaseDao()
 
     @Provides
     @Singleton

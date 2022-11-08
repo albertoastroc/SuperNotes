@@ -74,6 +74,11 @@ fun AllNotesScreen(
                     ),
                     MenuItem(
                         id = 4,
+                        title = "Suggest a feature",
+                        icon = Icons.Default.Email
+                    ),
+                    MenuItem(
+                        id = 4,
                         title = "Privacy policy and info",
                         icon = Icons.Default.Info
                     ),

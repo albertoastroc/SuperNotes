@@ -74,7 +74,7 @@ fun DrawerHeader(
             .fillMaxWidth()
             .padding(vertical = 24.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment =  Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     )
     {
         Image(
