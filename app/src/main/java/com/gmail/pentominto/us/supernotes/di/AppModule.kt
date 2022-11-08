@@ -35,7 +35,7 @@ object AppModule {
         NoteDatabase::class.java,
         DATABASE_NAME)
 
-//    .createFromAsset("notes_database.db")
+    .createFromAsset("notes_database.db")
         .build()
         .getNoteDatabaseDao()
 
