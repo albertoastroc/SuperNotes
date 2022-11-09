@@ -22,6 +22,11 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
+import com.gmail.pentominto.us.supernotes.utility.Constants.ALL_NOTES
+import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_ID
+import com.gmail.pentominto.us.supernotes.utility.Constants.OPTIONS
+import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH
+import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -33,15 +38,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-val userDarkThemeKey = booleanPreferencesKey("user_theme")
+val userDarkThemeKey = booleanPreferencesKey(USER_THEME_KEY)
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
     @Inject
     lateinit var dataStore : DataStore<Preferences>
-
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +53,6 @@ class MainActivity : ComponentActivity() {
             .map { preferences ->
                 preferences[userDarkThemeKey] ?: false
             }
-
 
         setContent {
 
@@ -94,86 +96,109 @@ fun SuperNotesApp() {
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = "allNotes",
+        startDestination = ALL_NOTES,
 
         ) {
         composable(
-            "allNotes",
+            ALL_NOTES,
             enterTransition = {
                 when (initialState.destination.route) {
-                    "noteEdit/{noteId}","options","trash" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    "noteEdit/{$NOTE_ID}", OPTIONS, TRASH ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else                                  -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "noteEdit/{noteId}","options","trash" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    "noteEdit/{$NOTE_ID}", OPTIONS, TRASH ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else                                  -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "noteEdit/{noteId}","options","trash" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    "noteEdit/{$NOTE_ID}", OPTIONS, TRASH ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else                                  -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "noteEdit/{noteId}","options","trash" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    "noteEdit/{$NOTE_ID}", OPTIONS, TRASH ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else                                  -> null
                 }
             }
         ) {
 
-
-
             AllNotesScreen(
                 onNoteClick = { noteId ->
-                    navController.navigate("noteEdit/${noteId}")
+                    navController.navigate("noteEdit/${NOTE_ID}")
                 },
                 onOptionsClick = { menuItemId ->
 
                     when (menuItemId) {
 
-                        2 -> navController.navigate("options")
-                        3 -> navController.navigate("trash")
+                        2 -> navController.navigate(OPTIONS)
+                        3 -> navController.navigate(TRASH)
 
                     }
                 }
             )
         }
 
-        composable("trash",
+        composable(
+            TRASH,
             enterTransition = {
                 when (initialState.destination.route) {
-                    "allNotes","readOnlyNote/{trashNoteId}" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES, "readOnlyNote/{trashNoteId}" ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else                                    -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "allNotes","readOnlyNote/{trashNoteId}" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES, "readOnlyNote/{trashNoteId}" ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else                                    -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "allNotes","readOnlyNote/{trashNoteId}" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES, "readOnlyNote/{trashNoteId}" ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else                                    -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "allNotes","readOnlyNote/{trashNoteId}" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES, "readOnlyNote/{trashNoteId}" ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else                                    -> null
                 }
             }) {
 
@@ -185,44 +210,56 @@ fun SuperNotesApp() {
         }
 
         composable(
-            "noteEdit/{noteId}",
+            "noteEdit/{$NOTE_ID}",
             enterTransition = {
                 when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             arguments = listOf(
-                navArgument("noteId") {
+                navArgument(NOTE_ID) {
                     type = NavType.LongType
                 }
             ),
         ) {
 
             val noteId = remember {
-                it.arguments?.getLong("noteId")
+                it.arguments?.getLong(NOTE_ID)
             }
             if (noteId != null) {
                 NoteEditScreen(noteId = noteId)
@@ -233,30 +270,42 @@ fun SuperNotesApp() {
             "readOnlyNote/{trashNoteId}",
             enterTransition = {
                 when (initialState.destination.route) {
-                    "trash" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    TRASH ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else  -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "trash" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    TRASH ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else  -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "trash" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    TRASH ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else  -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "trash" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    TRASH ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else  -> null
                 }
             },
             arguments = listOf(
@@ -274,33 +323,46 @@ fun SuperNotesApp() {
             }
         }
 
-        composable("options",
+        composable(
+            OPTIONS,
             enterTransition = {
                 when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             popEnterTransition = {
                 when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             },
             popExitTransition = {
                 when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
-                    else -> null
+                    ALL_NOTES ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    else      -> null
                 }
             }
         ) {
@@ -354,4 +416,4 @@ fun SuperNotesApp() {
 
  * string resources - not done
  * image resources - not done
-*/
+ */

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,7 +91,7 @@ fun SearchBarWithMenu(
                     singleLine = true,
                     placeholder = {
                         Text(
-                            text = "Search Notes...",
+                            text = stringResource(id = R.string.search_notes),
                             color = MaterialTheme.colors.onSecondary,
                             fontSize = 16.sp
                         )
