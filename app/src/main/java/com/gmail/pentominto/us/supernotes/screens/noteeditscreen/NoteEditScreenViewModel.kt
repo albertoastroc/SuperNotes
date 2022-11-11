@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -21,7 +22,7 @@ class NoteEditScreenViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private val noteId : Long? = savedStateHandle["noteId"]
+    private val noteId : Long? = savedStateHandle[NOTE_ID]
 
     private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState : State<NoteEditState> = _noteEditState
