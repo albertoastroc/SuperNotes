@@ -78,15 +78,15 @@ fun AllNotesScreen(
                         icon = Icons.Default.Email
                     ),
                     MenuItem(
-                        id = 4,
-                        title = "Privacy policy and info",
-                        icon = Icons.Default.Info
-                    ),
-                    MenuItem(
                         id = 5,
                         title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),
+                    MenuItem(
+                        id = 6,
+                        title = "Privacy policy and info",
+                        icon = Icons.Default.Info
+                    )
                 ),
                 onSettingClick = {
 
