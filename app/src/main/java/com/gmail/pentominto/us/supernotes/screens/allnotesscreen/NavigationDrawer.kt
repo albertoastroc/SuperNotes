@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 
 

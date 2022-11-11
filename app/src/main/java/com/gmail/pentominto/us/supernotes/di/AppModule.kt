@@ -11,7 +11,6 @@ import androidx.room.Room
 import com.gmail.pentominto.us.supernotes.database.NoteDatabase
 import com.gmail.pentominto.us.supernotes.utility.Constants.DATABASE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREFERENCES_STORE_NAME
-import com.gmail.pentominto.us.supernotes.utility.Constants.PREPOPULATED_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,7 +35,7 @@ object AppModule {
         NoteDatabase::class.java,
         DATABASE_NAME)
 
-    .createFromAsset(PREPOPULATED_DATABASE_NAME)
+    .createFromAsset("notes_database.db")
         .build()
         .getNoteDatabaseDao()
 

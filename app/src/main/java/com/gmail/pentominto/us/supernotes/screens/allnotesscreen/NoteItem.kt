@@ -17,12 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Note
 
 @Composable
@@ -131,12 +129,12 @@ fun NoteItem(
                         ) {
 
                             Text(
-                                text = stringResource(id = R.string.created) + note.createdDate,
+                                text = "Created ${note.createdDate}",
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
                             Text(
-                                text = stringResource(id = R.string.last_accessed) + note.lastModified,
+                                text = "Last Accessed ${note.lastModified}",
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
@@ -293,12 +291,12 @@ fun NoteItemSearchResult(
                         ) {
 
                             Text(
-                                text = stringResource(id = R.string.created) + note.createdDate,
+                                text = "Created ${note.createdDate}",
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
                             Text(
-                                text = stringResource(id = R.string.last_accessed) + note.lastModified,
+                                text = "Last Accessed ${note.lastModified}",
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
