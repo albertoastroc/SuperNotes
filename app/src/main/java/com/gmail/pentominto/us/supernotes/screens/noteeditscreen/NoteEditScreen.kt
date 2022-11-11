@@ -156,7 +156,7 @@ fun NoteEditScreen(
                                     fontSize = 18.sp
                                 ),
 
-                            )
+                                )
                         }
 
                         Column() {
@@ -192,7 +192,7 @@ fun NoteEditScreen(
                                     dropDownMenuExpanded = false
                                     Toast.makeText(
                                         context,
-                                        "Copied to clipboard",
+                                        "Text Copied",
                                         Toast.LENGTH_SHORT
                                     ).show()
 

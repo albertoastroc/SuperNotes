@@ -2,6 +2,8 @@
 
 package com.gmail.pentominto.us.supernotes
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +12,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -92,6 +95,8 @@ fun SuperNotesApp() {
 
     val navController = rememberAnimatedNavController()
 
+    val context = LocalContext.current
+
     AnimatedNavHost(
         navController = navController,
         startDestination = "allNotes",
@@ -129,7 +134,12 @@ fun SuperNotesApp() {
             }
         ) {
 
-
+            val deepLinkIntent = Intent()
+                .setData(Uri.parse("mailto:"))
+                .setAction(Intent.ACTION_SENDTO)
+                .putExtra(Intent.EXTRA_EMAIL, "jaycastro100@gmail.com")
+                .putExtra(Intent.EXTRA_SUBJECT, "test subject")
+                .putExtra(Intent.EXTRA_TEXT, "test email body")
 
             AllNotesScreen(
                 onNoteClick = { noteId ->
@@ -141,6 +151,7 @@ fun SuperNotesApp() {
 
                         2 -> navController.navigate("options")
                         3 -> navController.navigate("trash")
+                        4 -> context.startActivity(deepLinkIntent)
 
                     }
                 }
@@ -309,49 +320,3 @@ fun SuperNotesApp() {
         }
     }
 }
-
-/**
- *
- *
- *
- * if the focus is on the note body or title while categories are active, close categories - done
- *
- *
- * confirm category deletion - feels unecessary
- *
- * set up repository
- *
- * need focus to come up to line being edited
- *
- * in settings screen/ maybe call it options instead of settings - done
- *
- * restore tutorial note - need to know what all to include in tutorial first, for prepopulating https://developer.android.com/training/data-storage/room/prepopulate
- * disable categories - done
- * export all notes - for v2
- * import txt file - for v2
- * delete all notes - done
- * search notes - done
- *
- * dark mode - done
- *
- * single note settings
- *
- * copy to clipboard - done
- * reminder - wait until calendar api is easy to use
- * share note - done
- * waiting on google bug fix to put category on bottom of screen, bug makes screen not function in landscape mode
- * text not being saved in orientation change - fixed
- * new note is being saved on orientation change if its a new note, no problem with existing notes - fixed
- * dialogbackground looks wrong, text on light container on dark - fixed
- * find a way to implement screen for tablets - fixed
- * make fab dissapear when scrolling - fixed
- * screen transition animations
- *
- *
- *
- * ORGANIZATION
- * repository - not done
-
- * string resources - not done
- * image resources - not done
-*/
