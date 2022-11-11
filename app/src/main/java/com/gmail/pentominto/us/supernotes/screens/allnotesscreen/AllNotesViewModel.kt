@@ -11,8 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.data.TrashNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
-import com.gmail.pentominto.us.supernotes.utility.Constants.HIDE_CATEGORIES_KEY
-import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_ENABLED_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -28,8 +26,8 @@ class AllNotesViewModel @Inject constructor(
     private val _allNotesState : MutableState<AllNotesState> = mutableStateOf(AllNotesState())
     val allNotesState : State<AllNotesState> = _allNotesState
 
-    private val hideCategoriesKey = booleanPreferencesKey(HIDE_CATEGORIES_KEY)
-    private val trashEnabled = booleanPreferencesKey(TRASH_ENABLED_KEY)
+    private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
+    private val trashEnabled = booleanPreferencesKey("trash_enabled")
 
     fun onSearchChange(input : String) {
 

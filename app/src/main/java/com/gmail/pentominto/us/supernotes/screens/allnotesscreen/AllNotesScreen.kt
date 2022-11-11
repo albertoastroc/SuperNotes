@@ -15,11 +15,11 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 import kotlinx.coroutines.launch
@@ -59,32 +59,32 @@ fun AllNotesScreen(
                 drawerOptionsList = listOf(
                     MenuItem(
                         id = 1,
-                        title = stringResource(id = R.string.home),
+                        title = "Home",
                         icon = Icons.Default.Home
                     ),
                     MenuItem(
                         id = 2,
-                        title = stringResource(id = R.string.options),
+                        title = "Options",
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
                         id = 3,
-                        title = stringResource(id = R.string.trash),
+                        title = "Trash",
                         icon = Icons.Default.Delete
                     ),
                     MenuItem(
                         id = 4,
-                        title = stringResource(id = R.string.suggest_feature),
+                        title = "Suggest a feature",
                         icon = Icons.Default.Email
                     ),
                     MenuItem(
                         id = 4,
-                        title = stringResource(id = R.string.privacy_policy),
+                        title = "Privacy policy and info",
                         icon = Icons.Default.Info
                     ),
                     MenuItem(
                         id = 5,
-                        title = stringResource(id = R.string.rate_in_playstore),
+                        title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),
                 ),
@@ -208,7 +208,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = stringResource(id = R.string.new_note),
+                        text = "New Note",
                         color = MaterialTheme.colors.onSecondary
                     )
                 },

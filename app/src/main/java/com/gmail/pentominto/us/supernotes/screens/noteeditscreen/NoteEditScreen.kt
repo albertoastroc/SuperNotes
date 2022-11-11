@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -132,7 +131,7 @@ fun NoteEditScreen(
                                 singleLine = true,
                                 placeholder = {
                                     Text(
-                                        text = stringResource(id = R.string.enter_title),
+                                        text = "Enter a Title...",
                                         color = MaterialTheme.colors.onPrimary,
                                         fontSize = 18.sp
                                     )
@@ -198,7 +197,7 @@ fun NoteEditScreen(
                                     ).show()
 
                                 }) {
-                                    Text(text = stringResource(id = R.string.copy_to_clipboard))
+                                    Text(text = "Copy to clipboard")
                                 }
 
                                 DropdownMenuItem(onClick = {
@@ -209,7 +208,7 @@ fun NoteEditScreen(
                                         dropDownMenuExpanded = false
                                     }
                                 }) {
-                                    Text(text = stringResource(id = R.string.set_category))
+                                    Text(text = "Set category")
                                 }
 
                                 DropdownMenuItem(onClick = {
@@ -231,7 +230,7 @@ fun NoteEditScreen(
                                     dropDownMenuExpanded = false
 
                                 }) {
-                                    Text(text = stringResource(id = R.string.share))
+                                    Text(text = "Share")
                                 }
                             }
                         }
@@ -257,7 +256,7 @@ fun NoteEditScreen(
                             value = noteState.value.noteBody.toString(),
                             placeholder = {
                                 Text(
-                                    text = stringResource(id = R.string.enter_text_body),
+                                    text = "Enter Text...",
                                     color = MaterialTheme.colors.onPrimary,
                                     fontSize = 18.sp
                                 )
@@ -379,7 +378,7 @@ fun CategoriesList(
                                 value = dialogInput.value,
                                 modifier = Modifier
                                     .padding(top = 8.dp),
-                                placeholder = { Text(text = stringResource(id = R.string.new_category_name)) },
+                                placeholder = { Text(text = "New Category Name...") },
                                 onValueChange = {
                                     dialogInput.value = it
                                     dialogTitleState.value = ""
@@ -408,7 +407,7 @@ fun CategoriesList(
                                 modifier = Modifier.width(100.dp)
 
                             ) {
-                                Text(text = stringResource(id = R.string.cancel))
+                                Text(text = "Cancel")
                             }
 
                             Button(
@@ -428,7 +427,7 @@ fun CategoriesList(
                                     backgroundColor = MaterialTheme.colors.secondary
                                 )
                             ) {
-                                Text(text = stringResource(id = R.string.add))
+                                Text(text = "Add")
                             }
                         }
                     }

@@ -1,22 +1,3 @@
 <resources>
     <string name="app_name">Super Notes</string>
-    <string name="home">Home</string>
-    <string name="options">Options</string>
-    <string name="trash">Trash</string>
-    <string name="suggest_feature">Suggest a feature</string>
-    <string name="privacy_policy">Privacy policy</string>
-    <string name="rate_in_playstore">Rate me in the Play Store!</string>
-    <string name="new_note">New Note</string>
-    <string name="created">Created</string>
-    <string name="last_accessed">Last Accessed</string>
-    <string name="search_notes">Search Notes…</string>
-    <string name="enter_title">Enter a Title…</string>
-    <string name="enter_text_body">Enter Text…</string>
-    <string name="new_category_name">New Category Name…</string>
-    <string name="copy_to_clipboard">Copy to clipboard</string>
-    <string name="set_category">Set category</string>
-    <string name="share">Share</string>
-    <string name="cancel">Cancel</string>
-    <string name="category_name_empty">Category name is empty</string>
-    <string name="add">AddOP</string>
 </resources>
