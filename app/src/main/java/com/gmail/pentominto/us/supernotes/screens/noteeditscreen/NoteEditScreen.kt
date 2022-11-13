@@ -159,7 +159,7 @@ fun NoteEditScreen(
                                 )
                         }
 
-                        Column() {
+                        Column {
 
                             Icon(
                                 painterResource(id = R.drawable.ic_baseline_more_vert_24),

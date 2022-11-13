@@ -27,7 +27,7 @@ class ReadOnlyNoteViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.getTrashNote(trashNoteId).collect() { trashNote ->
+            databaseDao.getTrashNote(trashNoteId).collect { trashNote ->
 
                 _trashNoteState.value = trashNote
             }

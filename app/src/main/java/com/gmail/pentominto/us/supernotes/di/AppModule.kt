@@ -34,9 +34,10 @@ object AppModule {
     ) = Room.databaseBuilder(
         app,
         NoteDatabase::class.java,
-        DATABASE_NAME)
+        DATABASE_NAME
+    )
 
-    .createFromAsset(PREPOP_DATABASE_NAME)
+        .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
         .getNoteDatabaseDao()
 

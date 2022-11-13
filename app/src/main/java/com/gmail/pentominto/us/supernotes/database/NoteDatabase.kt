@@ -6,7 +6,11 @@ import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.data.TrashNote
 
-@Database(entities = [Note::class, Category::class, TrashNote::class] , version = 1 , exportSchema = false)
+@Database(
+    entities = [Note::class, Category::class, TrashNote::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class NoteDatabase : RoomDatabase() {
 
     abstract fun getNoteDatabaseDao() : DatabaseDao

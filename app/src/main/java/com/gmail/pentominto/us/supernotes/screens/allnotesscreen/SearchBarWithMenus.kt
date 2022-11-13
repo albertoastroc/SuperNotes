@@ -45,7 +45,7 @@ fun SearchBarWithMenu(
             )
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.secondaryVariant),
-        ) {
+    ) {
 
         Row(
             modifier = Modifier,
@@ -102,7 +102,7 @@ fun SearchBarWithMenu(
                     )
                 )
             }
-            
+
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_close_24),
                 contentDescription = null,

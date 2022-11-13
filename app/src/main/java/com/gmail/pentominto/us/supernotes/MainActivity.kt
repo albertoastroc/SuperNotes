@@ -16,6 +16,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
@@ -29,18 +32,23 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.*
 import javax.inject.Inject
 
 val userDarkThemeKey = booleanPreferencesKey("user_theme")
+val userIdKey = stringPreferencesKey("user_id")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
 
     @Inject
     lateinit var dataStore : DataStore<Preferences>
@@ -54,6 +62,24 @@ class MainActivity : ComponentActivity() {
                 preferences[userDarkThemeKey] ?: false
             }
 
+        // sets up firebase id
+        lifecycleScope.launch {
+
+            dataStore.edit { preferences ->
+
+                if (! preferences.contains(userIdKey)) {
+
+                    val userId = UUID.randomUUID().toString()
+                    preferences[userIdKey] = userId
+                }
+            }
+
+            dataStore.data.collect { preferences ->
+
+                Firebase.crashlytics.setUserId(preferences[userIdKey] ?: String())
+                Firebase.analytics.setUserId(preferences[userIdKey] ?: String())
+            }
+        }
 
         setContent {
 
@@ -174,7 +200,9 @@ fun SuperNotesApp() {
                         2 -> navController.navigate("options")
                         3 -> navController.navigate("trash")
                         4 -> context.startActivity(emailIntent)
-                        5 -> { TODO("playstore intent") }
+                        5 -> {
+                            TODO("playstore intent")
+                        }
 
                     }
                 }

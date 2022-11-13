@@ -26,7 +26,7 @@ fun Drawer(
     itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
 ) {
 
-    LazyColumn() {
+    LazyColumn {
 
         item {
 
@@ -78,7 +78,7 @@ fun DrawerHeader(
     )
     {
         Image(
-            painterResource(id = R.drawable.ic_iconexported),
+            painterResource(id = R.drawable.app_icon),
             modifier = Modifier
                 .height(50.dp)
                 .width(50.dp),

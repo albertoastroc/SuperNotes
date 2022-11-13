@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
+    private val dataStore : DataStore<Preferences>,
     private val databaseDao : DatabaseDao
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _optionsScreenState.value = _optionsScreenState.value.copy(categoriesOption = !_optionsScreenState.value.categoriesOption)
+                _optionsScreenState.value = _optionsScreenState.value.copy(categoriesOption = ! _optionsScreenState.value.categoriesOption)
 
                 settings[hideCategoriesKey] = _optionsScreenState.value.categoriesOption
             }
@@ -46,7 +46,7 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _optionsScreenState.value = _optionsScreenState.value.copy(darkThemeOption = !_optionsScreenState.value.darkThemeOption)
+                _optionsScreenState.value = _optionsScreenState.value.copy(darkThemeOption = ! _optionsScreenState.value.darkThemeOption)
 
                 settings[userDarkThemeKey] = _optionsScreenState.value.darkThemeOption
             }
@@ -59,8 +59,10 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _optionsScreenState.value = _optionsScreenState.value.copy(trashEnabled =
-                !_optionsScreenState.value.trashEnabled)
+                _optionsScreenState.value = _optionsScreenState.value.copy(
+                    trashEnabled =
+                    ! _optionsScreenState.value.trashEnabled
+                )
 
                 settings[trashEnabled] = _optionsScreenState.value.trashEnabled
             }
@@ -71,7 +73,7 @@ class OptionsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            dataStore.data.collect() { preferences ->
+            dataStore.data.collect { preferences ->
 
                 if (preferences.contains(hideCategoriesKey)) {
 
@@ -116,5 +118,4 @@ class OptionsScreenViewModel @Inject constructor(
     init {
         getPrefs()
     }
-
 }

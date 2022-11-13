@@ -40,7 +40,7 @@ fun TrashNoteItem(
 
     ) {
 
-        Column() {
+        Column {
 
             Spacer(
                 modifier = Modifier
@@ -53,8 +53,7 @@ fun TrashNoteItem(
                 color = MaterialTheme.colors.primaryVariant
             )
 
-            Row(
-            ) {
+            Row {
 
                 Column(
                     modifier = Modifier

@@ -20,11 +20,11 @@ class TrashNotesViewModel @Inject constructor(
     private val _trashNotesList : MutableState<List<TrashNote>> = mutableStateOf(emptyList())
     val trashNotesList : State<List<TrashNote>> = _trashNotesList
 
-    private fun getTrashNotesList(){
+    private fun getTrashNotesList() {
 
         viewModelScope.launch {
 
-            databaseDao.getAllTrashNotes().collect() { noteList ->
+            databaseDao.getAllTrashNotes().collect { noteList ->
 
                 _trashNotesList.value = noteList
             }
@@ -36,7 +36,7 @@ class TrashNotesViewModel @Inject constructor(
         databaseDao.deleteTrashNote(noteId)
     }
 
-    fun restoreTrashNote(note : TrashNote)  {
+    fun restoreTrashNote(note : TrashNote) {
 
         viewModelScope.launch {
 

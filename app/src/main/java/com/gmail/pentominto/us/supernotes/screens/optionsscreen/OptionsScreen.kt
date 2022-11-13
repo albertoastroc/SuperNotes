@@ -1,14 +1,19 @@
 package com.gmail.pentominto.us.supernotes.screens.optionsscreen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -20,8 +25,11 @@ fun OptionsScreen(
     viewModel : OptionsScreenViewModel = hiltViewModel()
 ) {
 
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
@@ -33,7 +41,6 @@ fun OptionsScreen(
                 .padding(16.dp),
             color = MaterialTheme.colors.onBackground
         )
-
 
         OptionsRowWithSwitch(
             title = "Dark mode",
@@ -59,33 +66,46 @@ fun OptionsScreen(
             viewModel.trashFolderToggle()
         }
 
-//        OptionsRowWithAlertDialog(
-//            title = "Export all notes",
-//            subTitle = "You can export individual notes in the edit note screen",
-//            message = "null"
-//        ) {
-//
-//        }
-//        OptionsRowWithAlertDialog(
-//            title = "Import notes",
-//            subTitle = null,
-//            message = "null"
-//        ) {
-//
-//        }
         OptionsRowWithAlertDialog(
             title = "Delete home screen notes",
             subTitle = "Deleting this way will not send notes to the Trash folder",
-            message = "Are you sure you want to delete all notes?"
+            message = "Are you sure you want to delete all notes?",
+            yesButtonMessage = "Delete",
+            noButtonMessage = "Cancel"
         ) {
             viewModel.deleteAllNotes()
         }
         OptionsRowWithAlertDialog(
             title = "Delete notes in Trash folder",
             subTitle = null,
-            message = "Are you sure you want to delete all notes in Trash?"
+            message = "Are you sure you want to delete all notes in Trash?",
+            yesButtonMessage = "Delete",
+            noButtonMessage = "Cancel"
         ) {
             viewModel.deleteAllTrashNotes()
+        }
+
+        OptionsRowWithAlertDialog(
+            title = "Request deletion of data",
+            subTitle = "Data collected is used to help diagnose crashes and analyze app performance",
+            message = "This will setup an email with some information that is needed for deleting the data. ",
+            yesButtonMessage = "Continue",
+            noButtonMessage = "Cancel"
+        ) {
+
+            val emailIntent = Intent()
+                .setData(Uri.parse("mailto:simplenotesacf@gmail.com"))
+                .setAction(Intent.ACTION_SENDTO)
+                .putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    "Simple notes feedback"
+                ).putExtra(
+                    Intent.EXTRA_TEXT,
+                    "User Id goes here"
+                )
+
+            context.startActivity(emailIntent)
+
         }
     }
 }
@@ -95,6 +115,8 @@ fun OptionsRowWithAlertDialog(
     title : String,
     subTitle : String?,
     message : String,
+    yesButtonMessage : String,
+    noButtonMessage : String,
     onClick : () -> Unit,
 ) {
 
@@ -112,7 +134,7 @@ fun OptionsRowWithAlertDialog(
                     },
                     modifier = Modifier.width(100.dp)
                 ) {
-                    Text(text = "Delete")
+                    Text(text = yesButtonMessage)
                 }
             },
             dismissButton = {
@@ -122,7 +144,7 @@ fun OptionsRowWithAlertDialog(
                     },
                     modifier = Modifier.width(100.dp)
                 ) {
-                    Text(text = "Cancel")
+                    Text(text = noButtonMessage)
                 }
             }
 

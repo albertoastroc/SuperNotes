@@ -43,7 +43,7 @@ fun NoteItem(
 
     ) {
 
-        Column() {
+        Column {
 
             Spacer(
                 modifier = Modifier
@@ -56,8 +56,7 @@ fun NoteItem(
                 color = MaterialTheme.colors.primaryVariant
             )
 
-            Row(
-            ) {
+            Row {
 
                 Column(
                     modifier = Modifier
@@ -152,7 +151,6 @@ fun NoteItem(
     }
 }
 
-
 @Composable
 fun NoteItemSearchResult(
     note : Note,
@@ -187,7 +185,7 @@ fun NoteItemSearchResult(
 
     ) {
 
-        Column() {
+        Column {
 
             Spacer(
                 modifier = Modifier
@@ -200,8 +198,7 @@ fun NoteItemSearchResult(
                 color = MaterialTheme.colors.primaryVariant
             )
 
-            Row(
-            ) {
+            Row {
 
                 Column(
                     modifier = Modifier

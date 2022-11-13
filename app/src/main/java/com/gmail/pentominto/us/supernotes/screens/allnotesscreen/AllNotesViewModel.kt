@@ -50,7 +50,7 @@ class AllNotesViewModel @Inject constructor(
 
     fun getNotesList() = viewModelScope.launch {
 
-        databaseDao.getAllCategoriesAndNotes().collect() { categoryNotesMap ->
+        databaseDao.getAllCategoriesAndNotes().collect { categoryNotesMap ->
 
             _allNotesState.value = _allNotesState.value.copy(notesWithCategory = categoryNotesMap)
 
@@ -99,7 +99,7 @@ class AllNotesViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            dataStore.data.collect() { preferences ->
+            dataStore.data.collect { preferences ->
 
                 if (preferences.contains(hideCategoriesKey)) {
 

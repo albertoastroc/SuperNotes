@@ -35,7 +35,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
             viewModelScope.launch {
 
-                databaseDao.getNoteWithCategory(noteId).collect() { categoryNoteMap ->
+                databaseDao.getNoteWithCategory(noteId).collect { categoryNoteMap ->
 
                     categoryNoteMap.forEach {
 
@@ -76,7 +76,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.getAllCategories().collect() {
+            databaseDao.getAllCategories().collect {
 
                 _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
@@ -109,7 +109,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
             databaseDao.deleteCategory(category.categoryId)
 
-            notesToUpdate.collect() { notesList ->
+            notesToUpdate.collect { notesList ->
 
                 notesList.forEach { note ->
 
