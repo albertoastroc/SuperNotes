@@ -93,16 +93,13 @@ fun OptionsScreen(
             noButtonMessage = "Cancel"
         ) {
 
+            val uriText = "mailto:simplenotesacf@gmail.com" +
+                    "?subject=" + "Data deletion request" +
+                    "&body=" + "Delete data for ID ${viewModel.optionsScreenState.value.userId}"
+
             val emailIntent = Intent()
-                .setData(Uri.parse("mailto:simplenotesacf@gmail.com"))
+                .setData(Uri.parse(uriText))
                 .setAction(Intent.ACTION_SENDTO)
-                .putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    "Simple notes feedback"
-                ).putExtra(
-                    Intent.EXTRA_TEXT,
-                    "User Id goes here"
-                )
 
             context.startActivity(emailIntent)
 

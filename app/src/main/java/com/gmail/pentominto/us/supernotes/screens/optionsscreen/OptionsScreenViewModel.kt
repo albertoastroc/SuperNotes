@@ -7,6 +7,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
@@ -25,7 +26,8 @@ class OptionsScreenViewModel @Inject constructor(
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     private val userDarkThemeKey = booleanPreferencesKey("user_theme")
-    private val trashEnabled = booleanPreferencesKey("trash_enabled")
+    private val trashEnabledKey = booleanPreferencesKey("trash_enabled")
+    private val userIdKey = stringPreferencesKey("user_id")
 
     fun categoriesPrefToggle() {
 
@@ -64,7 +66,7 @@ class OptionsScreenViewModel @Inject constructor(
                     ! _optionsScreenState.value.trashEnabled
                 )
 
-                settings[trashEnabled] = _optionsScreenState.value.trashEnabled
+                settings[trashEnabledKey] = _optionsScreenState.value.trashEnabled
             }
         }
     }
@@ -89,10 +91,17 @@ class OptionsScreenViewModel @Inject constructor(
                     )
                 }
 
-                if (preferences.contains(trashEnabled)) {
+                if (preferences.contains(trashEnabledKey)) {
 
                     _optionsScreenState.value = _optionsScreenState.value.copy(
-                        trashEnabled = preferences[trashEnabled] ?: true
+                        trashEnabled = preferences[trashEnabledKey] ?: true
+                    )
+                }
+
+                if (preferences.contains(userIdKey)) {
+
+                    _optionsScreenState.value = _optionsScreenState.value.copy(
+                        userId = preferences[userIdKey] ?: String()
                     )
                 }
             }

@@ -172,14 +172,6 @@ fun SuperNotesApp() {
             }
         ) {
 
-            val emailIntent = Intent()
-                .setData(Uri.parse("mailto:simplenotesacf@gmail.com"))
-                .setAction(Intent.ACTION_SENDTO)
-                .putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    "Simple notes feedback"
-                )
-
             val playstoreIntent = Intent()
                 .setData(Uri.parse("market://details?id=packagename"))
                 .setAction(Intent.ACTION_VIEW)
@@ -199,9 +191,11 @@ fun SuperNotesApp() {
 
                         2 -> navController.navigate("options")
                         3 -> navController.navigate("trash")
-                        4 -> context.startActivity(emailIntent)
-                        5 -> {
+                        4 -> {
                             TODO("playstore intent")
+                        }
+                        5 -> {
+                            TODO("privacy")
                         }
 
                     }

@@ -74,16 +74,11 @@ fun AllNotesScreen(
                     ),
                     MenuItem(
                         id = 4,
-                        title = "Suggest a feature",
-                        icon = Icons.Default.Email
-                    ),
-                    MenuItem(
-                        id = 5,
                         title = "Rate me in the Play Store!",
                         icon = Icons.Default.Star
                     ),
                     MenuItem(
-                        id = 6,
+                        id = 5,
                         title = "Privacy policy and info",
                         icon = Icons.Default.Info
                     )
