@@ -51,7 +51,7 @@ fun NoteItem(
             )
             Divider(
                 modifier = Modifier
-                    .height(.5.dp)
+                    .height(1.dp)
                     .padding(horizontal = 12.dp),
                 color = MaterialTheme.colors.primaryVariant
             )
@@ -104,7 +104,7 @@ fun NoteItem(
 
                             Divider(
                                 modifier = Modifier
-                                    .height(.5.dp)
+                                    .height(1.dp)
                                     .padding(horizontal = 12.dp),
                                 color = MaterialTheme.colors.primaryVariant
 
@@ -193,7 +193,7 @@ fun NoteItemSearchResult(
             )
             Divider(
                 modifier = Modifier
-                    .height(.5.dp)
+                    .height(1.dp)
                     .padding(horizontal = 12.dp),
                 color = MaterialTheme.colors.primaryVariant
             )
@@ -264,7 +264,7 @@ fun NoteItemSearchResult(
 
                             Divider(
                                 modifier = Modifier
-                                    .height(.5.dp)
+                                    .height(1.dp)
                                     .padding(horizontal = 12.dp),
                                 color = MaterialTheme.colors.primaryVariant
 

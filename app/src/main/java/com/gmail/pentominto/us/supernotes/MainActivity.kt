@@ -12,7 +12,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -56,6 +55,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
+
+        actionBar?.hide()
 
         val themeFlow : Flow<Boolean> = dataStore.data
             .map { preferences ->
@@ -120,8 +121,6 @@ class MainActivity : ComponentActivity() {
 fun SuperNotesApp() {
 
     val navController = rememberAnimatedNavController()
-
-    val context = LocalContext.current
 
     AnimatedNavHost(
         navController = navController,

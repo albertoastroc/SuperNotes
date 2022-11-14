@@ -48,7 +48,7 @@ fun TrashNoteItem(
             )
             Divider(
                 modifier = Modifier
-                    .height(.5.dp)
+                    .height(1.dp)
                     .padding(horizontal = 12.dp),
                 color = MaterialTheme.colors.primaryVariant
             )
@@ -101,7 +101,7 @@ fun TrashNoteItem(
 
                             Divider(
                                 modifier = Modifier
-                                    .height(.5.dp)
+                                    .height(1.dp)
                                     .padding(horizontal = 12.dp),
                                 color = MaterialTheme.colors.primaryVariant
 
