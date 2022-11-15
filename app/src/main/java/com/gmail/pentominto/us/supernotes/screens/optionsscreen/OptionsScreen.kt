@@ -28,7 +28,8 @@ fun OptionsScreen(
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
 

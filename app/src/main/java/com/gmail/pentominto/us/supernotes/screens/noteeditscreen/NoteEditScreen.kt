@@ -239,8 +239,8 @@ fun NoteEditScreen(
 
                 Divider(
                     color = MaterialTheme.colors.onBackground,
-                    modifier = Modifier.
-                    padding(horizontal = 2.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
                         .height(1.dp)
                 )
 
