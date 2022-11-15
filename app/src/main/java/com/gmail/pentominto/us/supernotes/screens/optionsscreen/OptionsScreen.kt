@@ -108,6 +108,15 @@ fun OptionsScreen(
                 context.startActivity(emailIntent)
 
             }
+            OptionsRowWithAlertDialog(
+                title = "Restore Welcome/FAQ note",
+                subTitle = null,
+                message = "Are you sure you want to restore the Welcome/FAQ note?",
+                yesButtonMessage = "Continue",
+                noButtonMessage = "Cancel"
+            ) {
+                viewModel.restoreWelcomeNote()
+            }
         }
     }
 }

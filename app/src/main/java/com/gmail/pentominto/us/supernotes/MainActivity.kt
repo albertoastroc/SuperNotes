@@ -12,6 +12,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -120,6 +121,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun SuperNotesApp() {
 
+    val context = LocalContext.current
+
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -172,13 +175,17 @@ fun SuperNotesApp() {
         ) {
 
             val playstoreIntent = Intent()
-                .setData(Uri.parse("market://details?id=packagename"))
+                .setData(Uri.parse("market://details?id=com.gmail.pentominto.us.supernotes"))
                 .setAction(Intent.ACTION_VIEW)
                 .addFlags(
                     Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
                             Intent.FLAG_ACTIVITY_NO_HISTORY or
                             Intent.FLAG_ACTIVITY_MULTIPLE_TASK
                 )
+
+            val privacyPolicyIntent = Intent()
+                .setAction(Intent.ACTION_VIEW)
+                .setData(Uri.parse("https://www.termsfeed.com/live/debf4da5-b65b-4420-a444-9e172bf8b813"))
 
             AllNotesScreen(
                 onNoteClick = { noteId ->
@@ -190,12 +197,8 @@ fun SuperNotesApp() {
 
                         2 -> navController.navigate("options")
                         3 -> navController.navigate("trash")
-                        4 -> {
-                            TODO("playstore intent")
-                        }
-                        5 -> {
-                            TODO("privacy")
-                        }
+                        4 -> context.startActivity(playstoreIntent)
+                        5 -> context.startActivity(privacyPolicyIntent)
 
                     }
                 }

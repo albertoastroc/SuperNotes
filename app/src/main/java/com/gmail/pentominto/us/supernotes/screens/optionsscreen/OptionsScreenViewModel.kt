@@ -10,7 +10,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -71,6 +73,38 @@ class OptionsScreenViewModel @Inject constructor(
         }
     }
 
+    private fun getCurrentDate() {
+
+        _optionsScreenState.value = _optionsScreenState.value.copy(
+            currentDate = DateGetter.getCurrentDate()
+        )
+    }
+
+    fun restoreWelcomeNote() {
+
+        viewModelScope.launch {
+
+            databaseDao.insertNote(
+                Note(
+                    noteTitle = "Welcome",
+                    createdDate = _optionsScreenState.value.currentDate,
+                    noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
+                            "\n" +
+                            "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
+                            "\n" +
+                            "2. There is no save button, the app auto-saves everything.\n" +
+                            "\n" +
+                            "3. To delete a note, swipe it to the right, to restore a note from the Trash, swipe it to the left.\n" +
+                            "\n" +
+                            "4. To add and set a category use the menu at the top right of this screen. \n" +
+                            "\n" +
+                            "5. If this note is deleted, it can later be restored in Options.\n" +
+                            "\n"
+                )
+            )
+        }
+    }
+
     fun getPrefs() {
 
         viewModelScope.launch {
@@ -126,5 +160,6 @@ class OptionsScreenViewModel @Inject constructor(
 
     init {
         getPrefs()
+        getCurrentDate()
     }
 }

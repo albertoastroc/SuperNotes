@@ -9,10 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -85,10 +84,8 @@ class NoteEditScreenViewModel @Inject constructor(
 
     private fun getCurrentDate() {
 
-        val currentTime = Calendar.getInstance().time
-        val dateFormatter = SimpleDateFormat("M/d/yy")
         _noteEditState.value = _noteEditState.value.copy(
-            currentDate = dateFormatter.format(currentTime)
+            currentDate = DateGetter.getCurrentDate()
         )
     }
 
