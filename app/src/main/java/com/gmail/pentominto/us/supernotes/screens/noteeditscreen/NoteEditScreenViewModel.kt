@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.utility.Constants.NO_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -56,13 +57,13 @@ class NoteEditScreenViewModel @Inject constructor(
 
             if (! databaseDao.defaultCategoryExists()) {
 
-                insertCategory("No Category")
+                insertCategory(NO_CATEGORY)
             }
 
             getNote(
                 databaseDao.insertNote(
                     Note(
-                        category = "No Category",
+                        category = NO_CATEGORY,
                         createdDate = noteEditState.value.currentDate,
                         lastModified = noteEditState.value.currentDate
                     )
@@ -111,7 +112,7 @@ class NoteEditScreenViewModel @Inject constructor(
                 notesList.forEach { note ->
 
                     databaseDao.updateNoteCategory(
-                        "No Category",
+                        NO_CATEGORY,
                         note.noteId
                     )
                 }

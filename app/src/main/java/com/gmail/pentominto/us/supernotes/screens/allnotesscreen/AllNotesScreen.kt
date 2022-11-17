@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
 
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
@@ -15,6 +14,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +23,7 @@ import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun AllNotesScreen(
@@ -59,27 +60,27 @@ fun AllNotesScreen(
                 drawerOptionsList = listOf(
                     MenuItem(
                         id = 1,
-                        title = "Home",
+                        title = stringResource(R.string.home),
                         icon = Icons.Default.Home
                     ),
                     MenuItem(
                         id = 2,
-                        title = "Options",
+                        title = stringResource(R.string.options),
                         icon = Icons.Default.Settings
                     ),
                     MenuItem(
                         id = 3,
-                        title = "Trash",
+                        title = stringResource(R.string.trash),
                         icon = Icons.Default.Delete
                     ),
                     MenuItem(
                         id = 4,
-                        title = "Rate me in the Play Store!",
+                        title = stringResource(R.string.rate_in_playstore),
                         icon = Icons.Default.Star
                     ),
                     MenuItem(
                         id = 5,
-                        title = "Privacy policy and info",
+                        title = stringResource(R.string.privacy_and_info),
                         icon = Icons.Default.Info
                     )
                 ),
@@ -203,7 +204,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "New Note",
+                        text = stringResource(R.string.new_note),
                         color = MaterialTheme.colors.onSecondary
                     )
                 },

@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Simple Notes</string>
+    <string name="home">Home</string>
+    <string name="options">Options</string>
+    <string name="trash">Trash</string>
+    <string name="rate_in_playstore">Rate me in the Play Store!</string>
+    <string name="privacy_and_info">Privacy policy and info</string>
+    <string name="new_note">New Note</string>
+    <string name="search_notes">Search Notes...</string>
+    <string name="enter_title">Enter a Title...</string>
+    <string name="set_category">Set category</string>
+    <string name="copy_to_clipboard">Copy to clipboard</string>
+    <string name="share">Share</string>
+    <string name="enter_text">Enter Text...</string>
+    <string name="new_category_name">New Category Name...</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
 </resources>

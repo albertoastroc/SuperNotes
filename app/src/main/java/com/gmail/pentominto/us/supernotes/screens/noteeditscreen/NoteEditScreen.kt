@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,6 +32,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.utility.Constants.NO_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
@@ -131,7 +133,7 @@ fun NoteEditScreen(
                                 singleLine = true,
                                 placeholder = {
                                     Text(
-                                        text = "Enter a Title...",
+                                        text = stringResource(R.string.enter_title),
                                         color = MaterialTheme.colors.onPrimary,
                                         fontSize = 18.sp
                                     )
@@ -197,7 +199,7 @@ fun NoteEditScreen(
                                     ).show()
 
                                 }) {
-                                    Text(text = "Copy to clipboard")
+                                    Text(text = stringResource(R.string.copy_to_clipboard))
                                 }
 
                                 DropdownMenuItem(onClick = {
@@ -208,7 +210,7 @@ fun NoteEditScreen(
                                         dropDownMenuExpanded = false
                                     }
                                 }) {
-                                    Text(text = "Set category")
+                                    Text(text = stringResource(R.string.set_category))
                                 }
 
                                 DropdownMenuItem(onClick = {
@@ -230,7 +232,7 @@ fun NoteEditScreen(
                                     dropDownMenuExpanded = false
 
                                 }) {
-                                    Text(text = "Share")
+                                    Text(text = stringResource(R.string.share))
                                 }
                             }
                         }
@@ -258,7 +260,7 @@ fun NoteEditScreen(
                             value = noteState.value.noteBody.toString(),
                             placeholder = {
                                 Text(
-                                    text = "Enter Text...",
+                                    text = stringResource(R.string.enter_text),
                                     color = MaterialTheme.colors.onPrimary,
                                     fontSize = 18.sp
                                 )
@@ -380,7 +382,7 @@ fun CategoriesList(
                                 value = dialogInput.value,
                                 modifier = Modifier
                                     .padding(top = 8.dp),
-                                placeholder = { Text(text = "New Category Name...") },
+                                placeholder = { Text(text = stringResource(R.string.new_category_name)) },
                                 onValueChange = {
                                     dialogInput.value = it
                                     dialogTitleState.value = ""
@@ -409,7 +411,7 @@ fun CategoriesList(
                                 modifier = Modifier.width(100.dp)
 
                             ) {
-                                Text(text = "Cancel")
+                                Text(text = stringResource(R.string.cancel))
                             }
 
                             Button(
@@ -429,7 +431,7 @@ fun CategoriesList(
                                     backgroundColor = MaterialTheme.colors.secondary
                                 )
                             ) {
-                                Text(text = "Add")
+                                Text(text = stringResource(R.string.add))
                             }
                         }
                     }
@@ -475,7 +477,7 @@ fun CategoriesList(
                     maxLines = 2
                 )
 
-                if (category.categoryTitle != "No Category") {
+                if (category.categoryTitle != NO_CATEGORY) {
 
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_delete_24),
