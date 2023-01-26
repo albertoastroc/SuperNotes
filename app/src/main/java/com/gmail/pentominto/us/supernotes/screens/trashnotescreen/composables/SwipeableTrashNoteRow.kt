@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.trashnotescreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,15 +12,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.entities.TrashNoteEntity
 import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
-fun SwipeableNoteRow(
+fun SwipeableTrashNoteRow(
     deleteNote : (Long) -> Unit,
-    sendToTrash : () -> Unit,
-    note : Note,
-    trashEnabled : Boolean,
+    restoreNote : () -> Unit,
+    trashNote : TrashNoteEntity,
     content : @Composable () -> Unit,
 ) {
 
@@ -29,33 +28,35 @@ fun SwipeableNoteRow(
 
             if (it == DismissValue.DismissedToEnd) {
 
-                if (trashEnabled) {
-                    sendToTrash()
-                    deleteNote(note.noteId)
-                } else {
+                deleteNote(trashNote.noteId)
+            } else if (it == DismissValue.DismissedToStart) {
 
-                    deleteNote(note.noteId)
-                }
+                restoreNote()
             }
+
             true
         }
     )
 
     SwipeToDismiss(
         state = dismissState,
-        directions = setOf(DismissDirection.StartToEnd),
+        directions = setOf(
+            DismissDirection.StartToEnd,
+            DismissDirection.EndToStart
+        ),
         dismissThresholds = { FractionalThreshold(.6f) },
         background = {
-            if (
-                dismissState.progress.fraction <= .99f
 
+            val direction = dismissState.dismissDirection?.name
+
+            if (
+                dismissState.progress.fraction <= .99f && direction == DismissDirection.StartToEnd.name
             ) {
 
                 Box(
                     modifier = Modifier
                         .background(
                             Scarlet
-//                            MaterialTheme.colors.secondary
                         )
                 ) {
                     Row(
@@ -75,6 +76,35 @@ fun SwipeableNoteRow(
                             painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_32),
                             contentDescription = null,
                             tint = MaterialTheme.colors.onSecondary
+                        )
+                    }
+                }
+            } else if (
+                dismissState.progress.fraction <= .99f && direction == DismissDirection.EndToStart.name
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colors.secondary
+                        )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Transparent),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_arrow_back_32),
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onSecondary
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_restore_32),
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.padding(horizontal = 24.dp)
                         )
                     }
                 }

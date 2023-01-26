@@ -8,7 +8,7 @@ object DateGetter {
     fun getCurrentDate() : String {
 
         val currentTime = Calendar.getInstance().time
-        val dateFormatter = SimpleDateFormat("M/d/yy")
+        val dateFormatter = SimpleDateFormat("M/d/yy", Locale.US)
         return dateFormatter.format(currentTime)
     }
 }

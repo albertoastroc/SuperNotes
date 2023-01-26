@@ -2,6 +2,7 @@
 
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
+import android.view.MenuItem
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
 import kotlinx.coroutines.launch
 
 @Composable
@@ -203,7 +203,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "New Note",
+                        text = "New NoteEntity",
                         color = MaterialTheme.colors.onSecondary
                     )
                 },

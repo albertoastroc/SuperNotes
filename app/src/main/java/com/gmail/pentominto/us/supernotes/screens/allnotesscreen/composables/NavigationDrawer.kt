@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
 
 
 @Composable

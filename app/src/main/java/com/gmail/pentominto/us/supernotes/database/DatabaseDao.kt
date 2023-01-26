@@ -4,19 +4,19 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.data.TrashNote
+import com.gmail.pentominto.us.supernotes.data.entities.CategoryEntity
+import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
+import com.gmail.pentominto.us.supernotes.data.entities.TrashNoteEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note : Note) : Long
+    suspend fun insertNote(note : NoteEntity) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTrashNote(trashNote : TrashNote) : Long
+    suspend fun insertTrashNote(trashNote : TrashNoteEntity) : Long
 
     @Query("UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody, lastModified = :lastModified WHERE note_db_id = :noteId")
     suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Long, lastModified : String)
@@ -25,19 +25,19 @@ interface DatabaseDao {
     suspend fun updateNoteCategory(chosenCategory : String, noteId : Long)
 
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
-    fun getNote(id : Long) : Flow<Note>
+    fun getNote(id : Long) : Flow<NoteEntity>
 
     @Query("SELECT * FROM trash_note_table WHERE trash_note_db_id = :id")
-    fun getTrashNote(id : Long) : Flow<TrashNote>
+    fun getTrashNote(id : Long) : Flow<TrashNoteEntity>
 
-    @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No Category')")
+    @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No CategoryEntity')")
     suspend fun defaultCategoryExists() : Boolean
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCategory(category : Category)
+    suspend fun insertCategory(category : CategoryEntity)
 
     @Query("SELECT * FROM note_table")
-    fun getAllNotes() : Flow<List<Note>>
+    fun getAllNotes() : Flow<List<NoteEntity>>
 
     @Query("DELETE FROM note_table WHERE note_db_id = :id")
     suspend fun deleteNote(id : Long)
@@ -49,19 +49,19 @@ interface DatabaseDao {
     suspend fun deleteCategory(id : Long)
 
     @Query("SELECT * FROM note_table WHERE category = :category")
-    fun getNotesOfThisCategory(category : String) : Flow<List<Note>>
+    fun getNotesOfThisCategory(category : String) : Flow<List<NoteEntity>>
 
     @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle")
-    fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>>
+    fun getAllCategoriesAndNotes() : Flow<Map<CategoryEntity, List<NoteEntity>>>
 
     @Query("SELECT * FROM trash_note_table")
-    fun getAllTrashNotes() : Flow<List<TrashNote>>
+    fun getAllTrashNotes() : Flow<List<TrashNoteEntity>>
 
     @Query("SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle WHERE note_db_id = :id")
-    fun getNoteWithCategory(id : Long) : Flow<Map<Category, Note>>
+    fun getNoteWithCategory(id : Long) : Flow<Map<CategoryEntity, NoteEntity>>
 
     @Query("SELECT * FROM category_table")
-    fun getAllCategories() : Flow<List<Category>>
+    fun getAllCategories() : Flow<List<CategoryEntity>>
 
     @Query("DELETE FROM note_table ")
     suspend fun deleteAllNotes()

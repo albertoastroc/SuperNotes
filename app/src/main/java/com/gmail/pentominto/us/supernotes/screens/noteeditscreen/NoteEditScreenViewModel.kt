@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.entities.CategoryEntity
+import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,15 +56,17 @@ class NoteEditScreenViewModel @Inject constructor(
 
             if (! databaseDao.defaultCategoryExists()) {
 
-                insertCategory("No Category")
+                insertCategory("No CategoryEntity")
             }
 
             getNote(
                 databaseDao.insertNote(
-                    Note(
-                        category = "No Category",
+                    NoteEntity(
+                        category = "No CategoryEntity",
                         createdDate = noteEditState.value.currentDate,
-                        lastModified = noteEditState.value.currentDate
+                        lastModified = noteEditState.value.currentDate,
+                        noteBody = noteEditState.value.noteBody,
+                        noteTitle = noteEditState.value.noteTitle
                     )
                 )
             )
@@ -94,11 +96,11 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             saveNoteText()
-            databaseDao.insertCategory(Category(categoryName))
+            databaseDao.insertCategory(CategoryEntity(categoryName))
         }
     }
 
-    fun deleteCategory(category : Category) {
+    fun deleteCategory(category : CategoryEntity) {
 
         viewModelScope.launch {
 
@@ -111,7 +113,7 @@ class NoteEditScreenViewModel @Inject constructor(
                 notesList.forEach { note ->
 
                     databaseDao.updateNoteCategory(
-                        "No Category",
+                        "No CategoryEntity",
                         note.noteId
                     )
                 }
@@ -131,7 +133,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveNoteCategory(category : Category) {
+    fun saveNoteCategory(category : CategoryEntity) {
 
         viewModelScope.launch {
 

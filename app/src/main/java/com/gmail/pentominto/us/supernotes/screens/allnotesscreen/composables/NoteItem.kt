@@ -21,11 +21,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
 
 @Composable
 fun NoteItem(
-    note : Note,
+    note : NoteEntity,
     modifier : Modifier,
     onClick : (Long) -> Unit
 ) {
@@ -153,7 +153,7 @@ fun NoteItem(
 
 @Composable
 fun NoteItemSearchResult(
-    note : Note,
+    note : NoteEntity,
     query : String,
     modifier : Modifier,
     onClick : (Long) -> Unit

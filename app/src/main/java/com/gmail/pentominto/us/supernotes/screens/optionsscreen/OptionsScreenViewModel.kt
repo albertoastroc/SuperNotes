@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -85,7 +85,7 @@ class OptionsScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             databaseDao.insertNote(
-                Note(
+                NoteEntity(
                     noteTitle = "Welcome",
                     createdDate = _optionsScreenState.value.currentDate,
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
