@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.entities.CategoryEntity
-import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
+import com.gmail.pentominto.us.supernotes.data.entities.Category
+import com.gmail.pentominto.us.supernotes.data.entities.Note
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,14 +20,14 @@ class NoteEditScreenViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private val noteId : Long? = savedStateHandle["noteId"]
+    private val noteId : Int = checkNotNull( savedStateHandle["noteId"] )
 
     private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState : State<NoteEditState> = _noteEditState
 
-    private fun getNote(noteId : Long) {
+    private fun getNote(noteId : Int) {
 
-        if (noteId == 0L) {
+        if (noteId == 0) {
 
             insertNewNote()
         } else {
@@ -40,7 +40,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
                         _noteEditState.value = _noteEditState.value.copy(
                             noteCategory = it.key,
-                            note = it.value,
                             noteTitle = it.value.noteTitle,
                             noteBody = it.value.noteBody
                         )
@@ -56,19 +55,19 @@ class NoteEditScreenViewModel @Inject constructor(
 
             if (! databaseDao.defaultCategoryExists()) {
 
-                insertCategory("No CategoryEntity")
+                insertCategory("No Category")
             }
 
             getNote(
                 databaseDao.insertNote(
-                    NoteEntity(
-                        category = "No CategoryEntity",
+                    Note(
+                        category = "No Category",
                         createdDate = noteEditState.value.currentDate,
                         lastModified = noteEditState.value.currentDate,
                         noteBody = noteEditState.value.noteBody,
                         noteTitle = noteEditState.value.noteTitle
                     )
-                )
+                ).toInt()
             )
         }
     }
@@ -96,11 +95,11 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             saveNoteText()
-            databaseDao.insertCategory(CategoryEntity(categoryName))
+            databaseDao.insertCategory(Category(categoryName))
         }
     }
 
-    fun deleteCategory(category : CategoryEntity) {
+    fun deleteCategory(category : Category) {
 
         viewModelScope.launch {
 
@@ -113,7 +112,7 @@ class NoteEditScreenViewModel @Inject constructor(
                 notesList.forEach { note ->
 
                     databaseDao.updateNoteCategory(
-                        "No CategoryEntity",
+                        "No Category",
                         note.noteId
                     )
                 }
@@ -125,22 +124,22 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             databaseDao.updateNote(
-                noteTitle = _noteEditState.value.noteTitle.toString(),
-                noteBody = _noteEditState.value.noteBody.toString(),
-                noteId = _noteEditState.value.note.noteId,
+                noteTitle = _noteEditState.value.noteTitle,
+                noteBody = _noteEditState.value.noteBody,
+                noteId = noteId,
                 lastModified = _noteEditState.value.currentDate
             )
         }
     }
 
-    fun saveNoteCategory(category : CategoryEntity) {
+    fun saveNoteCategory(category : Category) {
 
         viewModelScope.launch {
 
             saveNoteText()
             databaseDao.updateNoteCategory(
                 chosenCategory = category.categoryTitle,
-                noteId = _noteEditState.value.note.noteId
+                noteId = noteId
             )
         }
     }
@@ -160,10 +159,8 @@ class NoteEditScreenViewModel @Inject constructor(
     }
 
     init {
-        if (noteId != null) {
             getNote(noteId)
             getCategories()
             getCurrentDate()
-        }
     }
 }

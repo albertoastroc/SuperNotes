@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "trash_note_table")
-data class TrashNoteEntity(
+data class TrashNote(
 
     var noteTitle : String,
 
@@ -19,5 +19,5 @@ data class TrashNoteEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "trash_note_db_id")
-    var noteId : Long = 0,
+    var noteId : Int = 0,
 )

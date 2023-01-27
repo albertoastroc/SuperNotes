@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
-    onNoteClick : (Long) -> Unit,
+    onNoteClick : (Int) -> Unit,
     onOptionsClick : (Int) -> Unit,
 ) {
 
@@ -203,7 +203,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "New NoteEntity",
+                        text = "New Note",
                         color = MaterialTheme.colors.onSecondary
                     )
                 },
@@ -215,7 +215,7 @@ fun AllNotesScreen(
                     )
                 },
                 expanded = listState.isScrollingUp(),
-                onClick = { onNoteClick(0L) },
+                onClick = { onNoteClick(0) },
                 containerColor = MaterialTheme.colors.secondary,
             )
         }

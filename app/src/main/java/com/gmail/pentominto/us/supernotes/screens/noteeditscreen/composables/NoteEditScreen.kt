@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.entities.CategoryEntity
+import com.gmail.pentominto.us.supernotes.data.entities.Category
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
@@ -311,11 +311,11 @@ fun NoteEditScreen(
 
 @Composable
 fun CategoriesList(
-    categories : List<CategoryEntity>,
-    currentCategory : CategoryEntity,
+    categories : List<Category>,
+    currentCategory : Category,
     onClickDialog : (String) -> Unit,
-    onDeleteCategory : (CategoryEntity) -> Unit,
-    onClickCategory : (CategoryEntity) -> Unit,
+    onDeleteCategory : (Category) -> Unit,
+    onClickCategory : (Category) -> Unit,
 ) {
 
     val openCategoryDialog = remember { mutableStateOf(false) }
@@ -380,7 +380,7 @@ fun CategoriesList(
                                 value = dialogInput.value,
                                 modifier = Modifier
                                     .padding(top = 8.dp),
-                                placeholder = { Text(text = "New CategoryEntity Name...") },
+                                placeholder = { Text(text = "New Category Name...") },
                                 onValueChange = {
                                     dialogInput.value = it
                                     dialogTitleState.value = ""
@@ -420,7 +420,7 @@ fun CategoriesList(
                                         openCategoryDialog.value = false
                                         dialogInput.value = ""
                                     } else {
-                                        dialogTitleState.value = "CategoryEntity name is empty"
+                                        dialogTitleState.value = "Category name is empty"
                                     }
                                 },
                                 modifier = Modifier.width(100.dp),
@@ -475,7 +475,7 @@ fun CategoriesList(
                     maxLines = 2
                 )
 
-                if (category.categoryTitle != "No CategoryEntity") {
+                if (category.categoryTitle != "No Category") {
 
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_delete_24),

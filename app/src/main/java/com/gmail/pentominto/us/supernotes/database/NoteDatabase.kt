@@ -2,12 +2,12 @@ package com.gmail.pentominto.us.supernotes.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.gmail.pentominto.us.supernotes.data.entities.CategoryEntity
-import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
-import com.gmail.pentominto.us.supernotes.data.entities.TrashNoteEntity
+import com.gmail.pentominto.us.supernotes.data.entities.Category
+import com.gmail.pentominto.us.supernotes.data.entities.Note
+import com.gmail.pentominto.us.supernotes.data.entities.TrashNote
 
 @Database(
-    entities = [NoteEntity::class, CategoryEntity::class, TrashNoteEntity::class],
+    entities = [Note::class, Category::class, TrashNote::class],
     version = 1,
     exportSchema = false
 )

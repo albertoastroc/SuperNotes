@@ -12,14 +12,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
+import com.gmail.pentominto.us.supernotes.data.entities.Note
 import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
 fun SwipeableNoteRow(
-    deleteNote : (Long) -> Unit,
+    deleteNote : (Int) -> Unit,
     sendToTrash : () -> Unit,
-    note : NoteEntity,
+    note : Note,
     trashEnabled : Boolean,
     content : @Composable () -> Unit,
 ) {

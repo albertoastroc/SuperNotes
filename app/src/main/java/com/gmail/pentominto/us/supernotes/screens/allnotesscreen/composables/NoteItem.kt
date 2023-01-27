@@ -21,13 +21,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.entities.NoteEntity
+import com.gmail.pentominto.us.supernotes.data.entities.Note
 
 @Composable
 fun NoteItem(
-    note : NoteEntity,
+    note : Note,
     modifier : Modifier,
-    onClick : (Long) -> Unit
+    onClick : (Int) -> Unit
 ) {
 
     Card(
@@ -153,10 +153,10 @@ fun NoteItem(
 
 @Composable
 fun NoteItemSearchResult(
-    note : NoteEntity,
+    note : Note,
     query : String,
     modifier : Modifier,
-    onClick : (Long) -> Unit
+    onClick : (Int) -> Unit
 ) {
 
     val finder = note.noteBody?.indexOf(query)
