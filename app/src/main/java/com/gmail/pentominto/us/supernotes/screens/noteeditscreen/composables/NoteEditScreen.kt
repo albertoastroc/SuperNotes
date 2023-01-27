@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoteEditScreen(
-    noteId : Long,
+    noteId : Int,
     viewModel : NoteEditScreenViewModel = hiltViewModel()
 
 ) {

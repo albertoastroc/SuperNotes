@@ -17,7 +17,7 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
 fun SwipeableTrashNoteRow(
-    deleteNote : (Long) -> Unit,
+    deleteNote : (Int) -> Unit,
     restoreNote : () -> Unit,
     trashNote : TrashNote,
     content : @Composable () -> Unit,

@@ -24,7 +24,7 @@ import com.gmail.pentominto.us.supernotes.data.entities.TrashNote
 fun TrashNoteItem(
     note : TrashNote,
     modifier : Modifier,
-    onClick : (Long) -> Unit
+    onClick : (Int) -> Unit
 ) {
 
     Card(

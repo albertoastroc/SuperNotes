@@ -159,14 +159,14 @@ fun NoteItemSearchResult(
     onClick : (Int) -> Unit
 ) {
 
-    val finder = note.noteBody?.indexOf(query)
+    val finder = note.noteBody.indexOf(query)
 
-    val noteLength = note.noteBody?.length
+    val noteLength = note.noteBody.length
 
-    val queryResult = finder?.let {
-        note.noteBody?.substring(
+    val queryResult = finder.let {
+        note.noteBody.substring(
             it,
-            noteLength ?: query.length
+            noteLength
         )
     }
 

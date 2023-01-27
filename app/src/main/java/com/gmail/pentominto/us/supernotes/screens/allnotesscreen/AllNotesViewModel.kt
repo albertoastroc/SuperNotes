@@ -36,10 +36,10 @@ class AllNotesViewModel @Inject constructor(
 
             val notesSearchResults = _allNotesState.value.notesWithNoCategories.filter { note ->
 
-                note.noteBody?.contains(
+                note.noteBody.contains(
                     input,
                     true
-                ) ?: false
+                )
             }
 
             _allNotesState.value = _allNotesState.value.copy(notesSearchResults = notesSearchResults)

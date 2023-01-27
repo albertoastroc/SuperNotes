@@ -18,11 +18,11 @@ import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.ReadOnlyNot
 
 @Composable
 fun ReadOnlyNoteScreen(
-    trashNoteId : Long,
+    trashNoteId : Int,
     viewModel : ReadOnlyNoteViewModel = hiltViewModel()
 ) {
 
-    val trashNoteState = remember { viewModel.trashNoteState }
+    val trashNoteState = remember { viewModel.readOnlyNoteState }
 
     Column(
         modifier = Modifier
@@ -50,7 +50,7 @@ fun ReadOnlyNoteScreen(
             ) {
 
                 Text(
-                    text = trashNoteState.value.noteTitle.toString(),
+                    text = trashNoteState.value.trashNote?.noteTitle ?: "",
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 18.sp,
                     modifier = Modifier
@@ -78,7 +78,7 @@ fun ReadOnlyNoteScreen(
         ) {
 
             Text(
-                text = trashNoteState.value.noteBody.toString(),
+                text = trashNoteState.value.trashNote?.noteBody ?: "",
                 color = MaterialTheme.colors.onBackground,
                 fontSize = 18.sp,
                 modifier = Modifier

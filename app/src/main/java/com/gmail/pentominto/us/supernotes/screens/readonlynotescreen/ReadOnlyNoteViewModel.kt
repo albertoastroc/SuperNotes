@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.entities.TrashNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,10 +17,10 @@ class ReadOnlyNoteViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private val trashNoteId : Long? = savedStateHandle["trashNoteId"]
+    private val trashNoteId : Int = checkNotNull( savedStateHandle["trashNoteId"])
 
-    private val _trashNoteState : MutableState<TrashNote> = mutableStateOf(TrashNote())
-    val trashNoteState : State<TrashNote> = _trashNoteState
+    private val _readOnlyNoteState : MutableState<ReadOnlyNoteScreenState> = mutableStateOf(ReadOnlyNoteScreenState())
+    val readOnlyNoteState : State<ReadOnlyNoteScreenState> = _readOnlyNoteState
 
     private fun getTrashNote(trashNoteId : Int) {
 
@@ -29,14 +28,14 @@ class ReadOnlyNoteViewModel @Inject constructor(
 
             databaseDao.getTrashNote(trashNoteId).collect { trashNote ->
 
-                _trashNoteState.value = trashNote
+                _readOnlyNoteState.value = _readOnlyNoteState.value.copy(
+                    trashNote = trashNote
+                )
             }
         }
     }
 
     init {
-        if (trashNoteId != null) {
             getTrashNote(trashNoteId)
-        }
     }
 }

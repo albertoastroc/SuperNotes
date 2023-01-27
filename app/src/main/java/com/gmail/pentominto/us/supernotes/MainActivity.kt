@@ -298,13 +298,13 @@ fun SuperNotesApp() {
             },
             arguments = listOf(
                 navArgument("noteId") {
-                    type = NavType.LongType
+                    type = NavType.IntType
                 }
             ),
         ) {
 
             val noteId = remember {
-                it.arguments?.getLong("noteId")
+                it.arguments?.getInt("noteId")
             }
             if (noteId != null) {
                 NoteEditScreen(noteId = noteId)
@@ -355,13 +355,13 @@ fun SuperNotesApp() {
             },
             arguments = listOf(
                 navArgument("trashNoteId") {
-                    type = NavType.LongType
+                    type = NavType.IntType
                 }
             )
         ) {
 
             val trashNoteId = remember {
-                it.arguments?.getLong("trashNoteId")
+                it.arguments?.getInt("trashNoteId")
             }
             if (trashNoteId != null) {
                 ReadOnlyNoteScreen(trashNoteId = trashNoteId)
