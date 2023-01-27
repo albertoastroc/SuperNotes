@@ -37,7 +37,8 @@ object AppModule {
         DATABASE_NAME
     )
 
-        .createFromAsset(PREPOP_DATABASE_NAME)
+            //TODO fix prepopulated database
+//        .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
         .getNoteDatabaseDao()
 
