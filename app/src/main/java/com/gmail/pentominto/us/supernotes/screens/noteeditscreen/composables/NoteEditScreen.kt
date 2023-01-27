@@ -73,12 +73,8 @@ fun NoteEditScreen(
 
             when (event) {
 
-                Lifecycle.Event.ON_PAUSE,
-                Lifecycle.Event.ON_STOP,
-                Lifecycle.Event.ON_DESTROY -> viewModel.saveNoteText()
-                else                       -> {
-                    //Nothing
-                }
+                Lifecycle.Event.ON_STOP-> viewModel.saveNoteText()
+                else                   -> {}
             }
         }
 
