@@ -8,8 +8,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.entities.Note
-import com.gmail.pentominto.us.supernotes.data.entities.TrashNote
+import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -63,12 +63,12 @@ class AllNotesViewModel @Inject constructor(
         databaseDao.deleteNote(noteId)
     }
 
-    fun sendToTrash(note : Note) {
+    fun sendToTrash(note : SavedNote) {
 
         viewModelScope.launch {
 
             databaseDao.insertTrashNote(
-                TrashNote(
+                DiscardedNote(
                     noteTitle = note.noteTitle,
                     noteBody = note.noteBody,
                     createdDate = note.createdDate,

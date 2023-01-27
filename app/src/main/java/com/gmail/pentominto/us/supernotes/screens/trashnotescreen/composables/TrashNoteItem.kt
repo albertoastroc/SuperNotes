@@ -18,11 +18,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.entities.TrashNote
+import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 
 @Composable
 fun TrashNoteItem(
-    note : TrashNote,
+    note : DiscardedNote,
     modifier : Modifier,
     onClick : (Int) -> Unit
 ) {

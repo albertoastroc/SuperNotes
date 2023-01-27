@@ -1,13 +1,13 @@
-package com.gmail.pentominto.us.supernotes.data.entities
+package com.gmail.pentominto.us.supernotes.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "category_table")
-data class Category(
+data class NoteCategory(
 
-    var categoryTitle : String = "No Category",
+    var categoryTitle : String = "No NoteCategory",
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "category_db_id")

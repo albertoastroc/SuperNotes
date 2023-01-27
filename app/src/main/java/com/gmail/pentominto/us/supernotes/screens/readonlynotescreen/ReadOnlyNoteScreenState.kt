@@ -1,7 +1,7 @@
 package com.gmail.pentominto.us.supernotes.screens.readonlynotescreen
 
-import com.gmail.pentominto.us.supernotes.data.entities.TrashNote
+import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 
 data class ReadOnlyNoteScreenState(
-    val trashNote : TrashNote? = null,
+    val trashNote : DiscardedNote? = null,
 )

@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,11 +21,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.entities.Note
+import com.gmail.pentominto.us.supernotes.data.SavedNote
 
 @Composable
 fun NoteItem(
-    note : Note,
+    note : SavedNote,
     modifier : Modifier,
     onClick : (Int) -> Unit
 ) {
@@ -153,7 +153,7 @@ fun NoteItem(
 
 @Composable
 fun NoteItemSearchResult(
-    note : Note,
+    note : SavedNote,
     query : String,
     modifier : Modifier,
     onClick : (Int) -> Unit

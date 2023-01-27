@@ -17,7 +17,7 @@ class ReadOnlyNoteViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private val trashNoteId : Int = checkNotNull( savedStateHandle["trashNoteId"])
+    private val trashNoteId : Int = checkNotNull(savedStateHandle["trashNoteId"])
 
     private val _readOnlyNoteState : MutableState<ReadOnlyNoteScreenState> = mutableStateOf(ReadOnlyNoteScreenState())
     val readOnlyNoteState : State<ReadOnlyNoteScreenState> = _readOnlyNoteState
@@ -36,6 +36,6 @@ class ReadOnlyNoteViewModel @Inject constructor(
     }
 
     init {
-            getTrashNote(trashNoteId)
+        getTrashNote(trashNoteId)
     }
 }
