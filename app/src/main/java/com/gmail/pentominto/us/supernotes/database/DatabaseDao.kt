@@ -24,9 +24,6 @@ interface DatabaseDao {
     @Query("UPDATE note_table SET category = :chosenCategory WHERE note_db_id = :noteId")
     suspend fun updateNoteCategory(chosenCategory : String, noteId : Long)
 
-    @Query("SELECT * FROM note_table WHERE note_db_id = :id")
-    fun getNote(id : Long) : Flow<Note>
-
     @Query("SELECT * FROM trash_note_table WHERE trash_note_db_id = :id")
     fun getTrashNote(id : Long) : Flow<TrashNote>
 
@@ -35,9 +32,6 @@ interface DatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category : Category)
-
-    @Query("SELECT * FROM note_table")
-    fun getAllNotes() : Flow<List<Note>>
 
     @Query("DELETE FROM note_table WHERE note_db_id = :id")
     suspend fun deleteNote(id : Long)
