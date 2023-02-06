@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,13 +21,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.SavedNote
 
 @Composable
 fun NoteItem(
-    note : Note,
+    note : SavedNote,
     modifier : Modifier,
-    onClick : (Long) -> Unit
+    onClick : (Int) -> Unit
 ) {
 
     Card(
@@ -153,20 +153,20 @@ fun NoteItem(
 
 @Composable
 fun NoteItemSearchResult(
-    note : Note,
+    note : SavedNote,
     query : String,
     modifier : Modifier,
-    onClick : (Long) -> Unit
+    onClick : (Int) -> Unit
 ) {
 
-    val finder = note.noteBody?.indexOf(query)
+    val finder = note.noteBody.indexOf(query)
 
-    val noteLength = note.noteBody?.length
+    val noteLength = note.noteBody.length
 
-    val queryResult = finder?.let {
-        note.noteBody?.substring(
+    val queryResult = finder.let {
+        note.noteBody.substring(
             it,
-            noteLength ?: query.length
+            noteLength
         )
     }
 

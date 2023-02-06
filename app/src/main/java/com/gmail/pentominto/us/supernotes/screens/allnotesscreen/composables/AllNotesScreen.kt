@@ -21,13 +21,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.MenuItem
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.NoteItem
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.NoteItemSearchResult
 import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
     viewModel : AllNotesViewModel = hiltViewModel(),
-    onNoteClick : (Long) -> Unit,
+    onNoteClick : (Int) -> Unit,
     onOptionsClick : (Int) -> Unit,
 ) {
 
@@ -203,7 +204,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "New Note",
+                        text = "New SavedNote",
                         color = MaterialTheme.colors.onSecondary
                     )
                 },
@@ -215,7 +216,7 @@ fun AllNotesScreen(
                     )
                 },
                 expanded = listState.isScrollingUp(),
-                onClick = { onNoteClick(0L) },
+                onClick = { onNoteClick(0) },
                 containerColor = MaterialTheme.colors.secondary,
             )
         }

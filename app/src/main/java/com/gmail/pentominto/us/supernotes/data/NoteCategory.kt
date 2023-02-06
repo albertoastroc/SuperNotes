@@ -5,11 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "category_table")
-data class Category(
+data class NoteCategory(
 
     var categoryTitle : String = "No Category",
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "category_db_id")
-    var categoryId : Long = 0
+    var categoryId : Int = 0
 )

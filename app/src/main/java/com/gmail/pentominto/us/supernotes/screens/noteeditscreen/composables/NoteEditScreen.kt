@@ -14,7 +14,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
@@ -40,7 +39,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoteEditScreen(
-    noteId : Long,
+    noteId : Int,
     viewModel : NoteEditScreenViewModel = hiltViewModel()
 
 ) {
@@ -56,8 +55,6 @@ fun NoteEditScreen(
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
-
-    val focusRequester = remember { FocusRequester() }
 
     val focusManager = LocalFocusManager.current
 
@@ -76,12 +73,8 @@ fun NoteEditScreen(
 
             when (event) {
 
-                Lifecycle.Event.ON_PAUSE,
-                Lifecycle.Event.ON_STOP,
-                Lifecycle.Event.ON_DESTROY -> viewModel.saveNoteText()
-                else                       -> {
-                    //Nothing
-                }
+                Lifecycle.Event.ON_STOP-> viewModel.saveNoteText()
+                else                   -> {}
             }
         }
 
@@ -186,7 +179,7 @@ fun NoteEditScreen(
 
                                     clipboardManager.setText(
                                         AnnotatedString(
-                                            noteState.value.noteBody ?: ""
+                                            noteState.value.noteBody
                                         )
                                     )
                                     dropDownMenuExpanded = false
@@ -217,7 +210,7 @@ fun NoteEditScreen(
                                         action = Intent.ACTION_SEND
                                         putExtra(
                                             Intent.EXTRA_TEXT,
-                                            noteState.value.noteBody ?: ""
+                                            noteState.value.noteBody
                                         )
                                         type = "text/plain"
                                     }
@@ -311,11 +304,11 @@ fun NoteEditScreen(
 
 @Composable
 fun CategoriesList(
-    categories : List<Category>,
-    currentCategory : Category,
+    categories : List<NoteCategory>,
+    currentCategory : NoteCategory,
     onClickDialog : (String) -> Unit,
-    onDeleteCategory : (Category) -> Unit,
-    onClickCategory : (Category) -> Unit,
+    onDeleteCategory : (NoteCategory) -> Unit,
+    onClickCategory : (NoteCategory) -> Unit,
 ) {
 
     val openCategoryDialog = remember { mutableStateOf(false) }
@@ -380,7 +373,7 @@ fun CategoriesList(
                                 value = dialogInput.value,
                                 modifier = Modifier
                                     .padding(top = 8.dp),
-                                placeholder = { Text(text = "New Category Name...") },
+                                placeholder = { Text(text = "New NoteCategory Name...") },
                                 onValueChange = {
                                     dialogInput.value = it
                                     dialogTitleState.value = ""
@@ -420,7 +413,7 @@ fun CategoriesList(
                                         openCategoryDialog.value = false
                                         dialogInput.value = ""
                                     } else {
-                                        dialogTitleState.value = "Category name is empty"
+                                        dialogTitleState.value = "NoteCategory name is empty"
                                     }
                                 },
                                 modifier = Modifier.width(100.dp),
@@ -475,7 +468,7 @@ fun CategoriesList(
                     maxLines = 2
                 )
 
-                if (category.categoryTitle != "No Category") {
+                if (category.categoryTitle != "No NoteCategory") {
 
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_delete_24),

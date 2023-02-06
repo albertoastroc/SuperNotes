@@ -1,14 +1,14 @@
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
-import com.gmail.pentominto.us.supernotes.data.Category
-import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.data.NoteCategory
+import com.gmail.pentominto.us.supernotes.data.SavedNote
 
 
 data class NoteEditState(
-    val note : Note = Note(),
-    val noteTitle : String? = String(),
-    val noteBody : String? = String(),
-    val categories : List<Category> = emptyList(),
-    val noteCategory : Category = Category(),
+    val note : SavedNote? = null,
+    val noteTitle : String = "",
+    val noteBody : String = "",
+    val categories : List<NoteCategory> = emptyList(),
+    val noteCategory : NoteCategory = NoteCategory(),
     val currentDate : String = String()
 )

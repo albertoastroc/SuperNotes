@@ -5,19 +5,19 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "note_table")
-data class Note(
+data class SavedNote(
 
-    var noteTitle : String? = "",
+    var noteTitle : String,
 
-    var noteBody : String? = "",
+    var noteBody : String,
 
-    var category : String? = "No Category",
+    var category : String = "No Category",
 
-    var createdDate : String = "",
+    var createdDate : String,
 
-    var lastModified : String = "",
+    var lastModified : String,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")
-    var noteId : Long = 0,
+    var noteId : Int = 0,
 )

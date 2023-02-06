@@ -8,9 +8,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.data.TrashNote
-import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.DiscardedNote
+import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
-    val databaseDao : DatabaseDao,
+    private val repository : LocalRepository,
     private val dataStore : DataStore<Preferences>
 ) : ViewModel() {
 
@@ -36,10 +36,10 @@ class AllNotesViewModel @Inject constructor(
 
             val notesSearchResults = _allNotesState.value.notesWithNoCategories.filter { note ->
 
-                note.noteBody?.contains(
+                note.noteBody.contains(
                     input,
                     true
-                ) ?: false
+                )
             }
 
             _allNotesState.value = _allNotesState.value.copy(notesSearchResults = notesSearchResults)
@@ -49,7 +49,7 @@ class AllNotesViewModel @Inject constructor(
 
     fun getNotesList() = viewModelScope.launch {
 
-        databaseDao.getAllCategoriesAndNotes().collect { categoryNotesMap ->
+        repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
 
             _allNotesState.value = _allNotesState.value.copy(notesWithCategory = categoryNotesMap)
 
@@ -58,20 +58,19 @@ class AllNotesViewModel @Inject constructor(
         }
     }
 
-    fun deleteNote(noteId : Long) = viewModelScope.launch {
+    fun deleteNote(noteId : Int) = viewModelScope.launch {
 
-        databaseDao.deleteNote(noteId)
+        repository.deleteNote(noteId)
     }
 
-    fun sendToTrash(note : Note) {
+    fun sendToTrash(note : SavedNote) {
 
         viewModelScope.launch {
 
-            databaseDao.insertTrashNote(
-                TrashNote(
+            repository.insertTrashNote(
+                DiscardedNote(
                     noteTitle = note.noteTitle,
                     noteBody = note.noteBody,
-                    category = note.category,
                     createdDate = note.createdDate,
                     lastModified = note.lastModified,
                     dateDeleted = allNotesState.value.currentDate
