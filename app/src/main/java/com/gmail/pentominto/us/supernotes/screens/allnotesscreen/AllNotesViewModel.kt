@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.data.DiscardedNote
-import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
-    val databaseDao : DatabaseDao,
+    private val repository : LocalRepository,
     private val dataStore : DataStore<Preferences>
 ) : ViewModel() {
 
@@ -49,7 +49,7 @@ class AllNotesViewModel @Inject constructor(
 
     fun getNotesList() = viewModelScope.launch {
 
-        databaseDao.getAllCategoriesAndNotes().collect { categoryNotesMap ->
+        repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
 
             _allNotesState.value = _allNotesState.value.copy(notesWithCategory = categoryNotesMap)
 
@@ -60,14 +60,14 @@ class AllNotesViewModel @Inject constructor(
 
     fun deleteNote(noteId : Int) = viewModelScope.launch {
 
-        databaseDao.deleteNote(noteId)
+        repository.deleteNote(noteId)
     }
 
     fun sendToTrash(note : SavedNote) {
 
         viewModelScope.launch {
 
-            databaseDao.insertTrashNote(
+            repository.insertTrashNote(
                 DiscardedNote(
                     noteTitle = note.noteTitle,
                     noteBody = note.noteBody,

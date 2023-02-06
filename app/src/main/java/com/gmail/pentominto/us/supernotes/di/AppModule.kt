@@ -42,7 +42,6 @@ object AppModule {
             //TODO fix prepopulated database
 //        .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
-        .getNoteDatabaseDao()
 
     @Provides
     @Singleton

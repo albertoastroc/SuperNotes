@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
-    private val db : NoteDatabase
+    db : NoteDatabase
 ) : LocalRepository {
 
     private val dao = db.getNoteDatabaseDao()

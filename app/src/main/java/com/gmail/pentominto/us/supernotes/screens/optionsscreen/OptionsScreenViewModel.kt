@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
     private val dataStore : DataStore<Preferences>,
-    private val databaseDao : DatabaseDao
+    private val repository : LocalRepository
 ) : ViewModel() {
 
     private val _optionsScreenState : MutableState<OptionsScreenState> = mutableStateOf(OptionsScreenState())
@@ -84,10 +85,10 @@ class OptionsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.insertNote(
+            repository.insertNote(
                 SavedNote(
                     noteTitle = "Welcome",
-                    createdDate = _optionsScreenState.value.currentDate,
+                    createdDate = DateGetter.getCurrentDate(),
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
                             "\n" +
                             "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
@@ -100,7 +101,7 @@ class OptionsScreenViewModel @Inject constructor(
                             "\n" +
                             "5. If this note is deleted, it can later be restored in Options.\n" +
                             "\n",
-                    lastModified = _optionsScreenState.value.currentDate
+                    lastModified = DateGetter.getCurrentDate(),
                 )
             )
         }
@@ -147,7 +148,7 @@ class OptionsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.deleteAllNotes()
+            repository.deleteAllNotes()
         }
     }
 
@@ -155,7 +156,7 @@ class OptionsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.deleteAllTrashNotes()
+            repository.deleteAllTrashNotes()
         }
     }
 

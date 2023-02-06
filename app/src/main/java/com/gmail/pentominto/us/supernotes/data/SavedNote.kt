@@ -11,7 +11,7 @@ data class SavedNote(
 
     var noteBody : String,
 
-    var category : String = "No NoteCategory",
+    var category : String = "No Category",
 
     var createdDate : String,
 

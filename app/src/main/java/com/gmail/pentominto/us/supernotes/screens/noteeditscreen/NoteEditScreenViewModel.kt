@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
-    private val databaseDao : DatabaseDao,
+    private val repository : LocalRepository,
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
@@ -34,7 +35,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
             viewModelScope.launch {
 
-                databaseDao.getNoteWithCategory(noteId).collect { categoryNoteMap ->
+                repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
 
                     categoryNoteMap.forEach {
 
@@ -54,11 +55,11 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             getNote(
-                databaseDao.insertNote(
+                repository.insertNote(
                     SavedNote(
-                        category = "No NoteCategory",
-                        createdDate = noteEditState.value.currentDate,
-                        lastModified = noteEditState.value.currentDate,
+                        category = "No Category",
+                        createdDate = DateGetter.getCurrentDate(),
+                        lastModified = DateGetter.getCurrentDate(),
                         noteBody = noteEditState.value.noteBody,
                         noteTitle = noteEditState.value.noteTitle
                     )
@@ -71,7 +72,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.getAllCategories().collect {
+            repository.getAllCategories().collect {
 
                 _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
@@ -90,7 +91,7 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             saveNoteText()
-            databaseDao.insertCategory(NoteCategory(categoryName))
+            repository.insertCategory(NoteCategory(categoryName))
         }
     }
 
@@ -98,15 +99,15 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val notesToUpdate = databaseDao.getNotesOfThisCategory(category.categoryTitle)
+            val notesToUpdate = repository.getNotesOfThisCategory(category.categoryTitle)
 
-            databaseDao.deleteCategory(category.categoryId)
+            repository.deleteCategory(category.categoryId)
 
             notesToUpdate.collect { notesList ->
 
                 notesList.forEach { note ->
 
-                    databaseDao.updateNoteCategory(
+                    repository.updateNoteCategory(
                         "No NoteCategory",
                         note.noteId
                     )
@@ -118,7 +119,7 @@ class NoteEditScreenViewModel @Inject constructor(
     fun saveNoteText() {
 
         viewModelScope.launch {
-            databaseDao.updateNote(
+            repository.updateNote(
                 noteTitle = _noteEditState.value.noteTitle,
                 noteBody = _noteEditState.value.noteBody,
                 noteId = noteId,
@@ -132,7 +133,7 @@ class NoteEditScreenViewModel @Inject constructor(
         viewModelScope.launch {
 
             saveNoteText()
-            databaseDao.updateNoteCategory(
+            repository.updateNoteCategory(
                 chosenCategory = category.categoryTitle,
                 noteId = noteId
             )

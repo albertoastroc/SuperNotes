@@ -7,13 +7,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
+import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ReadOnlyNoteViewModel @Inject constructor(
-    private val databaseDao : DatabaseDao,
+    private val repository : LocalRepository,
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
@@ -26,7 +27,7 @@ class ReadOnlyNoteViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            databaseDao.getTrashNote(trashNoteId).collect { trashNote ->
+            repository.getTrashNote(trashNoteId).collect { trashNote ->
 
                 _readOnlyNoteState.value = _readOnlyNoteState.value.copy(
                     trashNote = trashNote
