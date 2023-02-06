@@ -20,8 +20,6 @@ interface LocalRepository {
 
     fun getTrashNote(id : Int) : Flow<DiscardedNote>
 
-    suspend fun defaultCategoryExists() : Boolean
-
     suspend fun insertCategory(category : NoteCategory)
 
     suspend fun deleteNote(id : Int)

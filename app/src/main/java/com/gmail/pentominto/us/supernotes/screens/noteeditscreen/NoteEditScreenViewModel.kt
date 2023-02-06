@@ -53,11 +53,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            if (! databaseDao.defaultCategoryExists()) {
-
-                insertCategory("No NoteCategory")
-            }
-
             getNote(
                 databaseDao.insertNote(
                     SavedNote(

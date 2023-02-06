@@ -27,9 +27,6 @@ interface DatabaseDao {
     @Query("SELECT * FROM trash_note_table WHERE trash_note_db_id = :id")
     fun getTrashNote(id : Int) : Flow<DiscardedNote>
 
-    @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No NoteCategory')")
-    suspend fun defaultCategoryExists() : Boolean
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category : NoteCategory)
 
