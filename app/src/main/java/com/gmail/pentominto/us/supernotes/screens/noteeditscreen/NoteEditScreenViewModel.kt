@@ -54,6 +54,11 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            if (! repository.defaultCategoryExists()) {
+
+                insertCategory("No Category")
+            }
+
             getNote(
                 repository.insertNote(
                     SavedNote(

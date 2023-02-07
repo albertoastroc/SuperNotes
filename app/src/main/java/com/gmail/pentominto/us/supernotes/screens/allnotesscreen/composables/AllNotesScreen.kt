@@ -204,7 +204,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "New SavedNote",
+                        text = "New Note",
                         color = MaterialTheme.colors.onSecondary
                     )
                 },

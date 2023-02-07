@@ -106,4 +106,10 @@ class LocalRepositoryImpl @Inject constructor(
         dao.deleteAllTrashNotes()
 
     }
+
+    override suspend fun defaultCategoryExists() : Boolean {
+
+        return dao.defaultCategoryExists()
+
+    }
 }
