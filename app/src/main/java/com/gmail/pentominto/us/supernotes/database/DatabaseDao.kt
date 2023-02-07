@@ -61,7 +61,7 @@ interface DatabaseDao {
     suspend fun deleteAllTrashNotes()
 
     //temporary while prepoluated database gets fixed
-    @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No NoteCategory')")
+    @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No Category')")
     suspend fun defaultCategoryExists() : Boolean
 }
 

@@ -57,6 +57,7 @@ class NoteEditScreenViewModel @Inject constructor(
             if (! repository.defaultCategoryExists()) {
 
                 insertCategory("No Category")
+
             }
 
             getNote(

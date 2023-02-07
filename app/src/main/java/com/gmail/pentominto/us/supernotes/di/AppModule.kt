@@ -37,7 +37,7 @@ object AppModule {
         app,
         NoteDatabase::class.java,
         DATABASE_NAME)
-        .createFromAsset(PREPOP_DATABASE_NAME)
+//        .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
 
     @Provides

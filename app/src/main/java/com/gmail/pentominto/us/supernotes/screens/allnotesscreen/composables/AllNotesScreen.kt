@@ -121,7 +121,10 @@ fun AllNotesScreen(
 
                 if (allNotesState.value.searchBarInput.length >= 3) {
 
-                    items(allNotesState.value.notesSearchResults) { note ->
+                    items(
+                        items = allNotesState.value.notesSearchResults,
+                        key = { it.noteId }
+                    ) { note ->
 
                         SwipeableNoteRow(
                             deleteNote = { viewModel.deleteNote(note.noteId) },
@@ -176,7 +179,7 @@ fun AllNotesScreen(
                             }
                         }
                     }
-                } else {
+                } else if (!allNotesState.value.showCategories) {
 
                     items(
                         items = allNotesState.value.notesWithNoCategories,
