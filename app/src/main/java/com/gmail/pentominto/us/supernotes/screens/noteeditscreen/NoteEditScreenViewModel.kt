@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,7 @@ class NoteEditScreenViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private val noteId : Int = checkNotNull(savedStateHandle["noteId"])
+    private var noteId : Int = checkNotNull(savedStateHandle["noteId"])
 
     private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState : State<NoteEditState> = _noteEditState
@@ -31,6 +32,7 @@ class NoteEditScreenViewModel @Inject constructor(
         if (noteId == 0) {
 
             insertNewNote()
+
         } else {
 
             viewModelScope.launch {
@@ -42,7 +44,7 @@ class NoteEditScreenViewModel @Inject constructor(
                         _noteEditState.value = _noteEditState.value.copy(
                             noteCategory = it.key,
                             noteTitle = it.value.noteTitle,
-                            noteBody = it.value.noteBody
+                            noteBody = it.value.noteBody,
                         )
                     }
                 }
@@ -54,23 +56,17 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            if (! repository.defaultCategoryExists()) {
+            noteId = repository.insertNote(
+                SavedNote(
+                    category = "No Category",
+                    createdDate = DateGetter.getCurrentDate(),
+                    lastModified = DateGetter.getCurrentDate(),
+                    noteBody = noteEditState.value.noteBody,
+                    noteTitle = noteEditState.value.noteTitle
+                )
+            ).toInt()
 
-                insertCategory("No Category")
-
-            }
-
-            getNote(
-                repository.insertNote(
-                    SavedNote(
-                        category = "No Category",
-                        createdDate = DateGetter.getCurrentDate(),
-                        lastModified = DateGetter.getCurrentDate(),
-                        noteBody = noteEditState.value.noteBody,
-                        noteTitle = noteEditState.value.noteTitle
-                    )
-                ).toInt()
-            )
+            getNote(noteId)
         }
     }
 

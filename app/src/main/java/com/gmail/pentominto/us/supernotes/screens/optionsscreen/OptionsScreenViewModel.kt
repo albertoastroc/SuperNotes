@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.database.DatabaseDao
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
@@ -85,10 +86,19 @@ class OptionsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            if (!repository.defaultCategoryExists()) {
+
+                repository.insertCategory(
+                    NoteCategory()
+                )
+
+            }
+
             repository.insertNote(
                 SavedNote(
                     noteTitle = "Welcome",
                     createdDate = DateGetter.getCurrentDate(),
+                    category = "No Category",
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
                             "\n" +
                             "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
