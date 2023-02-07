@@ -29,11 +29,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
     private fun getNote(noteId : Int) {
 
-        if (noteId == 0) {
-
-            insertNewNote()
-
-        } else {
 
             viewModelScope.launch {
 
@@ -49,7 +44,7 @@ class NoteEditScreenViewModel @Inject constructor(
                     }
                 }
             }
-        }
+
     }
 
     private fun insertNewNote() {
@@ -65,8 +60,6 @@ class NoteEditScreenViewModel @Inject constructor(
                     noteTitle = noteEditState.value.noteTitle
                 )
             ).toInt()
-
-            getNote(noteId)
         }
     }
 
@@ -157,6 +150,13 @@ class NoteEditScreenViewModel @Inject constructor(
     }
 
     init {
+
+        if (noteId == 0) {
+
+            insertNewNote()
+
+        }
+
         getNote(noteId)
         getCategories()
         getCurrentDate()
