@@ -36,11 +36,8 @@ object AppModule {
     ) = Room.databaseBuilder(
         app,
         NoteDatabase::class.java,
-        DATABASE_NAME
-    )
-
-            //TODO fix prepopulated database
-//        .createFromAsset(PREPOP_DATABASE_NAME)
+        DATABASE_NAME)
+        .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
 
     @Provides
