@@ -8,10 +8,10 @@ data class AllNotesState(
     val notesWithNoCategories : List<SavedNote> = emptyList(),
     val notesSearchResults : List<SavedNote> = emptyList(),
     val categories : List<NoteCategory> = emptyList(),
-    val searchBarInput : String = String(),
+    val searchBarInput : String = "",
     val showCategories : Boolean = true,
     val trashEnabled : Boolean = true,
-    val currentDate : String = String(),
+    val currentDate : String = "",
     val currentList : CurrentList = CurrentList.WITH_CATEGORIES
 )
 
