@@ -59,11 +59,6 @@ class MainActivity : ComponentActivity() {
 
         actionBar?.hide()
 
-        val themeFlow : Flow<Boolean> = dataStore.data
-            .map { preferences ->
-                preferences[userDarkThemeKey] ?: false
-            }
-
         // sets up firebase id
         lifecycleScope.launch {
 
@@ -83,22 +78,29 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val themeFlow : Flow<Boolean> = dataStore.data
+            .map { preferences ->
+                preferences[userDarkThemeKey] ?: false
+            }
+
         setContent {
 
-            val savedTheme : MutableState<Boolean> = runBlocking { mutableStateOf(themeFlow.first()) }
+            val isSavedThemeDark : MutableState<Boolean> = runBlocking { mutableStateOf(themeFlow.first()) }
 
-            val latestTheme = themeFlow.collectAsState(initial = false)
+            val isCurrentThemeDark = themeFlow.collectAsState(initial = false)
 
-            val themeState : MutableState<Boolean> = remember(key1 = latestTheme.value) { mutableStateOf(savedTheme.value) }
+            val themeState : MutableState<Boolean> = remember(key1 = isCurrentThemeDark.value) { mutableStateOf(isSavedThemeDark.value) }
 
             SuperNotesTheme(
                 darkTheme = themeState.value
             ) {
 
                 val systemUiController = rememberSystemUiController()
-                SideEffect {
+                LaunchedEffect(
+                    key1 = themeState.value
+                ) {
 
-                    if (! themeState.value) {
+                    if (!themeState.value) {
 
                         systemUiController.setSystemBarsColor(
                             color = Color.White,

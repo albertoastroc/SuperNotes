@@ -169,6 +169,7 @@ private fun CategoryTitle(category : NoteCategory) {
                 top = 8.dp,
                 bottom = 8.dp
             ),
+        color = MaterialTheme.colors.onBackground,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 22.sp
