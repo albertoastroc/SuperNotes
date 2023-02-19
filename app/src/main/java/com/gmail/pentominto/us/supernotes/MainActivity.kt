@@ -22,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesScreen
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen

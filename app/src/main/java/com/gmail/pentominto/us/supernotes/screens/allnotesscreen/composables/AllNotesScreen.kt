@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,8 +21,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.NoteItem
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.NoteItemSearchResult
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SwipeableNoteRow
+import com.gmail.pentominto.us.supernotes.utility.Constants.MINIMUM_INPUT_LENGTH
 import kotlinx.coroutines.launch
 
 @Composable
@@ -119,7 +122,7 @@ fun AllNotesScreen(
                     )
                 }
 
-                if (allNotesState.value.searchBarInput.length >= 3) {
+                if (allNotesState.value.searchBarInput.length >= MINIMUM_INPUT_LENGTH) {
 
                     items(allNotesState.value.notesSearchResults) { note ->
 
@@ -204,7 +207,7 @@ fun AllNotesScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "New SavedNote",
+                        text = "New Note",
                         color = MaterialTheme.colors.onSecondary
                     )
                 },
