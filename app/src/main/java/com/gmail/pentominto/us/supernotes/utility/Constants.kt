@@ -8,4 +8,6 @@ object Constants {
     const val PREFERENCES_STORE_NAME = "user_preferences"
 
     const val MINIMUM_INPUT_LENGTH = 3
+
+    const val DEFAULT_CATEGORY = "No Category"
 }

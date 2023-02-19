@@ -8,10 +8,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.data.DiscardedNote
+import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.utility.DateGetter
+import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,13 +28,14 @@ class AllNotesViewModel @Inject constructor(
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     private val trashEnabled = booleanPreferencesKey("trash_enabled")
 
+
     fun onSearchChange(input : String) {
 
         viewModelScope.launch {
 
             _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
 
-            val notesSearchResults = _allNotesState.value.notesWithNoCategories.filter { note ->
+            val notesSearchResults = _allNotesState.value.notes.values.flatten().filter { note ->
 
                 note.noteBody.contains(
                     input,
@@ -51,9 +52,7 @@ class AllNotesViewModel @Inject constructor(
 
         repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
 
-            _allNotesState.value = _allNotesState.value.copy(notesWithCategory = categoryNotesMap)
-
-            _allNotesState.value = _allNotesState.value.copy(notesWithNoCategories = categoryNotesMap.values.flatten())
+            _allNotesState.value = _allNotesState.value.copy(notes = categoryNotesMap)
 
         }
     }
@@ -68,30 +67,25 @@ class AllNotesViewModel @Inject constructor(
         viewModelScope.launch {
 
             repository.insertTrashNote(
+
                 DiscardedNote(
                     noteTitle = note.noteTitle,
                     noteBody = note.noteBody,
                     createdDate = note.createdDate,
                     lastModified = note.lastModified,
-                    dateDeleted = allNotesState.value.currentDate
+                    dateDeleted = getCurrentDate()
+
                 )
             )
         }
     }
 
-    private fun getCurrentDate() {
-
-        _allNotesState.value = _allNotesState.value.copy(
-            currentDate = DateGetter.getCurrentDate()
-        )
-    }
-
     fun clearSearchBar() {
 
-        _allNotesState.value = _allNotesState.value.copy(searchBarInput = String())
+        _allNotesState.value = _allNotesState.value.copy(searchBarInput = "")
     }
 
-    fun getPrefs() {
+    private fun getPrefs() {
 
         viewModelScope.launch {
 
@@ -102,6 +96,7 @@ class AllNotesViewModel @Inject constructor(
                     _allNotesState.value = _allNotesState.value.copy(
                         showCategories = preferences[hideCategoriesKey] ?: true
                     )
+
 
                     if (_allNotesState.value.showCategories) {
                         _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITH_CATEGORIES)
@@ -119,7 +114,7 @@ class AllNotesViewModel @Inject constructor(
     }
 
     init {
+        getNotesList()
         getPrefs()
-        getCurrentDate()
     }
 }

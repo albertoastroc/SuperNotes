@@ -5,5 +5,4 @@ data class OptionsScreenState(
     val darkThemeOption : Boolean = false,
     val trashEnabled : Boolean = true,
     val userId : String = "",
-    val currentDate : String = ""
 )

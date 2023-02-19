@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.optionsscreen
+package com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables
 
 import android.content.Intent
 import android.net.Uri
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreenViewModel
 
 @Composable
 fun OptionsScreen(

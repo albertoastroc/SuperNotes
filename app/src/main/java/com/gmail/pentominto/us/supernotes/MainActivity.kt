@@ -24,7 +24,7 @@ import androidx.navigation.navArgument
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
-import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
+import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme

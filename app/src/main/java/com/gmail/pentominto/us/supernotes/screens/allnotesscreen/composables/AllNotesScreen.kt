@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +6,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -44,7 +46,7 @@ fun AllNotesScreen(
     val listState = rememberLazyListState()
 
     LaunchedEffect(
-        key1 = allNotesState.value.notesWithCategory.size,
+        key1 = allNotesState.value.notes.size,
         block = {
             viewModel.getNotesList()
         }
@@ -141,23 +143,27 @@ fun AllNotesScreen(
                             )
                         }
                     }
-                } else if (allNotesState.value.showCategories) {
+                } else {
 
-                    allNotesState.value.notesWithCategory.entries.forEach { (category, notes) ->
+                    allNotesState.value.notes.entries.forEach { (category, notes) ->
 
-                        item {
-                            Text(
-                                text = category.categoryTitle,
-                                modifier = Modifier
-                                    .padding(
-                                        start = 16.dp,
-                                        top = 8.dp,
-                                        bottom = 8.dp
-                                    ),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = 22.sp
-                            )
+                        if (allNotesState.value.showCategories) {
+
+                            item {
+
+                                Text(
+                                    text = category.categoryTitle,
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 16.dp,
+                                            top = 8.dp,
+                                            bottom = 8.dp
+                                        ),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    fontSize = 22.sp
+                                )
+                            }
                         }
 
                         items(
@@ -179,50 +185,38 @@ fun AllNotesScreen(
                             }
                         }
                     }
-                } else {
-
-                    items(
-                        items = allNotesState.value.notesWithNoCategories,
-                        key = { it.noteId }
-                    ) { note ->
-
-                        SwipeableNoteRow(
-                            deleteNote = { viewModel.deleteNote(note.noteId) },
-                            note = note,
-                            trashEnabled = allNotesState.value.trashEnabled,
-                            sendToTrash = { viewModel.sendToTrash(note) }
-                        ) {
-                            NoteItem(
-                                note = note,
-                                modifier = Modifier,
-                                onClick = { onNoteClick(note.noteId) }
-                            )
-                        }
-                    }
                 }
             }
         },
         floatingActionButton = {
 
-            ExtendedFloatingActionButton(
-                text = {
-                    Text(
-                        text = "New Note",
-                        color = MaterialTheme.colors.onSecondary
-                    )
-                },
-                icon = {
-                    Icon(
-                        painterResource(id = R.drawable.ic_baseline_add_24),
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.onSecondary
-                    )
-                },
-                expanded = listState.isScrollingUp(),
-                onClick = { onNoteClick(0) },
-                containerColor = MaterialTheme.colors.secondary,
+            ExtendedFab(
+                listState,
+                onNoteClick
             )
         }
+    )
+}
+
+@Composable
+private fun ExtendedFab(listState : LazyListState, onNoteClick : (Int) -> Unit) {
+    ExtendedFloatingActionButton(
+        text = {
+            Text(
+                text = "New Note",
+                color = MaterialTheme.colors.onSecondary
+            )
+        },
+        icon = {
+            Icon(
+                painterResource(id = R.drawable.ic_baseline_add_24),
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSecondary
+            )
+        },
+        expanded = listState.isScrollingUp(),
+        onClick = { onNoteClick(0) },
+        containerColor = MaterialTheme.colors.secondary,
     )
 }
 
