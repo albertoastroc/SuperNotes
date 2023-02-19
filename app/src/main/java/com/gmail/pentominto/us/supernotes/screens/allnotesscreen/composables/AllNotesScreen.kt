@@ -6,12 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -28,6 +25,7 @@ import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SwipeableNoteRow
 import com.gmail.pentominto.us.supernotes.utility.Constants.MINIMUM_INPUT_LENGTH
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -61,43 +59,10 @@ fun AllNotesScreen(
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
 
-            Drawer(
-                drawerOptionsList = listOf(
-                    MenuItem(
-                        id = 1,
-                        title = "Home",
-                        icon = Icons.Default.Home
-                    ),
-                    MenuItem(
-                        id = 2,
-                        title = "Options",
-                        icon = Icons.Default.Settings
-                    ),
-                    MenuItem(
-                        id = 3,
-                        title = "Trash",
-                        icon = Icons.Default.Delete
-                    ),
-                    MenuItem(
-                        id = 4,
-                        title = "Rate me in the Play Store!",
-                        icon = Icons.Default.Star
-                    ),
-                    MenuItem(
-                        id = 5,
-                        title = "Privacy policy and info",
-                        icon = Icons.Default.Info
-                    )
-                ),
-                onSettingClick = {
-
-                    scope.launch {
-
-                        scaffoldState.drawerState.close()
-                        onOptionsClick(it)
-                    }
-
-                },
+            AllNotesDrawer(
+                scope,
+                scaffoldState,
+                onOptionsClick
             )
         },
         content = { paddingValues ->
@@ -195,6 +160,52 @@ fun AllNotesScreen(
                 onNoteClick
             )
         }
+    )
+}
+
+@Composable
+private fun AllNotesDrawer(
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onOptionsClick : (Int) -> Unit
+) {
+    Drawer(
+        drawerOptionsList = listOf(
+            MenuItem(
+                id = 1,
+                title = "Home",
+                icon = Icons.Default.Home
+            ),
+            MenuItem(
+                id = 2,
+                title = "Options",
+                icon = Icons.Default.Settings
+            ),
+            MenuItem(
+                id = 3,
+                title = "Trash",
+                icon = Icons.Default.Delete
+            ),
+            MenuItem(
+                id = 4,
+                title = "Rate me in the Play Store!",
+                icon = Icons.Default.Star
+            ),
+            MenuItem(
+                id = 5,
+                title = "Privacy policy and info",
+                icon = Icons.Default.Info
+            )
+        ),
+        onSettingClick = {
+
+            scope.launch {
+
+                scaffoldState.drawerState.close()
+                onOptionsClick(it)
+            }
+
+        },
     )
 }
 
