@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +28,8 @@ fun OptionsScreen(
 ) {
 
     val context = LocalContext.current
+
+    val optionsState by remember { viewModel.optionsScreenState }
 
     Box(
         modifier = Modifier
@@ -51,7 +54,7 @@ fun OptionsScreen(
             OptionsRowWithSwitch(
                 title = "Dark mode",
                 subTitle = "App specific theme",
-                viewModel.optionsScreenState.value.darkThemeOption
+                optionsState.darkThemeOption
             ) {
                 viewModel.themeToggle()
             }
@@ -59,7 +62,7 @@ fun OptionsScreen(
             OptionsRowWithSwitch(
                 title = "Enable categories",
                 subTitle = "When disabled one uncategorized list will be shown",
-                switchState = viewModel.optionsScreenState.value.categoriesOption
+                switchState = optionsState.categoriesOption
             ) {
                 viewModel.categoriesPrefToggle()
             }
@@ -67,7 +70,7 @@ fun OptionsScreen(
             OptionsRowWithSwitch(
                 title = "Enable Trash folder",
                 subTitle = "When disabled notes will be permanently deleted when swiped off the home screen",
-                switchState = viewModel.optionsScreenState.value.trashEnabled
+                switchState = optionsState.trashEnabled
             ) {
                 viewModel.trashFolderToggle()
             }
@@ -101,7 +104,7 @@ fun OptionsScreen(
 
                 val uriText = "mailto:simplenotesacf@gmail.com" +
                         "?subject=" + "Data deletion request" +
-                        "&body=" + "Delete data for ID ${viewModel.optionsScreenState.value.userId}"
+                        "&body=" + "Delete data for ID ${optionsState.userId}"
 
                 val emailIntent = Intent()
                     .setData(Uri.parse(uriText))
@@ -137,7 +140,8 @@ fun OptionsRowWithAlertDialog(
 
     if (openConfirmDialog.value) {
 
-        AlertDialog(onDismissRequest = { openConfirmDialog.value = false },
+        AlertDialog(
+            onDismissRequest = { openConfirmDialog.value = false },
             title = { Text(text = message) },
             confirmButton = {
                 Button(

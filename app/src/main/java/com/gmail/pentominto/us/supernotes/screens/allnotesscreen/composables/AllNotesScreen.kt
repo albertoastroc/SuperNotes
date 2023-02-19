@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,11 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SwipeableNoteRow
-import com.gmail.pentominto.us.supernotes.utility.Constants.MINIMUM_INPUT_LENGTH
+import com.gmail.pentominto.us.supernotes.data.NoteCategory
+import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.*
+import com.gmail.pentominto.us.supernotes.utility.Constants.MINIMUM_SEARCH_INPUT_LENGTH
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,7 @@ fun AllNotesScreen(
     onOptionsClick : (Int) -> Unit,
 ) {
 
-    val allNotesState by remember { mutableStateOf(viewModel.allNotesState) }
+    val notesState by remember { viewModel.allNotesState }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -44,15 +44,14 @@ fun AllNotesScreen(
     val listState = rememberLazyListState()
 
     LaunchedEffect(
-        key1 = allNotesState.value.notes.size,
+        key1 = notesState.notes.size,
         block = {
             viewModel.getNotesList()
         }
     )
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         backgroundColor = MaterialTheme.colors.background,
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
@@ -67,91 +66,15 @@ fun AllNotesScreen(
         },
         content = { paddingValues ->
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(1f),
-                state = listState,
-                contentPadding = paddingValues
-            ) {
-
-                item {
-                    SearchBarWithMenu(
-                        input = allNotesState.value.searchBarInput,
-                        onInputChange = { viewModel.onSearchChange(it) },
-                        onXClick = { viewModel.clearSearchBar() },
-                        onMenuIconClick = {
-
-                            scope.launch {
-
-                                scaffoldState.drawerState.open()
-                            }
-                        }
-                    )
-                }
-
-                if (allNotesState.value.searchBarInput.length >= MINIMUM_INPUT_LENGTH) {
-
-                    items(allNotesState.value.notesSearchResults) { note ->
-
-                        SwipeableNoteRow(
-                            deleteNote = { viewModel.deleteNote(note.noteId) },
-                            note = note,
-                            trashEnabled = allNotesState.value.trashEnabled,
-                            sendToTrash = { viewModel.sendToTrash(note) }
-                        ) {
-
-                            NoteItemSearchResult(
-                                note = note,
-                                query = allNotesState.value.searchBarInput,
-                                modifier = Modifier,
-                                onClick = { onNoteClick(note.noteId) },
-                            )
-                        }
-                    }
-                } else {
-
-                    allNotesState.value.notes.entries.forEach { (category, notes) ->
-
-                        if (allNotesState.value.showCategories) {
-
-                            item {
-
-                                Text(
-                                    text = category.categoryTitle,
-                                    modifier = Modifier
-                                        .padding(
-                                            start = 16.dp,
-                                            top = 8.dp,
-                                            bottom = 8.dp
-                                        ),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    fontSize = 22.sp
-                                )
-                            }
-                        }
-
-                        items(
-                            items = notes,
-                            key = { it.noteId }
-                        ) { note ->
-
-                            SwipeableNoteRow(
-                                deleteNote = { viewModel.deleteNote(note.noteId) },
-                                note = note,
-                                trashEnabled = allNotesState.value.trashEnabled,
-                                sendToTrash = { viewModel.sendToTrash(note) }
-                            ) {
-                                NoteItem(
-                                    note = note,
-                                    modifier = Modifier,
-                                    onClick = { onNoteClick(note.noteId) }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            NotesList(
+                listState,
+                paddingValues,
+                notesState,
+                viewModel,
+                scope,
+                scaffoldState,
+                onNoteClick
+            )
         },
         floatingActionButton = {
 
@@ -161,6 +84,139 @@ fun AllNotesScreen(
             )
         }
     )
+}
+
+@Composable
+private fun NotesList(
+    listState : LazyListState,
+    paddingValues : PaddingValues,
+    allNotesState : AllNotesState,
+    viewModel : AllNotesViewModel,
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onNoteClick : (Int) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(1f),
+        state = listState,
+        contentPadding = paddingValues
+    ) {
+
+        item {
+
+            SearchBarWithMenu(
+                input = allNotesState.searchBarInput,
+                onInputChange = { viewModel.onSearchChange(it) },
+                onXClick = { viewModel.clearSearchBar() },
+                onMenuIconClick = {
+
+                    scope.launch {
+
+                        scaffoldState.drawerState.open()
+                    }
+                }
+            )
+        }
+
+        if (allNotesState.searchBarInput.length >= MINIMUM_SEARCH_INPUT_LENGTH) {
+
+            items(allNotesState.notesSearchResults) { note ->
+
+                SearchResultsNote(
+                    viewModel,
+                    note,
+                    allNotesState,
+                    onNoteClick
+                )
+            }
+        } else {
+
+            allNotesState.notes.entries.forEach { (category, notes) ->
+
+                if (allNotesState.showCategories) {
+
+                    item {
+
+                        CategoryTitle(category)
+                    }
+                }
+
+                items(
+                    items = notes,
+                    key = { it.noteId }
+                ) { note ->
+
+                    DefaultNote(
+                        viewModel,
+                        note,
+                        allNotesState,
+                        onNoteClick
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategoryTitle(category : NoteCategory) {
+    Text(
+        text = category.categoryTitle,
+        modifier = Modifier
+            .padding(
+                start = 16.dp,
+                top = 8.dp,
+                bottom = 8.dp
+            ),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        fontSize = 22.sp
+    )
+}
+
+@Composable
+private fun DefaultNote(
+    viewModel : AllNotesViewModel,
+    note : SavedNote,
+    allNotesState : AllNotesState,
+    onNoteClick : (Int) -> Unit
+) {
+    SwipeableNoteRow(
+        deleteNote = { viewModel.deleteNote(note.noteId) },
+        note = note,
+        trashEnabled = allNotesState.trashEnabled,
+        sendToTrash = { viewModel.sendToTrash(note) }
+    ) {
+        NoteItem(
+            note = note,
+            modifier = Modifier,
+            onClick = { onNoteClick(note.noteId) }
+        )
+    }
+}
+
+@Composable
+private fun SearchResultsNote(
+    viewModel : AllNotesViewModel,
+    note : SavedNote,
+    allNotesState : AllNotesState,
+    onNoteClick : (Int) -> Unit
+) {
+    SwipeableNoteRow(
+        deleteNote = { viewModel.deleteNote(note.noteId) },
+        note = note,
+        trashEnabled = allNotesState.trashEnabled,
+        sendToTrash = { viewModel.sendToTrash(note) }
+    ) {
+
+        NoteItemSearchResult(
+            note = note,
+            query = allNotesState.searchBarInput,
+            modifier = Modifier,
+            onClick = { onNoteClick(note.noteId) },
+        )
+    }
 }
 
 @Composable
