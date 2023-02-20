@@ -45,9 +45,7 @@ fun AllNotesScreen(
 
     LaunchedEffect(
         key1 = notesState.notes.size,
-        block = {
-            viewModel.getNotesList()
-        }
+        block = { viewModel.getNotesList() }
     )
 
     Scaffold(
@@ -109,13 +107,7 @@ private fun NotesList(
                 input = allNotesState.searchBarInput,
                 onInputChange = { viewModel.onSearchChange(it) },
                 onXClick = { viewModel.clearSearchBar() },
-                onMenuIconClick = {
-
-                    scope.launch {
-
-                        scaffoldState.drawerState.open()
-                    }
-                }
+                onMenuIconClick = { scope.launch { scaffoldState.drawerState.open() } }
             )
         }
 
@@ -134,12 +126,8 @@ private fun NotesList(
 
             allNotesState.notes.entries.forEach { (category, notes) ->
 
-                if (allNotesState.showCategories) {
-
-                    item {
-
-                        CategoryTitle(category)
-                    }
+                if (allNotesState.showCategoryTitles) {
+                    item { CategoryTitle(category) }
                 }
 
                 items(

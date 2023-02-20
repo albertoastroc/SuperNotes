@@ -7,7 +7,7 @@ data class AllNotesState(
     val notes : Map<NoteCategory, List<SavedNote>> = emptyMap(),
     val notesSearchResults : List<SavedNote> = emptyList(),
     val searchBarInput : String = "",
-    val showCategories : Boolean = true,
+    val showCategoryTitles : Boolean = true,
     val trashEnabled : Boolean = true,
     val currentList : CurrentList = CurrentList.WITH_CATEGORIES
 )

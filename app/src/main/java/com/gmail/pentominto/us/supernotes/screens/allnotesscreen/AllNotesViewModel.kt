@@ -94,11 +94,11 @@ class AllNotesViewModel @Inject constructor(
                 if (preferences.contains(hideCategoriesKey)) {
 
                     _allNotesState.value = _allNotesState.value.copy(
-                        showCategories = preferences[hideCategoriesKey] ?: true
+                        showCategoryTitles = preferences[hideCategoriesKey] ?: true
                     )
 
 
-                    if (_allNotesState.value.showCategories) {
+                    if (_allNotesState.value.showCategoryTitles) {
                         _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITH_CATEGORIES)
                     } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITHOUT_CATEGORIES)
                 }
