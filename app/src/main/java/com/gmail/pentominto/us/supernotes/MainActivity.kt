@@ -28,6 +28,7 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.Opti
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_ANIMATION_DURATION
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -89,7 +90,8 @@ class MainActivity : ComponentActivity() {
 
             val isCurrentThemeDark = themeFlow.collectAsState(initial = false)
 
-            val themeState : MutableState<Boolean> = remember(key1 = isCurrentThemeDark.value) { mutableStateOf(isSavedThemeDark.value) }
+            val themeState : MutableState<Boolean> = remember(key1 = isCurrentThemeDark.value)
+            { mutableStateOf(isSavedThemeDark.value) }
 
             SuperNotesTheme(
                 darkTheme = themeState.value
@@ -139,7 +141,7 @@ fun SuperNotesApp() {
                     "noteEdit/{noteId}", "options", "trash" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                    -> null
                 }
@@ -149,7 +151,7 @@ fun SuperNotesApp() {
                     "noteEdit/{noteId}", "options", "trash" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                    -> null
                 }
@@ -159,7 +161,7 @@ fun SuperNotesApp() {
                     "noteEdit/{noteId}", "options", "trash" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                    -> null
                 }
@@ -169,7 +171,7 @@ fun SuperNotesApp() {
                     "noteEdit/{noteId}", "options", "trash" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                    -> null
                 }
@@ -213,7 +215,7 @@ fun SuperNotesApp() {
                     "allNotes", "readOnlyNote/{trashNoteId}" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                     -> null
                 }
@@ -223,7 +225,7 @@ fun SuperNotesApp() {
                     "allNotes", "readOnlyNote/{trashNoteId}" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                     -> null
                 }
@@ -233,7 +235,7 @@ fun SuperNotesApp() {
                     "allNotes", "readOnlyNote/{trashNoteId}" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                     -> null
                 }
@@ -243,7 +245,7 @@ fun SuperNotesApp() {
                     "allNotes", "readOnlyNote/{trashNoteId}" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else                                     -> null
                 }
@@ -263,7 +265,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -273,7 +275,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -283,7 +285,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -293,7 +295,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -320,7 +322,7 @@ fun SuperNotesApp() {
                     "trash" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else    -> null
                 }
@@ -330,7 +332,7 @@ fun SuperNotesApp() {
                     "trash" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else    -> null
                 }
@@ -340,7 +342,7 @@ fun SuperNotesApp() {
                     "trash" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else    -> null
                 }
@@ -350,7 +352,7 @@ fun SuperNotesApp() {
                     "trash" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else    -> null
                 }
@@ -376,7 +378,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -386,7 +388,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -396,7 +398,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideIntoContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }
@@ -406,7 +408,7 @@ fun SuperNotesApp() {
                     "allNotes" ->
                         slideOutOfContainer(
                             AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                         )
                     else       -> null
                 }

@@ -10,4 +10,6 @@ object Constants {
     const val MINIMUM_SEARCH_INPUT_LENGTH = 3
 
     const val DEFAULT_CATEGORY = "No Category"
+
+    const val DEFAULT_ANIMATION_DURATION = 700
 }
