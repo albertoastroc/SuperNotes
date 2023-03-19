@@ -36,18 +36,15 @@ object AppModule {
         NoteDatabase::class.java,
         DATABASE_NAME
     )
-
-            //TODO fix prepopulated database
         .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
 
     @Provides
     fun providesDAO(
-        database: NoteDatabase,
-    ): DatabaseDAO {
+        database : NoteDatabase,
+    ) : DatabaseDAO {
         return database.notesDAO()
     }
-
 
     @Provides
     @Singleton
@@ -62,7 +59,4 @@ object AppModule {
             produceFile = { appContext.preferencesDataStoreFile(PREFERENCES_STORE_NAME) }
         )
     }
-
-
-
 }

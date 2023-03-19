@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -85,6 +86,7 @@ class OptionsScreenViewModel @Inject constructor(
                 SavedNote(
                     noteTitle = "About this app",
                     createdDate = getCurrentDate(),
+                    category = DEFAULT_CATEGORY,
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
                             "\n" +
                             "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
