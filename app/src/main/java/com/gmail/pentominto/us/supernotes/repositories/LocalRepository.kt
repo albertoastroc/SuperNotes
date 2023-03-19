@@ -42,4 +42,6 @@ interface LocalRepository {
 
     suspend fun deleteAllTrashNotes()
 
+    suspend fun defaultCategoryExists() : Boolean
+
 }

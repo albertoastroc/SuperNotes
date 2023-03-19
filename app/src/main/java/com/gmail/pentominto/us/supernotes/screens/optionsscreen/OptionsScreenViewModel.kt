@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
@@ -81,6 +82,14 @@ class OptionsScreenViewModel @Inject constructor(
     fun restoreWelcomeNote() {
 
         viewModelScope.launch {
+
+            if (!repository.defaultCategoryExists()) {
+
+                repository.insertCategory(
+                    NoteCategory()
+                )
+
+            }
 
             repository.insertNote(
                 SavedNote(

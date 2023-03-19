@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +39,7 @@ class NoteEditScreenViewModel @Inject constructor(
                         _noteEditState.value = _noteEditState.value.copy(
                             noteCategory = it.key,
                             noteTitle = it.value.noteTitle,
-                            noteBody = it.value.noteBody
+                            noteBody = it.value.noteBody,
                         )
                     }
                 }
