@@ -13,5 +13,5 @@ import com.gmail.pentominto.us.supernotes.data.SavedNote
 )
 abstract class NoteDatabase : RoomDatabase() {
 
-    abstract fun getNoteDatabaseDao() : DatabaseDao
+    abstract fun notesDAO() : DatabaseDAO
 }

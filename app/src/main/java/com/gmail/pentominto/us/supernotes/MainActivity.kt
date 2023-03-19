@@ -2,12 +2,11 @@
 
 package com.gmail.pentominto.us.supernotes
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.*
@@ -19,15 +18,16 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.*
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesScreen
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
-import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreen
+import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_ANIMATION_DURATION
+import com.gmail.pentominto.us.supernotes.utility.NavIntentsGetter
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -53,16 +53,10 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var dataStore : DataStore<Preferences>
 
-
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
         actionBar?.hide()
-
-        val themeFlow : Flow<Boolean> = dataStore.data
-            .map { preferences ->
-                preferences[userDarkThemeKey] ?: false
-            }
 
         // sets up firebase id
         lifecycleScope.launch {
@@ -83,20 +77,28 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val themeFlow : Flow<Boolean> = dataStore.data
+            .map { preferences ->
+                preferences[userDarkThemeKey] ?: false
+            }
+
         setContent {
 
-            val savedTheme : MutableState<Boolean> = runBlocking { mutableStateOf(themeFlow.first()) }
+            val isSavedThemeDark : MutableState<Boolean> = runBlocking { mutableStateOf(themeFlow.first()) }
 
-            val latestTheme = themeFlow.collectAsState(initial = false)
+            val isCurrentThemeDark = themeFlow.collectAsState(initial = false)
 
-            val themeState : MutableState<Boolean> = remember(key1 = latestTheme.value) { mutableStateOf(savedTheme.value) }
+            val themeState : MutableState<Boolean> = remember(key1 = isCurrentThemeDark.value)
+            { mutableStateOf(isSavedThemeDark.value) }
 
             SuperNotesTheme(
                 darkTheme = themeState.value
             ) {
 
                 val systemUiController = rememberSystemUiController()
-                SideEffect {
+                LaunchedEffect(
+                    key1 = themeState.value
+                ) {
 
                     if (! themeState.value) {
 
@@ -128,64 +130,17 @@ fun SuperNotesApp() {
     AnimatedNavHost(
         navController = navController,
         startDestination = "allNotes",
+    ) {
 
+        navigationWithTransition(
+            routeName = "allNotes",
+            destinations = listOf(
+                "noteEdit/{noteId}",
+                "options",
+                "trash"
+            ),
+            arguments = emptyList()
         ) {
-        composable(
-            "allNotes",
-            enterTransition = {
-                when (initialState.destination.route) {
-                    "noteEdit/{noteId}", "options", "trash" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else                                    -> null
-                }
-            },
-            exitTransition = {
-                when (targetState.destination.route) {
-                    "noteEdit/{noteId}", "options", "trash" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else                                    -> null
-                }
-            },
-            popEnterTransition = {
-                when (initialState.destination.route) {
-                    "noteEdit/{noteId}", "options", "trash" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else                                    -> null
-                }
-            },
-            popExitTransition = {
-                when (targetState.destination.route) {
-                    "noteEdit/{noteId}", "options", "trash" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else                                    -> null
-                }
-            }
-        ) {
-
-            val playstoreIntent = Intent()
-                .setData(Uri.parse("market://details?id=com.gmail.pentominto.us.supernotes"))
-                .setAction(Intent.ACTION_VIEW)
-                .addFlags(
-                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                            Intent.FLAG_ACTIVITY_NO_HISTORY or
-                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-                )
-
-            val privacyPolicyIntent = Intent()
-                .setAction(Intent.ACTION_VIEW)
-                .setData(Uri.parse("https://www.termsfeed.com/live/debf4da5-b65b-4420-a444-9e172bf8b813"))
 
             AllNotesScreen(
                 onNoteClick = { noteId ->
@@ -197,55 +152,21 @@ fun SuperNotesApp() {
 
                         2 -> navController.navigate("options")
                         3 -> navController.navigate("trash")
-                        4 -> context.startActivity(playstoreIntent)
-                        5 -> context.startActivity(privacyPolicyIntent)
-
+                        4 -> context.startActivity(NavIntentsGetter.getPlaystoreIntent())
+                        5 -> context.startActivity(NavIntentsGetter.getPrivacyPolicyIntent())
                     }
                 }
             )
         }
 
-        composable("trash",
-            enterTransition = {
-                when (initialState.destination.route) {
-                    "allNotes", "readOnlyNote/{trashNoteId}" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else                                     -> null
-                }
-            },
-            exitTransition = {
-                when (targetState.destination.route) {
-                    "allNotes", "readOnlyNote/{trashNoteId}" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else                                     -> null
-                }
-            },
-            popEnterTransition = {
-                when (initialState.destination.route) {
-                    "allNotes", "readOnlyNote/{trashNoteId}" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else                                     -> null
-                }
-            },
-            popExitTransition = {
-                when (targetState.destination.route) {
-                    "allNotes", "readOnlyNote/{trashNoteId}" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else                                     -> null
-                }
-            }) {
+        navigationWithTransition(
+            routeName = "trash",
+            destinations = listOf(
+                "allNotes",
+                "readOnlyNote/{trashNoteId}"
+            ),
+            arguments = emptyList()
+        ) {
 
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
@@ -254,110 +175,27 @@ fun SuperNotesApp() {
             )
         }
 
-        composable(
-            "noteEdit/{noteId}",
-            enterTransition = {
-                when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
-            exitTransition = {
-                when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
-            popEnterTransition = {
-                when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
-            popExitTransition = {
-                when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
+        navigationWithTransition(
+            routeName = "noteEdit/{noteId}",
+            destinations = listOf("allNotes"),
             arguments = listOf(
-                navArgument("noteId") {
-                    type = NavType.IntType
-                }
-            ),
+                navArgument("noteId") { type = NavType.IntType })
         ) {
 
             val noteId = remember {
                 it.arguments?.getInt("noteId")
             }
+
             if (noteId != null) {
                 NoteEditScreen(noteId = noteId)
             }
         }
 
-        composable(
-            "readOnlyNote/{trashNoteId}",
-            enterTransition = {
-                when (initialState.destination.route) {
-                    "trash" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else    -> null
-                }
-            },
-            exitTransition = {
-                when (targetState.destination.route) {
-                    "trash" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else    -> null
-                }
-            },
-            popEnterTransition = {
-                when (initialState.destination.route) {
-                    "trash" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else    -> null
-                }
-            },
-            popExitTransition = {
-                when (targetState.destination.route) {
-                    "trash" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else    -> null
-                }
-            },
+        navigationWithTransition(
+            routeName = "readOnlyNote/{trashNoteId}",
+            destinations = listOf("trash"),
             arguments = listOf(
-                navArgument("trashNoteId") {
-                    type = NavType.IntType
-                }
-            )
+                navArgument("trashNoteId") { type = NavType.IntType })
         ) {
 
             val trashNoteId = remember {
@@ -368,50 +206,72 @@ fun SuperNotesApp() {
             }
         }
 
-        composable("options",
-            enterTransition = {
-                when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
-            exitTransition = {
-                when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Left,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
-            popEnterTransition = {
-                when (initialState.destination.route) {
-                    "allNotes" ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            },
-            popExitTransition = {
-                when (targetState.destination.route) {
-                    "allNotes" ->
-                        slideOutOfContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    else       -> null
-                }
-            }
+        navigationWithTransition(
+            routeName = "options",
+            destinations = listOf("allNotes"),
+            arguments = emptyList()
         ) {
 
             OptionsScreen()
         }
     }
+}
+
+fun NavGraphBuilder.navigationWithTransition(
+    routeName : String,
+    destinations : List<String>,
+    arguments : List<NamedNavArgument>,
+    content : @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
+) {
+
+    composable(
+        routeName,
+        enterTransition = {
+            when (initialState.destination.route) {
+
+                in destinations ->
+
+                    slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Left,
+                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
+                    )
+                else            -> null
+            }
+        },
+        exitTransition = {
+            when (targetState.destination.route) {
+
+                in destinations ->
+                    slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Left,
+                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
+                    )
+                else            -> null
+            }
+        },
+        popEnterTransition = {
+            when (initialState.destination.route) {
+
+                in destinations ->
+                    slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
+                    )
+                else            -> null
+            }
+        },
+        popExitTransition = {
+            when (targetState.destination.route) {
+
+                in destinations ->
+                    slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
+                    )
+                else            -> null
+            }
+        },
+        content = content,
+        arguments = arguments
+    )
 }

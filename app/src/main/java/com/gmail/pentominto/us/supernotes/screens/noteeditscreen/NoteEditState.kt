@@ -10,5 +10,5 @@ data class NoteEditState(
     val noteBody : String = "",
     val categories : List<NoteCategory> = emptyList(),
     val noteCategory : NoteCategory = NoteCategory(),
-    val currentDate : String = String()
+    val currentDate : String = ""
 )

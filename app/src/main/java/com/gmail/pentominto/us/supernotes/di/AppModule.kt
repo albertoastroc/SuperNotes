@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.gmail.pentominto.us.supernotes.database.DatabaseDAO
 import com.gmail.pentominto.us.supernotes.database.NoteDatabase
 import com.gmail.pentominto.us.supernotes.utility.Constants.DATABASE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREFERENCES_STORE_NAME
@@ -28,14 +29,22 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseDao(
+    fun provideDatabase(
         @ApplicationContext app : Context
     ) = Room.databaseBuilder(
         app,
         NoteDatabase::class.java,
-        DATABASE_NAME)
+        DATABASE_NAME
+    )
         .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
+
+    @Provides
+    fun providesDAO(
+        database : NoteDatabase,
+    ) : DatabaseDAO {
+        return database.notesDAO()
+    }
 
     @Provides
     @Singleton
@@ -50,7 +59,4 @@ object AppModule {
             produceFile = { appContext.preferencesDataStoreFile(PREFERENCES_STORE_NAME) }
         )
     }
-
-
-
 }

@@ -13,7 +13,8 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.utility.DateGetter
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
+import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,7 +39,9 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _optionsScreenState.value = _optionsScreenState.value.copy(categoriesOption = ! _optionsScreenState.value.categoriesOption)
+                _optionsScreenState.value = _optionsScreenState.value.copy(
+                    categoriesOption = ! _optionsScreenState.value.categoriesOption
+                )
 
                 settings[hideCategoriesKey] = _optionsScreenState.value.categoriesOption
             }
@@ -51,7 +54,9 @@ class OptionsScreenViewModel @Inject constructor(
 
             dataStore.edit { settings ->
 
-                _optionsScreenState.value = _optionsScreenState.value.copy(darkThemeOption = ! _optionsScreenState.value.darkThemeOption)
+                _optionsScreenState.value = _optionsScreenState.value.copy(
+                    darkThemeOption = ! _optionsScreenState.value.darkThemeOption
+                )
 
                 settings[userDarkThemeKey] = _optionsScreenState.value.darkThemeOption
             }
@@ -74,13 +79,6 @@ class OptionsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrentDate() {
-
-        _optionsScreenState.value = _optionsScreenState.value.copy(
-            currentDate = DateGetter.getCurrentDate()
-        )
-    }
-
     fun restoreWelcomeNote() {
 
         viewModelScope.launch {
@@ -95,9 +93,9 @@ class OptionsScreenViewModel @Inject constructor(
 
             repository.insertNote(
                 SavedNote(
-                    noteTitle = "Welcome",
-                    createdDate = DateGetter.getCurrentDate(),
-                    category = "No Category",
+                    noteTitle = "About this app",
+                    createdDate = getCurrentDate(),
+                    category = DEFAULT_CATEGORY,
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
                             "\n" +
                             "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
@@ -110,7 +108,7 @@ class OptionsScreenViewModel @Inject constructor(
                             "\n" +
                             "5. If this note is deleted, it can later be restored in Options.\n" +
                             "\n",
-                    lastModified = DateGetter.getCurrentDate(),
+                    lastModified = getCurrentDate(),
                 )
             )
         }
@@ -125,7 +123,7 @@ class OptionsScreenViewModel @Inject constructor(
                 if (preferences.contains(hideCategoriesKey)) {
 
                     _optionsScreenState.value = _optionsScreenState.value.copy(
-                        categoriesOption = preferences[hideCategoriesKey] ?: false
+                        categoriesOption = preferences[hideCategoriesKey] ?: true
                     )
                 }
 
@@ -171,6 +169,5 @@ class OptionsScreenViewModel @Inject constructor(
 
     init {
         getPrefs()
-        getCurrentDate()
     }
 }

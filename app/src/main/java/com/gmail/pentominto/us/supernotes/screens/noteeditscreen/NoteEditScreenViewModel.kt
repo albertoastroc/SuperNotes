@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -42,22 +43,21 @@ class NoteEditScreenViewModel @Inject constructor(
                     }
                 }
             }
-
     }
 
     private fun insertNewNote() {
 
         viewModelScope.launch {
 
-            noteId = repository.insertNote(
-                SavedNote(
-                    category = "No Category",
-                    createdDate = DateGetter.getCurrentDate(),
-                    lastModified = DateGetter.getCurrentDate(),
-                    noteBody = noteEditState.value.noteBody,
-                    noteTitle = noteEditState.value.noteTitle
-                )
-            ).toInt()
+                noteId = repository.insertNote(
+                    SavedNote(
+                        category = DEFAULT_CATEGORY,
+                        createdDate = DateGetter.getCurrentDate(),
+                        lastModified = DateGetter.getCurrentDate(),
+                        noteBody = noteEditState.value.noteBody,
+                        noteTitle = noteEditState.value.noteTitle
+                    )
+                ).toInt()
         }
     }
 
@@ -101,7 +101,7 @@ class NoteEditScreenViewModel @Inject constructor(
                 notesList.forEach { note ->
 
                     repository.updateNoteCategory(
-                        "No NoteCategory",
+                        DEFAULT_CATEGORY,
                         note.noteId
                     )
                 }
@@ -152,7 +152,6 @@ class NoteEditScreenViewModel @Inject constructor(
         if (noteId == 0) {
 
             insertNewNote()
-
         }
 
         getNote(noteId)

@@ -164,9 +164,10 @@ fun NoteItemSearchResult(
     val noteLength = note.noteBody.length
 
     val queryResult = finder.let {
+
         note.noteBody.substring(
             it,
-            noteLength
+            noteLength - 1
         )
     }
 

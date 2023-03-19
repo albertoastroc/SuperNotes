@@ -3,19 +3,18 @@ package com.gmail.pentominto.us.supernotes.repositories
 import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
-import com.gmail.pentominto.us.supernotes.database.NoteDatabase
+import com.gmail.pentominto.us.supernotes.database.DatabaseDAO
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
-    db : NoteDatabase
+    private val dao : DatabaseDAO
 ) : LocalRepository {
 
-    private val dao = db.getNoteDatabaseDao()
-
     override suspend fun insertNote(note : SavedNote) : Long {
+
         return dao.insertNote(note)
     }
 
