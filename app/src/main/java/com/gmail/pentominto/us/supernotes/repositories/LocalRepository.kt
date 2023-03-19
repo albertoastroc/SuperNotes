@@ -1,8 +1,5 @@
 package com.gmail.pentominto.us.supernotes.repositories
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
