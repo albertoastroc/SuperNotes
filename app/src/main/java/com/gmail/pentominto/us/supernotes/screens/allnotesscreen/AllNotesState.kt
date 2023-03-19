@@ -9,12 +9,4 @@ data class AllNotesState(
     val searchBarInput : String = "",
     val showCategoryTitles : Boolean = true,
     val trashEnabled : Boolean = true,
-    val currentList : CurrentList = CurrentList.WITH_CATEGORIES
 )
-
-enum class CurrentList {
-
-    WITHOUT_CATEGORIES,
-    WITH_CATEGORIES
-
-}

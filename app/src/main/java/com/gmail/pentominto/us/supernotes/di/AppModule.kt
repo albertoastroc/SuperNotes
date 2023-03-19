@@ -8,13 +8,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.gmail.pentominto.us.supernotes.database.DatabaseDAO
 import com.gmail.pentominto.us.supernotes.database.NoteDatabase
-import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.repositories.LocalRepositoryImpl
 import com.gmail.pentominto.us.supernotes.utility.Constants.DATABASE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREFERENCES_STORE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREPOP_DATABASE_NAME
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +29,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseDao(
+    fun provideDatabase(
         @ApplicationContext app : Context
     ) = Room.databaseBuilder(
         app,
@@ -40,8 +38,16 @@ object AppModule {
     )
 
             //TODO fix prepopulated database
-//        .createFromAsset(PREPOP_DATABASE_NAME)
+        .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
+
+    @Provides
+    fun providesDAO(
+        database: NoteDatabase,
+    ): DatabaseDAO {
+        return database.notesDAO()
+    }
+
 
     @Provides
     @Singleton

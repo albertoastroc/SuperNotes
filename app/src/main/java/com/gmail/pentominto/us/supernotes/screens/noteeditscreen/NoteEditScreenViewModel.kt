@@ -21,17 +21,13 @@ class NoteEditScreenViewModel @Inject constructor(
     savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private val noteId : Int = checkNotNull(savedStateHandle["noteId"])
+    private var noteId : Int = checkNotNull(savedStateHandle["noteId"])
 
     private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState : State<NoteEditState> = _noteEditState
 
     private fun getNote(noteId : Int) {
 
-        if (noteId == 0) {
-
-            insertNewNote()
-        } else {
 
             viewModelScope.launch {
 
@@ -47,15 +43,13 @@ class NoteEditScreenViewModel @Inject constructor(
                     }
                 }
             }
-        }
     }
 
     private fun insertNewNote() {
 
         viewModelScope.launch {
 
-            getNote(
-                repository.insertNote(
+                noteId = repository.insertNote(
                     SavedNote(
                         category = DEFAULT_CATEGORY,
                         createdDate = DateGetter.getCurrentDate(),
@@ -64,7 +58,6 @@ class NoteEditScreenViewModel @Inject constructor(
                         noteTitle = noteEditState.value.noteTitle
                     )
                 ).toInt()
-            )
         }
     }
 
@@ -155,6 +148,12 @@ class NoteEditScreenViewModel @Inject constructor(
     }
 
     init {
+
+        if (noteId == 0) {
+
+            insertNewNote()
+        }
+
         getNote(noteId)
         getCategories()
         getCurrentDate()

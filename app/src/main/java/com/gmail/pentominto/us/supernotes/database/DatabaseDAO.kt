@@ -4,13 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
-import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DatabaseDao {
+interface DatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note : SavedNote) : Long

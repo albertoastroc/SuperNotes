@@ -83,7 +83,7 @@ class OptionsScreenViewModel @Inject constructor(
 
             repository.insertNote(
                 SavedNote(
-                    noteTitle = "Welcome",
+                    noteTitle = "About this app",
                     createdDate = getCurrentDate(),
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
                             "\n" +

@@ -96,25 +96,20 @@ class AllNotesViewModel @Inject constructor(
                     _allNotesState.value = _allNotesState.value.copy(
                         showCategoryTitles = preferences[hideCategoriesKey] ?: true
                     )
-
-
-                    if (_allNotesState.value.showCategoryTitles) {
-                        _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITH_CATEGORIES)
-                    } else _allNotesState.value = _allNotesState.value.copy(currentList = CurrentList.WITHOUT_CATEGORIES)
                 }
 
-                if (preferences.contains(trashEnabled)) {
+                    if (preferences.contains(trashEnabled)) {
 
-                    _allNotesState.value = _allNotesState.value.copy(
-                        trashEnabled = preferences[trashEnabled] ?: true
-                    )
+                        _allNotesState.value = _allNotesState.value.copy(
+                            trashEnabled = preferences[trashEnabled] ?: true
+                        )
+                    }
                 }
             }
         }
-    }
 
-    init {
-        getNotesList()
-        getPrefs()
+        init {
+            getPrefs()
+            getNotesList()
+        }
     }
-}
