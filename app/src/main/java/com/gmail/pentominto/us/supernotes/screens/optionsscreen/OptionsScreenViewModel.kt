@@ -10,10 +10,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
+import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_NOTE
+import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_TITLE
+import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
+import com.gmail.pentominto.us.supernotes.utility.Constants.USER_HIDE_CATEGORIES_KEY
+import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
+import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -30,10 +34,10 @@ class OptionsScreenViewModel @Inject constructor(
     )
     val optionsScreenState: State<OptionsScreenState> = _optionsScreenState
 
-    private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
-    private val userDarkThemeKey = booleanPreferencesKey("user_theme")
-    private val trashEnabledKey = booleanPreferencesKey("trash_enabled")
-    private val userIdKey = stringPreferencesKey("user_id")
+    private val hideCategoriesKey = booleanPreferencesKey(USER_HIDE_CATEGORIES_KEY)
+    private val userDarkThemeKey = booleanPreferencesKey(USER_THEME_KEY)
+    private val trashEnabledKey = booleanPreferencesKey(USER_TRASH_ENABLED_KEY)
+    private val userIdKey = stringPreferencesKey(FIREBASE_ID_KEY)
 
     fun categoriesPrefToggle() {
         viewModelScope.launch {
@@ -77,29 +81,12 @@ class OptionsScreenViewModel @Inject constructor(
 
     fun restoreWelcomeNote() {
         viewModelScope.launch {
-            if (!repository.defaultCategoryExists()) {
-                repository.insertCategory(
-                    NoteCategory()
-                )
-            }
 
             repository.insertNote(
                 SavedNote(
-                    noteTitle = "About this app",
+                    noteTitle = ABOUT_THIS_APP_TITLE,
+                    noteBody = ABOUT_THIS_APP_NOTE,
                     createdDate = getCurrentDate(),
-                    category = DEFAULT_CATEGORY,
-                    noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
-                        "\n" +
-                        "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
-                        "\n" +
-                        "2. There is no save button, the app auto-saves everything.\n" +
-                        "\n" +
-                        "3. To delete a note, swipe it to the right, to restore a note from the Trash, swipe it to the left.\n" +
-                        "\n" +
-                        "4. To add and set a category use the menu at the top right of this screen. \n" +
-                        "\n" +
-                        "5. If this note is deleted, it can later be restored in Options.\n" +
-                        "\n",
                     lastModified = getCurrentDate()
                 )
             )

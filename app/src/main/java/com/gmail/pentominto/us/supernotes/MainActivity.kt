@@ -16,8 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.*
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
@@ -26,7 +24,15 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.Opti
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.Spider
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
+import com.gmail.pentominto.us.supernotes.utility.Constants.ALL_NOTES_DESTINATION
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_ANIMATION_DURATION
+import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_EDIT_DESTINATION
+import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_EDIT_NOTE_EDIT_DESTINATION
+import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_ID
+import com.gmail.pentominto.us.supernotes.utility.Constants.OPTIONS_DESTINATION
+import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_DESTINATION
+import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE
+import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE_ID
 import com.gmail.pentominto.us.supernotes.utility.NavIntentsGetter
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -36,13 +42,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 
-val userDarkThemeKey = booleanPreferencesKey("user_theme")
-val userIdKey = stringPreferencesKey("user_id")
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel : MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     @Inject
     lateinit var dataStore: DataStore<Preferences>
@@ -52,14 +55,9 @@ class MainActivity : ComponentActivity() {
 
         actionBar?.hide()
 
-        viewModel.setUpFirebaseId()
-
-        viewModel.isDarkThemePreferred()
-
-        val isDarkTheme : MutableState<Boolean> =  viewModel.isDarkThemeState
+        val isDarkTheme: MutableState<Boolean> = viewModel.isDarkThemeState
 
         setContent {
-
             SuperNotesTheme(
                 darkTheme = isDarkTheme.value
             ) {
@@ -98,29 +96,29 @@ fun SuperNotesApp() {
 }
 
 @Composable
-private fun MyNavHost(navController : NavHostController, context : Context) {
+private fun MyNavHost(navController: NavHostController, context: Context) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = "allNotes"
+        startDestination = ALL_NOTES_DESTINATION
     ) {
         navigationWithTransition(
-            routeName = "allNotes",
+            routeName = ALL_NOTES_DESTINATION,
             destinations = listOf(
-                "noteEdit/{noteId}",
-                "options",
-                "trash"
+                NOTE_EDIT_NOTE_EDIT_DESTINATION,
+                OPTIONS_DESTINATION,
+                TRASH_DESTINATION
             ),
             arguments = emptyList()
         ) {
             AllNotesScreen(
                 onNoteClick = { noteId ->
-                    navController.navigate("noteEdit/$noteId")
+                    navController.navigate("$NOTE_EDIT_DESTINATION/$noteId")
                 },
                 onOptionsClick = { menuItemId ->
 
                     when (menuItemId) {
-                        2 -> navController.navigate("options")
-                        3 -> navController.navigate("trash")
+                        2 -> navController.navigate(OPTIONS_DESTINATION)
+                        3 -> navController.navigate(TRASH_DESTINATION)
                         4 -> context.startActivity(NavIntentsGetter.getPlaystoreIntent())
                         5 -> context.startActivity(NavIntentsGetter.getPrivacyPolicyIntent())
                     }
@@ -129,29 +127,29 @@ private fun MyNavHost(navController : NavHostController, context : Context) {
         }
 
         navigationWithTransition(
-            routeName = "trash",
+            routeName = TRASH_DESTINATION,
             destinations = listOf(
-                "allNotes",
-                "readOnlyNote/{trashNoteId}"
+                ALL_NOTES_DESTINATION,
+                "$TRASH_NOTE/{$TRASH_NOTE_ID}"
             ),
             arguments = emptyList()
         ) {
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
-                    navController.navigate("readOnlyNote/$trashNoteId")
+                    navController.navigate("$TRASH_NOTE/$trashNoteId")
                 }
             )
         }
 
         navigationWithTransition(
-            routeName = "noteEdit/{noteId}",
-            destinations = listOf("allNotes"),
+            routeName = NOTE_EDIT_NOTE_EDIT_DESTINATION,
+            destinations = listOf(ALL_NOTES_DESTINATION),
             arguments = listOf(
-                navArgument("noteId") { type = NavType.IntType }
+                navArgument(NOTE_ID) { type = NavType.IntType }
             )
         ) {
             val noteId = remember {
-                it.arguments?.getInt("noteId")
+                it.arguments?.getInt(NOTE_ID)
             }
 
             if (noteId != null) {
@@ -160,14 +158,14 @@ private fun MyNavHost(navController : NavHostController, context : Context) {
         }
 
         navigationWithTransition(
-            routeName = "readOnlyNote/{trashNoteId}",
-            destinations = listOf("trash"),
+            routeName = "$TRASH_NOTE/{$TRASH_NOTE_ID}",
+            destinations = listOf(TRASH_DESTINATION),
             arguments = listOf(
-                navArgument("trashNoteId") { type = NavType.IntType }
+                navArgument(TRASH_NOTE_ID) { type = NavType.IntType }
             )
         ) {
             val trashNoteId = remember {
-                it.arguments?.getInt("trashNoteId")
+                it.arguments?.getInt(TRASH_NOTE_ID)
             }
             if (trashNoteId != null) {
                 ReadOnlyNoteScreen(trashNoteId = trashNoteId)
@@ -175,8 +173,8 @@ private fun MyNavHost(navController : NavHostController, context : Context) {
         }
 
         navigationWithTransition(
-            routeName = "options",
-            destinations = listOf("allNotes"),
+            routeName = OPTIONS_DESTINATION,
+            destinations = listOf(ALL_NOTES_DESTINATION),
             arguments = emptyList()
         ) {
             OptionsScreen()

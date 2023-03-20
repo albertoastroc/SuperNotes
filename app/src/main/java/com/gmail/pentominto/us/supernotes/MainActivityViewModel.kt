@@ -8,6 +8,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.data.NoteCategory
+import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
+import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
+import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -18,20 +22,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val dataStore : DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val repository : LocalRepository
 ) : ViewModel() {
 
-    val userDarkThemeKey = booleanPreferencesKey("user_theme")
-    val userIdKey = stringPreferencesKey("user_id")
+    val userDarkThemeKey = booleanPreferencesKey(USER_THEME_KEY)
+    val userIdKey = stringPreferencesKey(FIREBASE_ID_KEY)
 
     val isDarkThemeState = mutableStateOf(false)
 
-    fun setUpFirebaseId() {
-
+    private fun setUpFirebaseId() {
         viewModelScope.launch {
             dataStore.edit { preferences ->
 
-                if (! preferences.contains(userIdKey)) {
+                if (!preferences.contains(userIdKey)) {
                     val userId = UUID.randomUUID().toString()
                     preferences[userIdKey] = userId
                 }
@@ -46,16 +50,22 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun isDarkThemePreferred() {
-
         viewModelScope.launch {
-
             dataStore.data.collect { preferences ->
 
                 if (preferences.contains(userDarkThemeKey)) {
-
                     isDarkThemeState.value = preferences[userDarkThemeKey] ?: false
-
                 }
+            }
+        }
+    }
+
+    private fun setDefaultCategory() {
+        viewModelScope.launch {
+            if (!repository.defaultCategoryExists()) {
+                repository.insertCategory(
+                    NoteCategory()
+                )
             }
         }
     }
@@ -63,6 +73,7 @@ class MainActivityViewModel @Inject constructor(
     init {
 
         isDarkThemePreferred()
+        setDefaultCategory()
+        setUpFirebaseId()
     }
-
 }

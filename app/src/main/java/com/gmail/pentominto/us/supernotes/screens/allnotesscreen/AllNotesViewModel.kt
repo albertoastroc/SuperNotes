@@ -13,8 +13,8 @@ import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
@@ -70,6 +70,7 @@ class AllNotesViewModel @Inject constructor(
 
                 )
             )
+            repository.deleteNote(note.noteId)
         }
     }
 

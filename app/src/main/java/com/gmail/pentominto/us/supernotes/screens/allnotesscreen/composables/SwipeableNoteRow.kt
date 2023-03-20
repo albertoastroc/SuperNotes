@@ -28,7 +28,6 @@ fun SwipeableNoteRow(
             if (it == DismissValue.DismissedToEnd) {
                 if (trashEnabled) {
                     sendToTrash()
-                    deleteNote(note.noteId)
                 } else {
                     deleteNote(note.noteId)
                 }
