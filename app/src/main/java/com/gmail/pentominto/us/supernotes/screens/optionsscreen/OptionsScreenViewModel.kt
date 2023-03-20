@@ -21,12 +21,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
-    private val dataStore : DataStore<Preferences>,
-    private val repository : LocalRepository
+    private val dataStore: DataStore<Preferences>,
+    private val repository: LocalRepository
 ) : ViewModel() {
 
-    private val _optionsScreenState : MutableState<OptionsScreenState> = mutableStateOf(OptionsScreenState())
-    val optionsScreenState : State<OptionsScreenState> = _optionsScreenState
+    private val _optionsScreenState: MutableState<OptionsScreenState> = mutableStateOf(
+        OptionsScreenState()
+    )
+    val optionsScreenState: State<OptionsScreenState> = _optionsScreenState
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     private val userDarkThemeKey = booleanPreferencesKey("user_theme")
@@ -34,13 +36,11 @@ class OptionsScreenViewModel @Inject constructor(
     private val userIdKey = stringPreferencesKey("user_id")
 
     fun categoriesPrefToggle() {
-
         viewModelScope.launch {
-
             dataStore.edit { settings ->
 
                 _optionsScreenState.value = _optionsScreenState.value.copy(
-                    categoriesOption = ! _optionsScreenState.value.categoriesOption
+                    categoriesOption = !_optionsScreenState.value.categoriesOption
                 )
 
                 settings[hideCategoriesKey] = _optionsScreenState.value.categoriesOption
@@ -49,13 +49,11 @@ class OptionsScreenViewModel @Inject constructor(
     }
 
     fun themeToggle() {
-
         viewModelScope.launch {
-
             dataStore.edit { settings ->
 
                 _optionsScreenState.value = _optionsScreenState.value.copy(
-                    darkThemeOption = ! _optionsScreenState.value.darkThemeOption
+                    darkThemeOption = !_optionsScreenState.value.darkThemeOption
                 )
 
                 settings[userDarkThemeKey] = _optionsScreenState.value.darkThemeOption
@@ -64,14 +62,12 @@ class OptionsScreenViewModel @Inject constructor(
     }
 
     fun trashFolderToggle() {
-
         viewModelScope.launch {
-
             dataStore.edit { settings ->
 
                 _optionsScreenState.value = _optionsScreenState.value.copy(
                     trashEnabled =
-                    ! _optionsScreenState.value.trashEnabled
+                    !_optionsScreenState.value.trashEnabled
                 )
 
                 settings[trashEnabledKey] = _optionsScreenState.value.trashEnabled
@@ -80,15 +76,11 @@ class OptionsScreenViewModel @Inject constructor(
     }
 
     fun restoreWelcomeNote() {
-
         viewModelScope.launch {
-
             if (!repository.defaultCategoryExists()) {
-
                 repository.insertCategory(
                     NoteCategory()
                 )
-
             }
 
             repository.insertNote(
@@ -97,52 +89,46 @@ class OptionsScreenViewModel @Inject constructor(
                     createdDate = getCurrentDate(),
                     category = DEFAULT_CATEGORY,
                     noteBody = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
-                            "\n" +
-                            "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
-                            "\n" +
-                            "2. There is no save button, the app auto-saves everything.\n" +
-                            "\n" +
-                            "3. To delete a note, swipe it to the right, to restore a note from the Trash, swipe it to the left.\n" +
-                            "\n" +
-                            "4. To add and set a category use the menu at the top right of this screen. \n" +
-                            "\n" +
-                            "5. If this note is deleted, it can later be restored in Options.\n" +
-                            "\n",
-                    lastModified = getCurrentDate(),
+                        "\n" +
+                        "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
+                        "\n" +
+                        "2. There is no save button, the app auto-saves everything.\n" +
+                        "\n" +
+                        "3. To delete a note, swipe it to the right, to restore a note from the Trash, swipe it to the left.\n" +
+                        "\n" +
+                        "4. To add and set a category use the menu at the top right of this screen. \n" +
+                        "\n" +
+                        "5. If this note is deleted, it can later be restored in Options.\n" +
+                        "\n",
+                    lastModified = getCurrentDate()
                 )
             )
         }
     }
 
     fun getPrefs() {
-
         viewModelScope.launch {
-
             dataStore.data.collect { preferences ->
 
                 if (preferences.contains(hideCategoriesKey)) {
-
                     _optionsScreenState.value = _optionsScreenState.value.copy(
                         categoriesOption = preferences[hideCategoriesKey] ?: true
                     )
                 }
 
                 if (preferences.contains(userDarkThemeKey)) {
-
                     _optionsScreenState.value = _optionsScreenState.value.copy(
                         darkThemeOption = preferences[userDarkThemeKey] ?: false
                     )
                 }
 
                 if (preferences.contains(trashEnabledKey)) {
-
                     _optionsScreenState.value = _optionsScreenState.value.copy(
                         trashEnabled = preferences[trashEnabledKey] ?: true
                     )
                 }
 
                 if (preferences.contains(userIdKey)) {
-
                     _optionsScreenState.value = _optionsScreenState.value.copy(
                         userId = preferences[userIdKey] ?: String()
                     )
@@ -152,17 +138,13 @@ class OptionsScreenViewModel @Inject constructor(
     }
 
     fun deleteAllNotes() {
-
         viewModelScope.launch {
-
             repository.deleteAllNotes()
         }
     }
 
     fun deleteAllTrashNotes() {
-
         viewModelScope.launch {
-
             repository.deleteAllTrashNotes()
         }
     }

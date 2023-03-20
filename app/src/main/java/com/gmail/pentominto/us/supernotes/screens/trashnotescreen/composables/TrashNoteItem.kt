@@ -22,11 +22,10 @@ import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 
 @Composable
 fun TrashNoteItem(
-    note : DiscardedNote,
-    modifier : Modifier,
-    onClick : (Int) -> Unit
+    note: DiscardedNote,
+    modifier: Modifier,
+    onClick: (Int) -> Unit
 ) {
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -39,9 +38,7 @@ fun TrashNoteItem(
         backgroundColor = MaterialTheme.colors.primary
 
     ) {
-
         Column {
-
             Spacer(
                 modifier = Modifier
                     .height(10.dp)
@@ -54,7 +51,6 @@ fun TrashNoteItem(
             )
 
             Row {
-
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -66,7 +62,6 @@ fun TrashNoteItem(
                             )
                         )
                 ) {
-
                     Text(
                         text = note.noteTitle.toString(),
                         modifier = Modifier
@@ -82,7 +77,7 @@ fun TrashNoteItem(
                         fontSize = 22.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        color = MaterialTheme.colors.onBackground,
+                        color = MaterialTheme.colors.onBackground
                     )
 
                     Row(
@@ -91,14 +86,12 @@ fun TrashNoteItem(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Bottom
                     ) {
-
                         Column(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .weight(1f),
                             verticalArrangement = Arrangement.Bottom
                         ) {
-
                             Divider(
                                 modifier = Modifier
                                     .height(1.dp)
@@ -122,7 +115,6 @@ fun TrashNoteItem(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.End
                         ) {
-
                             Text(
                                 text = "Deleted ${note.dateDeleted}",
                                 fontSize = 12.sp,

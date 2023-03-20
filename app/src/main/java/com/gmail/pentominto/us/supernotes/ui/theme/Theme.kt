@@ -15,7 +15,7 @@ private val DarkColorPalette = darkColors(
     secondaryVariant = blackchocolate,
     onSecondary = Color.White,
     background = Spider,
-    onBackground = Color.White,
+    onBackground = Color.White
 )
 private val LightColorPalette = lightColors(
     primary = almond,
@@ -25,7 +25,7 @@ private val LightColorPalette = lightColors(
     secondaryVariant = artichoke,
     onSecondary = Color.White,
     background = Color.White,
-    onBackground = Color.Black,
+    onBackground = Color.Black
 
     /* Other default colors to override
     background = Color.White,
@@ -38,8 +38,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun SuperNotesTheme(darkTheme : Boolean = isSystemInDarkTheme(), content : @Composable () -> Unit) {
-
+fun SuperNotesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

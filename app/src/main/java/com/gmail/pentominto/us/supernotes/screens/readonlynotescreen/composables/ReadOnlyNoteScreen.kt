@@ -18,10 +18,9 @@ import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.ReadOnlyNot
 
 @Composable
 fun ReadOnlyNoteScreen(
-    trashNoteId : Int,
-    viewModel : ReadOnlyNoteViewModel = hiltViewModel()
+    trashNoteId: Int,
+    viewModel: ReadOnlyNoteViewModel = hiltViewModel()
 ) {
-
     val trashNoteState = remember { viewModel.readOnlyNoteState }
 
     Column(
@@ -34,21 +33,18 @@ fun ReadOnlyNoteScreen(
                 end = 16.dp
             )
     ) {
-
         Card(
             modifier = Modifier,
             shape = RoundedCornerShape(2.dp),
             elevation = 1.dp,
             backgroundColor = MaterialTheme.colors.primary
         ) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Text(
                     text = trashNoteState.value.trashNote?.noteTitle ?: "",
                     color = MaterialTheme.colors.onBackground,
@@ -57,7 +53,7 @@ fun ReadOnlyNoteScreen(
                         .padding(
                             top = 20.dp,
                             bottom = 20.dp,
-                            start = 24.dp,
+                            start = 24.dp
                         )
                 )
             }
@@ -76,7 +72,6 @@ fun ReadOnlyNoteScreen(
             elevation = 1.dp,
             backgroundColor = MaterialTheme.colors.primary
         ) {
-
             Text(
                 text = trashNoteState.value.trashNote?.noteBody ?: "",
                 color = MaterialTheme.colors.onBackground,
@@ -84,7 +79,6 @@ fun ReadOnlyNoteScreen(
                 modifier = Modifier
                     .padding(24.dp)
             )
-
         }
     }
 }

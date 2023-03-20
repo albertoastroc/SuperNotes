@@ -12,86 +12,72 @@ import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
-    private val repository : LocalRepository,
-    savedStateHandle : SavedStateHandle
+    private val repository: LocalRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var noteId : Int = checkNotNull(savedStateHandle["noteId"])
+    private var noteId: Int = checkNotNull(savedStateHandle["noteId"])
 
-    private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
-    val noteEditState : State<NoteEditState> = _noteEditState
+    private val _noteEditState: MutableState<NoteEditState> = mutableStateOf(NoteEditState())
+    val noteEditState: State<NoteEditState> = _noteEditState
 
-    private fun getNote(noteId : Int) {
+    private fun getNote(noteId: Int) {
+        viewModelScope.launch {
+            repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
 
-
-            viewModelScope.launch {
-
-                repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
-
-                    categoryNoteMap.forEach {
-
-                        _noteEditState.value = _noteEditState.value.copy(
-                            noteCategory = it.key,
-                            noteTitle = it.value.noteTitle,
-                            noteBody = it.value.noteBody,
-                        )
-                    }
+                categoryNoteMap.forEach {
+                    _noteEditState.value = _noteEditState.value.copy(
+                        noteCategory = it.key,
+                        noteTitle = it.value.noteTitle,
+                        noteBody = it.value.noteBody
+                    )
                 }
             }
+        }
     }
 
     private fun insertNewNote() {
-
         viewModelScope.launch {
-
-                noteId = repository.insertNote(
-                    SavedNote(
-                        category = DEFAULT_CATEGORY,
-                        createdDate = DateGetter.getCurrentDate(),
-                        lastModified = DateGetter.getCurrentDate(),
-                        noteBody = noteEditState.value.noteBody,
-                        noteTitle = noteEditState.value.noteTitle
-                    )
-                ).toInt()
+            noteId = repository.insertNote(
+                SavedNote(
+                    category = DEFAULT_CATEGORY,
+                    createdDate = DateGetter.getCurrentDate(),
+                    lastModified = DateGetter.getCurrentDate(),
+                    noteBody = noteEditState.value.noteBody,
+                    noteTitle = noteEditState.value.noteTitle
+                )
+            ).toInt()
         }
     }
 
     private fun getCategories() {
-
         viewModelScope.launch {
-
             repository.getAllCategories().collect {
-
                 _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
         }
     }
 
     private fun getCurrentDate() {
-
         _noteEditState.value = _noteEditState.value.copy(
             currentDate = DateGetter.getCurrentDate()
         )
     }
 
-    fun insertCategory(categoryName : String) {
-
+    fun insertCategory(categoryName: String) {
         viewModelScope.launch {
-
             saveNoteText()
             repository.insertCategory(NoteCategory(categoryName))
         }
     }
 
-    fun deleteCategory(category : NoteCategory) {
-
+    fun deleteCategory(category: NoteCategory) {
         viewModelScope.launch {
-
             val notesToUpdate = repository.getNotesOfThisCategory(category.categoryTitle)
 
             repository.deleteCategory(category.categoryId)
@@ -110,7 +96,6 @@ class NoteEditScreenViewModel @Inject constructor(
     }
 
     fun saveNoteText() {
-
         viewModelScope.launch {
             repository.updateNote(
                 noteTitle = _noteEditState.value.noteTitle,
@@ -121,10 +106,8 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveNoteCategory(category : NoteCategory) {
-
+    fun saveNoteCategory(category: NoteCategory) {
         viewModelScope.launch {
-
             saveNoteText()
             repository.updateNoteCategory(
                 chosenCategory = category.categoryTitle,
@@ -133,15 +116,13 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun onTitleInputChange(newInput : String) {
-
+    fun onTitleInputChange(newInput: String) {
         _noteEditState.value = _noteEditState.value.copy(
             noteTitle = newInput
         )
     }
 
-    fun onBodyInputChange(newInput : String) {
-
+    fun onBodyInputChange(newInput: String) {
         _noteEditState.value = _noteEditState.value.copy(
             noteBody = newInput
         )

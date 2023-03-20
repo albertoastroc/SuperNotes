@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -20,15 +21,13 @@ import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 
-
 @Composable
 fun SearchBarWithMenu(
-    input : String,
-    onInputChange : (String) -> Unit,
-    onMenuIconClick : () -> Unit,
-    onXClick : () -> Unit
+    input: String,
+    onInputChange: (String) -> Unit,
+    onMenuIconClick: () -> Unit,
+    onXClick: () -> Unit
 ) {
-
     val customTextSelectionColors = TextSelectionColors(
         handleColor = Color.Transparent,
         backgroundColor = Color.Transparent
@@ -44,15 +43,13 @@ fun SearchBarWithMenu(
                 bottom = 8.dp
             )
             .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colors.secondaryVariant),
+            .background(MaterialTheme.colors.secondaryVariant)
     ) {
-
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_menu_24),
                 contentDescription = null,
@@ -62,10 +59,10 @@ fun SearchBarWithMenu(
                         top = 20.dp,
                         bottom = 20.dp
                     )
+                    .testTag("Search Bar Menu")
                     .clickable(
                         interactionSource = NoRippleInteractionSource(),
                         onClick = {
-
                             onMenuIconClick()
                         },
                         indication = null
@@ -74,7 +71,6 @@ fun SearchBarWithMenu(
             )
 
             CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-
                 TextField(
                     modifier = Modifier
                         .weight(1f),
@@ -85,7 +81,7 @@ fun SearchBarWithMenu(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSecondary,
+                        cursorColor = MaterialTheme.colors.onSecondary
                     ),
                     singleLine = true,
                     placeholder = {
@@ -112,6 +108,7 @@ fun SearchBarWithMenu(
                         top = 20.dp,
                         bottom = 20.dp
                     )
+                    .testTag("Search Bar X")
                     .clickable(
                         interactionSource = NoRippleInteractionSource(),
                         onClick = {
@@ -122,6 +119,5 @@ fun SearchBarWithMenu(
                 tint = MaterialTheme.colors.onSecondary
             )
         }
-
     }
 }

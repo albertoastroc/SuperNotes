@@ -18,16 +18,14 @@ import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNotesView
 
 @Composable
 fun TrashNotesScreen(
-    viewModel : TrashNotesViewModel = hiltViewModel(),
-    onTrashNoteClick : (Int) -> Unit
+    viewModel: TrashNotesViewModel = hiltViewModel(),
+    onTrashNoteClick: (Int) -> Unit
 ) {
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
-
         item {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -58,7 +56,6 @@ fun TrashNotesScreen(
                 },
                 trashNote = note
             ) {
-
                 TrashNoteItem(
                     note = note,
                     modifier = Modifier,

@@ -30,11 +30,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
-    viewModel : AllNotesViewModel = hiltViewModel(),
-    onNoteClick : (Int) -> Unit,
-    onOptionsClick : (Int) -> Unit,
+    viewModel: AllNotesViewModel = hiltViewModel(),
+    onNoteClick: (Int) -> Unit,
+    onOptionsClick: (Int) -> Unit
 ) {
-
     val notesState by remember { viewModel.allNotesState }
 
     val scaffoldState = rememberScaffoldState()
@@ -55,7 +54,6 @@ fun AllNotesScreen(
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
-
             AllNotesDrawer(
                 scope,
                 scaffoldState,
@@ -75,7 +73,6 @@ fun AllNotesScreen(
             )
         },
         floatingActionButton = {
-
             ExtendedFab(
                 listState,
                 onNoteClick
@@ -86,13 +83,13 @@ fun AllNotesScreen(
 
 @Composable
 private fun NotesList(
-    listState : LazyListState,
-    paddingValues : PaddingValues,
-    allNotesState : AllNotesState,
-    viewModel : AllNotesViewModel,
-    scope : CoroutineScope,
-    scaffoldState : ScaffoldState,
-    onNoteClick : (Int) -> Unit
+    listState: LazyListState,
+    paddingValues: PaddingValues,
+    allNotesState: AllNotesState,
+    viewModel: AllNotesViewModel,
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    onNoteClick: (Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -100,9 +97,7 @@ private fun NotesList(
         state = listState,
         contentPadding = paddingValues
     ) {
-
         item {
-
             SearchBarWithMenu(
                 input = allNotesState.searchBarInput,
                 onInputChange = { viewModel.onSearchChange(it) },
@@ -112,7 +107,6 @@ private fun NotesList(
         }
 
         if (allNotesState.searchBarInput.length >= MINIMUM_SEARCH_INPUT_LENGTH) {
-
             items(allNotesState.notesSearchResults) { note ->
 
                 SearchResultsNote(
@@ -123,7 +117,6 @@ private fun NotesList(
                 )
             }
         } else {
-
             allNotesState.notes.entries.forEach { (category, notes) ->
 
                 if (allNotesState.showCategoryTitles) {
@@ -148,7 +141,7 @@ private fun NotesList(
 }
 
 @Composable
-private fun CategoryTitle(category : NoteCategory) {
+private fun CategoryTitle(category: NoteCategory) {
     Text(
         text = category.categoryTitle,
         modifier = Modifier
@@ -166,10 +159,10 @@ private fun CategoryTitle(category : NoteCategory) {
 
 @Composable
 private fun DefaultNote(
-    viewModel : AllNotesViewModel,
-    note : SavedNote,
-    allNotesState : AllNotesState,
-    onNoteClick : (Int) -> Unit
+    viewModel: AllNotesViewModel,
+    note: SavedNote,
+    allNotesState: AllNotesState,
+    onNoteClick: (Int) -> Unit
 ) {
     SwipeableNoteRow(
         deleteNote = { viewModel.deleteNote(note.noteId) },
@@ -187,10 +180,10 @@ private fun DefaultNote(
 
 @Composable
 private fun SearchResultsNote(
-    viewModel : AllNotesViewModel,
-    note : SavedNote,
-    allNotesState : AllNotesState,
-    onNoteClick : (Int) -> Unit
+    viewModel: AllNotesViewModel,
+    note: SavedNote,
+    allNotesState: AllNotesState,
+    onNoteClick: (Int) -> Unit
 ) {
     SwipeableNoteRow(
         deleteNote = { viewModel.deleteNote(note.noteId) },
@@ -198,21 +191,20 @@ private fun SearchResultsNote(
         trashEnabled = allNotesState.trashEnabled,
         sendToTrash = { viewModel.sendToTrash(note) }
     ) {
-
         NoteItemSearchResult(
             note = note,
             query = allNotesState.searchBarInput,
             modifier = Modifier,
-            onClick = { onNoteClick(note.noteId) },
+            onClick = { onNoteClick(note.noteId) }
         )
     }
 }
 
 @Composable
 private fun AllNotesDrawer(
-    scope : CoroutineScope,
-    scaffoldState : ScaffoldState,
-    onOptionsClick : (Int) -> Unit
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    onOptionsClick: (Int) -> Unit
 ) {
     Drawer(
         drawerOptionsList = listOf(
@@ -243,19 +235,16 @@ private fun AllNotesDrawer(
             )
         ),
         onSettingClick = {
-
             scope.launch {
-
                 scaffoldState.drawerState.close()
                 onOptionsClick(it)
             }
-
-        },
+        }
     )
 }
 
 @Composable
-private fun ExtendedFab(listState : LazyListState, onNoteClick : (Int) -> Unit) {
+private fun ExtendedFab(listState: LazyListState, onNoteClick: (Int) -> Unit) {
     ExtendedFloatingActionButton(
         text = {
             Text(
@@ -272,13 +261,12 @@ private fun ExtendedFab(listState : LazyListState, onNoteClick : (Int) -> Unit) 
         },
         expanded = listState.isScrollingUp(),
         onClick = { onNoteClick(0) },
-        containerColor = MaterialTheme.colors.secondary,
+        containerColor = MaterialTheme.colors.secondary
     )
 }
 
 @Composable
-fun LazyListState.isScrollingUp() : Boolean {
-
+fun LazyListState.isScrollingUp(): Boolean {
     var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
     var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
     return remember(this) {
@@ -294,4 +282,3 @@ fun LazyListState.isScrollingUp() : Boolean {
         }
     }.value
 }
-

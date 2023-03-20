@@ -13,26 +13,23 @@ import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
-    private val repository : LocalRepository,
-    private val dataStore : DataStore<Preferences>
+    private val repository: LocalRepository,
+    private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
-    private val _allNotesState : MutableState<AllNotesState> = mutableStateOf(AllNotesState())
-    val allNotesState : State<AllNotesState> = _allNotesState
+    private val _allNotesState: MutableState<AllNotesState> = mutableStateOf(AllNotesState())
+    val allNotesState: State<AllNotesState> = _allNotesState
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     private val trashEnabled = booleanPreferencesKey("trash_enabled")
 
-
-    fun onSearchChange(input : String) {
-
+    fun onSearchChange(input: String) {
         viewModelScope.launch {
-
             _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
 
             val notesSearchResults = _allNotesState.value.notes.values.flatten().filter { note ->
@@ -43,29 +40,25 @@ class AllNotesViewModel @Inject constructor(
                 )
             }
 
-            _allNotesState.value = _allNotesState.value.copy(notesSearchResults = notesSearchResults)
-
+            _allNotesState.value = _allNotesState.value.copy(
+                notesSearchResults = notesSearchResults
+            )
         }
     }
 
     fun getNotesList() = viewModelScope.launch {
-
         repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
 
             _allNotesState.value = _allNotesState.value.copy(notes = categoryNotesMap)
-
         }
     }
 
-    fun deleteNote(noteId : Int) = viewModelScope.launch {
-
+    fun deleteNote(noteId: Int) = viewModelScope.launch {
         repository.deleteNote(noteId)
     }
 
-    fun sendToTrash(note : SavedNote) {
-
+    fun sendToTrash(note: SavedNote) {
         viewModelScope.launch {
-
             repository.insertTrashNote(
 
                 DiscardedNote(
@@ -81,35 +74,30 @@ class AllNotesViewModel @Inject constructor(
     }
 
     fun clearSearchBar() {
-
         _allNotesState.value = _allNotesState.value.copy(searchBarInput = "")
     }
 
     private fun getPrefs() {
-
         viewModelScope.launch {
-
             dataStore.data.collect { preferences ->
 
                 if (preferences.contains(hideCategoriesKey)) {
-
                     _allNotesState.value = _allNotesState.value.copy(
                         showCategoryTitles = preferences[hideCategoriesKey] ?: true
                     )
                 }
 
-                    if (preferences.contains(trashEnabled)) {
-
-                        _allNotesState.value = _allNotesState.value.copy(
-                            trashEnabled = preferences[trashEnabled] ?: true
-                        )
-                    }
+                if (preferences.contains(trashEnabled)) {
+                    _allNotesState.value = _allNotesState.value.copy(
+                        trashEnabled = preferences[trashEnabled] ?: true
+                    )
                 }
             }
         }
-
-        init {
-            getPrefs()
-            getNotesList()
-        }
     }
+
+    init {
+        getPrefs()
+        getNotesList()
+    }
+}

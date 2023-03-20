@@ -34,16 +34,14 @@ import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
 @OptIn(
-    ExperimentalMaterialApi::class,
+    ExperimentalMaterialApi::class
 )
-
 @Composable
 fun NoteEditScreen(
-    noteId : Int,
-    viewModel : NoteEditScreenViewModel = hiltViewModel()
+    noteId: Int,
+    viewModel: NoteEditScreenViewModel = hiltViewModel()
 
 ) {
-
     val context = LocalContext.current
 
     val clipboardManager = LocalClipboardManager.current
@@ -54,7 +52,9 @@ fun NoteEditScreen(
 
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
 
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = bottomSheetState
+    )
 
     val focusManager = LocalFocusManager.current
 
@@ -68,13 +68,11 @@ fun NoteEditScreen(
     )
 
     DisposableEffect(lifeCycleOwner) {
-
         val observer = LifecycleEventObserver { _, event ->
 
             when (event) {
-
-                Lifecycle.Event.ON_STOP-> viewModel.saveNoteText()
-                else                   -> {}
+                Lifecycle.Event.ON_STOP -> viewModel.saveNoteText()
+                else -> {}
             }
         }
 
@@ -93,7 +91,6 @@ fun NoteEditScreen(
         sheetGesturesEnabled = true,
         sheetPeekHeight = 0.dp,
         content = {
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,22 +100,20 @@ fun NoteEditScreen(
                         end = 16.dp
                     )
             ) {
-
                 Card(
                     modifier = Modifier,
                     shape = RoundedCornerShape(2.dp),
                     elevation = 1.dp,
                     backgroundColor = MaterialTheme.colors.primary
                 ) {
-
                     Row(
                         modifier = Modifier
                             .weight(1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
-                        CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-
+                        CompositionLocalProvider(
+                            LocalTextSelectionColors provides customTextSelectionColors
+                        ) {
                             TextField(
                                 value = noteState.value.noteTitle.toString(),
                                 singleLine = true,
@@ -147,13 +142,12 @@ fun NoteEditScreen(
                                 textStyle = TextStyle(
                                     color = MaterialTheme.colors.onBackground,
                                     fontSize = 18.sp
-                                ),
-
                                 )
+
+                            )
                         }
 
                         Column {
-
                             Icon(
                                 painterResource(id = R.drawable.ic_baseline_more_vert_24),
                                 modifier = Modifier
@@ -161,7 +155,6 @@ fun NoteEditScreen(
                                     .clickable(
                                         interactionSource = NoRippleInteractionSource(),
                                         onClick = {
-
                                             dropDownMenuExpanded = true
                                         },
                                         indication = null
@@ -174,9 +167,7 @@ fun NoteEditScreen(
                                 expanded = dropDownMenuExpanded,
                                 onDismissRequest = { dropDownMenuExpanded = false }
                             ) {
-
                                 DropdownMenuItem(onClick = {
-
                                     clipboardManager.setText(
                                         AnnotatedString(
                                             noteState.value.noteBody
@@ -188,14 +179,12 @@ fun NoteEditScreen(
                                         "Text Copied",
                                         Toast.LENGTH_SHORT
                                     ).show()
-
                                 }) {
                                     Text(text = "Copy to clipboard")
                                 }
 
                                 DropdownMenuItem(onClick = {
                                     coroutineScope.launch {
-
                                         bottomSheetState.expand()
                                         focusManager.clearFocus()
                                         dropDownMenuExpanded = false
@@ -205,8 +194,7 @@ fun NoteEditScreen(
                                 }
 
                                 DropdownMenuItem(onClick = {
-
-                                    val sendIntent : Intent = Intent().apply {
+                                    val sendIntent: Intent = Intent().apply {
                                         action = Intent.ACTION_SEND
                                         putExtra(
                                             Intent.EXTRA_TEXT,
@@ -221,7 +209,6 @@ fun NoteEditScreen(
 
                                     context.startActivity(shareIntent)
                                     dropDownMenuExpanded = false
-
                                 }) {
                                     Text(text = "Share")
                                 }
@@ -244,9 +231,9 @@ fun NoteEditScreen(
                     shape = RoundedCornerShape(2.dp),
                     backgroundColor = MaterialTheme.colors.primary
                 ) {
-
-                    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-
+                    CompositionLocalProvider(
+                        LocalTextSelectionColors provides customTextSelectionColors
+                    ) {
                         TextField(
                             value = noteState.value.noteBody.toString(),
                             placeholder = {
@@ -285,7 +272,6 @@ fun NoteEditScreen(
         },
 
         sheetContent = {
-
             CategoriesList(
                 categories = noteState.value.categories,
                 currentCategory = noteState.value.noteCategory,
@@ -304,13 +290,12 @@ fun NoteEditScreen(
 
 @Composable
 fun CategoriesList(
-    categories : List<NoteCategory>,
-    currentCategory : NoteCategory,
-    onClickDialog : (String) -> Unit,
-    onDeleteCategory : (NoteCategory) -> Unit,
-    onClickCategory : (NoteCategory) -> Unit,
+    categories: List<NoteCategory>,
+    currentCategory: NoteCategory,
+    onClickDialog: (String) -> Unit,
+    onDeleteCategory: (NoteCategory) -> Unit,
+    onClickCategory: (NoteCategory) -> Unit
 ) {
-
     val openCategoryDialog = remember { mutableStateOf(false) }
 
     val dialogInput = remember { mutableStateOf(String()) }
@@ -322,9 +307,7 @@ fun CategoriesList(
             .fillMaxWidth()
             .heightIn(max = 450.dp)
     ) {
-
         item {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -332,7 +315,6 @@ fun CategoriesList(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_add_24),
                     contentDescription = null,
@@ -349,9 +331,7 @@ fun CategoriesList(
                 )
             }
 
-
             if (openCategoryDialog.value) {
-
                 AlertDialog(
                     modifier = Modifier.width(400.dp),
                     onDismissRequest = { openCategoryDialog.value = false },
@@ -360,15 +340,12 @@ fun CategoriesList(
                         Text(
                             text = dialogTitleState.value
                         )
-
                     },
                     text = {
-
                         Row(
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-
                             TextField(
                                 value = dialogInput.value,
                                 modifier = Modifier
@@ -383,7 +360,6 @@ fun CategoriesList(
                                 )
                             )
                         }
-
                     },
                     buttons = {
                         Row(
@@ -392,7 +368,6 @@ fun CategoriesList(
                                 .fillMaxWidth()
                                 .padding(bottom = 16.dp)
                         ) {
-
                             Button(
                                 onClick = { openCategoryDialog.value = false },
                                 colors = ButtonDefaults.buttonColors(
@@ -407,7 +382,6 @@ fun CategoriesList(
 
                             Button(
                                 onClick = {
-
                                     if (dialogInput.value.isNotEmpty()) {
                                         onClickDialog(dialogInput.value)
                                         openCategoryDialog.value = false
@@ -445,12 +419,14 @@ fun CategoriesList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = if (category == currentCategory)
-                            MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
+                        color = if (category == currentCategory) {
+                            MaterialTheme.colors.secondary
+                        } else {
+                            MaterialTheme.colors.secondaryVariant
+                        }
                     )
                     .height(60.dp)
                     .clickable {
-
                         onClickCategory(category)
                     },
                 verticalAlignment = Alignment.CenterVertically
@@ -469,7 +445,6 @@ fun CategoriesList(
                 )
 
                 if (category.categoryTitle != "No NoteCategory") {
-
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_delete_24),
                         modifier = Modifier
@@ -477,12 +452,11 @@ fun CategoriesList(
                             .clickable(
                                 interactionSource = NoRippleInteractionSource(),
                                 onClick = {
-
                                     onDeleteCategory(category)
                                 },
                                 indication = null
                             ),
-                        contentDescription = null,
+                        contentDescription = null
                     )
                 }
             }

@@ -7,17 +7,17 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "trash_note_table")
 data class DiscardedNote(
 
-    var noteTitle : String,
+    var noteTitle: String,
 
-    var noteBody : String,
+    var noteBody: String,
 
-    var createdDate : String,
+    var createdDate: String,
 
-    var lastModified : String,
+    var lastModified: String,
 
-    var dateDeleted : String,
+    var dateDeleted: String,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "trash_note_db_id")
-    var noteId : Int = 0,
+    var noteId: Int = 0
 )

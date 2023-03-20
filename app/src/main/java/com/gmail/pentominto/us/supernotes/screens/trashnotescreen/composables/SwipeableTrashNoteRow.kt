@@ -17,20 +17,16 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
 fun SwipeableTrashNoteRow(
-    deleteNote : (Int) -> Unit,
-    restoreNote : () -> Unit,
-    trashNote : DiscardedNote,
-    content : @Composable () -> Unit,
+    deleteNote: (Int) -> Unit,
+    restoreNote: () -> Unit,
+    trashNote: DiscardedNote,
+    content: @Composable () -> Unit
 ) {
-
     val dismissState = rememberDismissState(
         confirmStateChange = {
-
             if (it == DismissValue.DismissedToEnd) {
-
                 deleteNote(trashNote.noteId)
             } else if (it == DismissValue.DismissedToStart) {
-
                 restoreNote()
             }
 
@@ -46,13 +42,11 @@ fun SwipeableTrashNoteRow(
         ),
         dismissThresholds = { FractionalThreshold(.6f) },
         background = {
-
             val direction = dismissState.dismissDirection?.name
 
             if (
                 dismissState.progress.fraction <= .99f && direction == DismissDirection.StartToEnd.name
             ) {
-
                 Box(
                     modifier = Modifier
                         .background(

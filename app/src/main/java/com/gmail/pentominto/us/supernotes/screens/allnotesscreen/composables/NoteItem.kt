@@ -25,11 +25,10 @@ import com.gmail.pentominto.us.supernotes.data.SavedNote
 
 @Composable
 fun NoteItem(
-    note : SavedNote,
-    modifier : Modifier,
-    onClick : (Int) -> Unit
+    note: SavedNote,
+    modifier: Modifier,
+    onClick: (Int) -> Unit
 ) {
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -42,9 +41,7 @@ fun NoteItem(
         backgroundColor = MaterialTheme.colors.primary
 
     ) {
-
         Column {
-
             Spacer(
                 modifier = Modifier
                     .height(10.dp)
@@ -57,7 +54,6 @@ fun NoteItem(
             )
 
             Row {
-
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -69,7 +65,6 @@ fun NoteItem(
                             )
                         )
                 ) {
-
                     Text(
                         text = note.noteTitle.toString(),
                         modifier = Modifier
@@ -85,7 +80,7 @@ fun NoteItem(
                         fontSize = 22.sp,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        color = MaterialTheme.colors.onBackground,
+                        color = MaterialTheme.colors.onBackground
                     )
 
                     Row(
@@ -94,14 +89,12 @@ fun NoteItem(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Bottom
                     ) {
-
                         Column(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .weight(1f),
                             verticalArrangement = Arrangement.Bottom
                         ) {
-
                             Divider(
                                 modifier = Modifier
                                     .height(1.dp)
@@ -115,7 +108,6 @@ fun NoteItem(
                             )
                         }
 
-
                         Column(
                             modifier = Modifier
                                 .padding(
@@ -126,7 +118,6 @@ fun NoteItem(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.End
                         ) {
-
                             Text(
                                 text = "Created ${note.createdDate}",
                                 fontSize = 12.sp,
@@ -137,34 +128,26 @@ fun NoteItem(
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
-
                         }
-
                     }
-
                 }
-
             }
-
         }
-
     }
 }
 
 @Composable
 fun NoteItemSearchResult(
-    note : SavedNote,
-    query : String,
-    modifier : Modifier,
-    onClick : (Int) -> Unit
+    note: SavedNote,
+    query: String,
+    modifier: Modifier,
+    onClick: (Int) -> Unit
 ) {
-
     val finder = note.noteBody.indexOf(query)
 
     val noteLength = note.noteBody.length
 
     val queryResult = finder.let {
-
         note.noteBody.substring(
             it,
             noteLength - 1
@@ -185,9 +168,7 @@ fun NoteItemSearchResult(
         backgroundColor = MaterialTheme.colors.primary
 
     ) {
-
         Column {
-
             Spacer(
                 modifier = Modifier
                     .height(10.dp)
@@ -200,7 +181,6 @@ fun NoteItemSearchResult(
             )
 
             Row {
-
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -212,7 +192,6 @@ fun NoteItemSearchResult(
                             )
                         )
                 ) {
-
                     Text(
                         text = note.noteTitle.toString(),
                         modifier = Modifier
@@ -255,14 +234,12 @@ fun NoteItemSearchResult(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Bottom
                     ) {
-
                         Column(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .weight(1f),
                             verticalArrangement = Arrangement.Bottom
                         ) {
-
                             Divider(
                                 modifier = Modifier
                                     .height(1.dp)
@@ -276,7 +253,6 @@ fun NoteItemSearchResult(
                             )
                         }
 
-
                         Column(
                             modifier = Modifier
                                 .padding(
@@ -287,7 +263,6 @@ fun NoteItemSearchResult(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.End
                         ) {
-
                             Text(
                                 text = "Created ${note.createdDate}",
                                 fontSize = 12.sp,
@@ -298,17 +273,10 @@ fun NoteItemSearchResult(
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
-
                         }
-
                     }
-
                 }
-
             }
-
         }
-
     }
 }
-

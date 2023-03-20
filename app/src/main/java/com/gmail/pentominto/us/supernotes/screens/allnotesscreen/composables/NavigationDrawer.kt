@@ -18,18 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
 
-
 @Composable
 fun Drawer(
-    drawerOptionsList : List<MenuItem>,
-    onSettingClick : (Int) -> Unit,
-    itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp),
+    drawerOptionsList: List<MenuItem>,
+    onSettingClick: (Int) -> Unit,
+    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
 ) {
-
     LazyColumn {
-
         item {
-
             DrawerHeader()
         }
         items(drawerOptionsList) { item ->
@@ -42,7 +38,6 @@ fun Drawer(
                     }
                     .padding(16.dp)
             ) {
-
                 Icon(
                     imageVector = item.icon,
                     contentDescription = null,
@@ -55,36 +50,29 @@ fun Drawer(
                     style = itemTextStyle,
                     color = MaterialTheme.colors.onBackground
                 )
-
             }
-
         }
 
         item { Divider() }
-
     }
 }
 
 @Composable
-fun DrawerHeader(
-) {
-
+fun DrawerHeader() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 24.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
-    )
-    {
+    ) {
         Image(
             painterResource(id = R.drawable.app_icon),
             modifier = Modifier
                 .height(50.dp)
                 .width(50.dp),
-            contentDescription = null,
+            contentDescription = null
         )
-
     }
     Divider()
 }

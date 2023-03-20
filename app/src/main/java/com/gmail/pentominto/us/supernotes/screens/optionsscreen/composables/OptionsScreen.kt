@@ -24,9 +24,8 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreenVie
 
 @Composable
 fun OptionsScreen(
-    viewModel : OptionsScreenViewModel = hiltViewModel()
+    viewModel: OptionsScreenViewModel = hiltViewModel()
 ) {
-
     val context = LocalContext.current
 
     val optionsState by remember { viewModel.optionsScreenState }
@@ -36,13 +35,11 @@ fun OptionsScreen(
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
-
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
 
         ) {
-
             Text(
                 text = "Options",
                 fontSize = 36.sp,
@@ -101,17 +98,15 @@ fun OptionsScreen(
                 yesButtonMessage = "Continue",
                 noButtonMessage = "Cancel"
             ) {
-
                 val uriText = "mailto:simplenotesacf@gmail.com" +
-                        "?subject=" + "Data deletion request" +
-                        "&body=" + "Delete data for ID ${optionsState.userId}"
+                    "?subject=" + "Data deletion request" +
+                    "&body=" + "Delete data for ID ${optionsState.userId}"
 
                 val emailIntent = Intent()
                     .setData(Uri.parse(uriText))
                     .setAction(Intent.ACTION_SENDTO)
 
                 context.startActivity(emailIntent)
-
             }
             OptionsRowWithAlertDialog(
                 title = "Restore Welcome/FAQ note",
@@ -128,18 +123,16 @@ fun OptionsScreen(
 
 @Composable
 fun OptionsRowWithAlertDialog(
-    title : String,
-    subTitle : String?,
-    message : String,
-    yesButtonMessage : String,
-    noButtonMessage : String,
-    onClick : () -> Unit,
+    title: String,
+    subTitle: String?,
+    message: String,
+    yesButtonMessage: String,
+    noButtonMessage: String,
+    onClick: () -> Unit
 ) {
-
     val openConfirmDialog = remember { mutableStateOf(false) }
 
     if (openConfirmDialog.value) {
-
         AlertDialog(
             onDismissRequest = { openConfirmDialog.value = false },
             title = { Text(text = message) },
@@ -177,7 +170,6 @@ fun OptionsRowWithAlertDialog(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
         Column(
             modifier = Modifier
                 .padding(
@@ -186,7 +178,6 @@ fun OptionsRowWithAlertDialog(
                     start = 16.dp
                 )
         ) {
-
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
@@ -207,12 +198,11 @@ fun OptionsRowWithAlertDialog(
 
 @Composable
 fun OptionsRowWithSwitch(
-    title : String,
-    subTitle : String?,
-    switchState : Boolean,
-    onClick : (Boolean) -> Unit
+    title: String,
+    subTitle: String?,
+    switchState: Boolean,
+    onClick: (Boolean) -> Unit
 ) {
-
     val checkedState = remember { mutableStateOf(switchState) }
 
     Row(
@@ -220,17 +210,15 @@ fun OptionsRowWithSwitch(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Column(
             modifier = Modifier
                 .padding(
                     top = 24.dp,
                     bottom = 24.dp,
-                    start = 16.dp,
+                    start = 16.dp
                 )
                 .weight(1f)
         ) {
-
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
@@ -259,7 +247,7 @@ fun OptionsRowWithSwitch(
                 checkedTrackColor = MaterialTheme.colors.primaryVariant,
                 uncheckedTrackColor = MaterialTheme.colors.primaryVariant,
                 checkedTrackAlpha = 1f,
-                uncheckedTrackAlpha = 1f,
+                uncheckedTrackAlpha = 1f
             )
         )
     }

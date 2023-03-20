@@ -10,21 +10,19 @@ import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class TrashNotesViewModel @Inject constructor(
-    val repository : LocalRepository
+    val repository: LocalRepository
 ) : ViewModel() {
 
-    private val _trashNotesList : MutableState<List<DiscardedNote>> = mutableStateOf(emptyList())
-    val trashNotesList : State<List<DiscardedNote>> = _trashNotesList
+    private val _trashNotesList: MutableState<List<DiscardedNote>> = mutableStateOf(emptyList())
+    val trashNotesList: State<List<DiscardedNote>> = _trashNotesList
 
     private fun getTrashNotesList() {
-
         viewModelScope.launch {
-
             repository.getAllTrashNotes().collect { noteList ->
 
                 _trashNotesList.value = noteList
@@ -32,21 +30,18 @@ class TrashNotesViewModel @Inject constructor(
         }
     }
 
-    fun deleteTrashNote(noteId : Int) = viewModelScope.launch {
-
+    fun deleteTrashNote(noteId: Int) = viewModelScope.launch {
         repository.deleteTrashNote(noteId)
     }
 
-    fun restoreTrashNote(note : DiscardedNote) {
-
+    fun restoreTrashNote(note: DiscardedNote) {
         viewModelScope.launch {
-
             repository.insertNote(
                 SavedNote(
                     noteTitle = note.noteTitle,
                     noteBody = note.noteBody,
                     createdDate = note.createdDate,
-                    lastModified = DateGetter.getCurrentDate(),
+                    lastModified = DateGetter.getCurrentDate()
                 )
             )
             deleteTrashNote(note.noteId)
