@@ -15,8 +15,6 @@ data class SavedNote(
 
     var createdDate: String,
 
-    var lastModified: String,
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")
     var noteId: Int = 0

@@ -13,10 +13,6 @@ data class DiscardedNote(
 
     var createdDate: String,
 
-    var lastModified: String,
-
-    var dateDeleted: String,
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "trash_note_db_id")
     var noteId: Int = 0

@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -164,11 +165,21 @@ private fun DefaultNote(
     allNotesState: AllNotesState,
     onNoteClick: (Int) -> Unit
 ) {
+    Log.d(
+        "TAG",
+        "DefaultNote: $note"
+    )
+
     SwipeableNoteRow(
         deleteNote = { viewModel.deleteNote(note.noteId) },
-        note = note,
         trashEnabled = allNotesState.trashEnabled,
-        sendToTrash = { viewModel.sendToTrash(note) }
+        sendToTrash = {
+            Log.d(
+                "TAG",
+                "DefaultNote sendToTrash : $note"
+            )
+            viewModel.sendToTrash(note)
+        }
     ) {
         NoteItem(
             note = note,
@@ -187,7 +198,6 @@ private fun SearchResultsNote(
 ) {
     SwipeableNoteRow(
         deleteNote = { viewModel.deleteNote(note.noteId) },
-        note = note,
         trashEnabled = allNotesState.trashEnabled,
         sendToTrash = { viewModel.sendToTrash(note) }
     ) {

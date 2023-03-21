@@ -10,7 +10,7 @@ import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
-import com.gmail.pentominto.us.supernotes.utility.DateGetter
+import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -46,8 +46,7 @@ class NoteEditScreenViewModel @Inject constructor(
             noteId = repository.insertNote(
                 SavedNote(
                     category = DEFAULT_CATEGORY,
-                    createdDate = DateGetter.getCurrentDate(),
-                    lastModified = DateGetter.getCurrentDate(),
+                    createdDate = getCurrentDate(),
                     noteBody = noteEditState.value.noteBody,
                     noteTitle = noteEditState.value.noteTitle
                 )
@@ -61,12 +60,6 @@ class NoteEditScreenViewModel @Inject constructor(
                 _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
         }
-    }
-
-    private fun getCurrentDate() {
-        _noteEditState.value = _noteEditState.value.copy(
-            currentDate = DateGetter.getCurrentDate()
-        )
     }
 
     fun insertCategory(categoryName: String) {
@@ -100,8 +93,7 @@ class NoteEditScreenViewModel @Inject constructor(
             repository.updateNote(
                 noteTitle = _noteEditState.value.noteTitle,
                 noteBody = _noteEditState.value.noteBody,
-                noteId = noteId,
-                lastModified = _noteEditState.value.currentDate
+                noteId = noteId
             )
         }
     }

@@ -116,17 +116,7 @@ fun TrashNoteItem(
                             horizontalAlignment = Alignment.End
                         ) {
                             Text(
-                                text = "Deleted ${note.dateDeleted}",
-                                fontSize = 12.sp,
-                                fontStyle = FontStyle.Italic
-                            )
-                            Text(
                                 text = "Created ${note.createdDate}",
-                                fontSize = 12.sp,
-                                fontStyle = FontStyle.Italic
-                            )
-                            Text(
-                                text = "Last Accessed ${note.lastModified}",
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )

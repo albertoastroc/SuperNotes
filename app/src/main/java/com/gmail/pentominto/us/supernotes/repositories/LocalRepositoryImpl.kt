@@ -24,10 +24,9 @@ class LocalRepositoryImpl @Inject constructor(
     override suspend fun updateNote(
         noteTitle: String,
         noteBody: String,
-        noteId: Int,
-        lastModified: String
+        noteId: Int
     ) {
-        dao.updateNote(noteTitle, noteBody, noteId, lastModified)
+        dao.updateNote(noteTitle, noteBody, noteId)
     }
 
     override suspend fun updateNoteCategory(chosenCategory: String, noteId: Int) {

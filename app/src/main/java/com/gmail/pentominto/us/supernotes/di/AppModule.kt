@@ -12,16 +12,15 @@ import com.gmail.pentominto.us.supernotes.database.DatabaseDAO
 import com.gmail.pentominto.us.supernotes.database.NoteDatabase
 import com.gmail.pentominto.us.supernotes.utility.Constants.DATABASE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREFERENCES_STORE_NAME
-import com.gmail.pentominto.us.supernotes.utility.Constants.PREPOP_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,7 +34,8 @@ object AppModule {
         app,
         NoteDatabase::class.java,
         DATABASE_NAME
-    ).createFromAsset(PREPOP_DATABASE_NAME)
+    )
+        // .createFromAsset(PREPOP_DATABASE_NAME)
         .build()
 
     @Provides

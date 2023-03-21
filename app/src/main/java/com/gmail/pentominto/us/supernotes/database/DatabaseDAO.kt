@@ -19,9 +19,9 @@ interface DatabaseDAO {
     suspend fun insertTrashNote(trashNote: DiscardedNote): Long
 
     @Query(
-        "UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody, lastModified = :lastModified WHERE note_db_id = :noteId"
+        "UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody WHERE note_db_id = :noteId"
     )
-    suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int, lastModified: String)
+    suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int)
 
     @Query("UPDATE note_table SET category = :chosenCategory WHERE note_db_id = :noteId")
     suspend fun updateNoteCategory(chosenCategory: String, noteId: Int)

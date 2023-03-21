@@ -20,8 +20,8 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
@@ -81,13 +81,11 @@ class OptionsScreenViewModel @Inject constructor(
 
     fun restoreWelcomeNote() {
         viewModelScope.launch {
-
             repository.insertNote(
                 SavedNote(
                     noteTitle = ABOUT_THIS_APP_TITLE,
                     noteBody = ABOUT_THIS_APP_NOTE,
-                    createdDate = getCurrentDate(),
-                    lastModified = getCurrentDate()
+                    createdDate = getCurrentDate()
                 )
             )
         }

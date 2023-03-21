@@ -8,10 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.utility.DateGetter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class TrashNotesViewModel @Inject constructor(
@@ -40,8 +39,7 @@ class TrashNotesViewModel @Inject constructor(
                 SavedNote(
                     noteTitle = note.noteTitle,
                     noteBody = note.noteBody,
-                    createdDate = note.createdDate,
-                    lastModified = DateGetter.getCurrentDate()
+                    createdDate = note.createdDate
                 )
             )
             deleteTrashNote(note.noteId)

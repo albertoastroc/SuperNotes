@@ -123,11 +123,6 @@ fun NoteItem(
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )
-                            Text(
-                                text = "Last Accessed ${note.lastModified}",
-                                fontSize = 12.sp,
-                                fontStyle = FontStyle.Italic
-                            )
                         }
                     }
                 }
@@ -265,11 +260,6 @@ fun NoteItemSearchResult(
                         ) {
                             Text(
                                 text = "Created ${note.createdDate}",
-                                fontSize = 12.sp,
-                                fontStyle = FontStyle.Italic
-                            )
-                            Text(
-                                text = "Last Accessed ${note.lastModified}",
                                 fontSize = 12.sp,
                                 fontStyle = FontStyle.Italic
                             )

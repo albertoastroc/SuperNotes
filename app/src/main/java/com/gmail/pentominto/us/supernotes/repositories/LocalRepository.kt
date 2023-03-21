@@ -11,7 +11,7 @@ interface LocalRepository {
 
     suspend fun insertTrashNote(trashNote: DiscardedNote): Long
 
-    suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int, lastModified: String)
+    suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int)
 
     suspend fun updateNoteCategory(chosenCategory: String, noteId: Int)
 

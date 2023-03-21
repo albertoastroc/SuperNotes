@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -11,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -58,17 +58,21 @@ class AllNotesViewModel @Inject constructor(
     }
 
     fun sendToTrash(note: SavedNote) {
+
+        Log.d(
+            "TAG",
+            "sendToTrash: $note"
+        )
+
         viewModelScope.launch {
+            val noteForTrash = DiscardedNote(
+                noteTitle = note.noteTitle,
+                noteBody = note.noteBody,
+                createdDate = note.createdDate
+            )
+
             repository.insertTrashNote(
-
-                DiscardedNote(
-                    noteTitle = note.noteTitle,
-                    noteBody = note.noteBody,
-                    createdDate = note.createdDate,
-                    lastModified = note.lastModified,
-                    dateDeleted = getCurrentDate()
-
-                )
+                noteForTrash
             )
             repository.deleteNote(note.noteId)
         }

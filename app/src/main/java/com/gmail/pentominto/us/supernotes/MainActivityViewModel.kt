@@ -16,14 +16,14 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val repository : LocalRepository
+    private val repository: LocalRepository
 ) : ViewModel() {
 
     val userDarkThemeKey = booleanPreferencesKey(USER_THEME_KEY)
