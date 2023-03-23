@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "category_table")
-data class NoteCategory(
+data class Category(
 
     var categoryTitle: String = "No Category",
 

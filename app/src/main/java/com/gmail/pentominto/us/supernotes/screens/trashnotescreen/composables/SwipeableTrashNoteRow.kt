@@ -12,14 +12,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.DiscardedNote
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
 fun SwipeableTrashNoteRow(
     deleteNote: (Int) -> Unit,
     restoreNote: () -> Unit,
-    trashNote: DiscardedNote,
+    trashNote: Note,
     content: @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(

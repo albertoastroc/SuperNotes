@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_NOTE
 import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_TITLE
@@ -82,7 +82,7 @@ class OptionsScreenViewModel @Inject constructor(
     fun restoreWelcomeNote() {
         viewModelScope.launch {
             repository.insertNote(
-                SavedNote(
+                Note(
                     noteTitle = ABOUT_THIS_APP_TITLE,
                     noteBody = ABOUT_THIS_APP_NOTE,
                     createdDate = getCurrentDate()

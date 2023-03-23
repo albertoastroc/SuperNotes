@@ -18,11 +18,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gmail.pentominto.us.supernotes.data.DiscardedNote
+import com.gmail.pentominto.us.supernotes.data.Note
 
 @Composable
 fun TrashNoteItem(
-    note: DiscardedNote,
+    note: Note,
     modifier: Modifier,
     onClick: (Int) -> Unit
 ) {
@@ -63,7 +63,7 @@ fun TrashNoteItem(
                         )
                 ) {
                     Text(
-                        text = note.noteTitle.toString(),
+                        text = note.noteTitle,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(

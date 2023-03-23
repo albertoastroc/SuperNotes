@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.NoteCategory
+import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
@@ -293,11 +293,11 @@ fun NoteEditScreen(
 
 @Composable
 fun CategoriesList(
-    categories: List<NoteCategory>,
+    categories: List<Category>,
     currentCategory: String,
     onClickDialog: (String) -> Unit,
-    onDeleteCategory: (NoteCategory) -> Unit,
-    onClickCategory: (NoteCategory) -> Unit
+    onDeleteCategory: (Category) -> Unit,
+    onClickCategory: (Category) -> Unit
 ) {
     val openCategoryDialog = remember { mutableStateOf(false) }
 

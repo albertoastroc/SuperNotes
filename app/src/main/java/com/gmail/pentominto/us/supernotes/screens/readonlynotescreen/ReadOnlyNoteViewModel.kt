@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ReadOnlyNoteViewModel @Inject constructor(
@@ -26,7 +26,7 @@ class ReadOnlyNoteViewModel @Inject constructor(
 
     private fun getTrashNote(trashNoteId: Int) {
         viewModelScope.launch {
-            repository.getTrashNote(trashNoteId).collect { trashNote ->
+            repository.getNote(trashNoteId).collect { trashNote ->
 
                 _readOnlyNoteState.value = _readOnlyNoteState.value.copy(
                     trashNote = trashNote

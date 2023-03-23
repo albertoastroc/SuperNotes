@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,17 +21,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.NoteCategory
-import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
-    viewModel: AllNotesViewModel = hiltViewModel(),
-    onNoteClick: (Int) -> Unit,
-    onOptionsClick: (Int) -> Unit
+    viewModel : AllNotesViewModel = hiltViewModel(),
+    onNoteClick : (Int) -> Unit,
+    onOptionsClick : (Int) -> Unit
 ) {
     val allNotesState by remember { viewModel.allNotesState }
 
@@ -80,15 +79,15 @@ fun AllNotesScreen(
 
 @Composable
 private fun NotesList(
-    paddingValues: PaddingValues,
-    listState: LazyListState,
-    allNotesState: AllNotesState,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    onNoteClick: (Int) -> Unit,
-    onSearchChange: (String) -> Unit,
-    clearSearchBar: () -> Unit,
-    onNoteSwipe: (SavedNote) -> Unit
+    paddingValues : PaddingValues,
+    listState : LazyListState,
+    allNotesState : AllNotesState,
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onNoteClick : (Int) -> Unit,
+    onSearchChange : (String) -> Unit,
+    clearSearchBar : () -> Unit,
+    onNoteSwipe : (Note) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -111,14 +110,11 @@ private fun NotesList(
             }
 
             items(
-                items = notes.filter { it.noteBody.contains(allNotesState.searchBarInput) },
+                items = notes.filter
+                { it.noteBody.contains(allNotesState.searchBarInput) }.filter
+                { it.category != "TrashNotesAPPTAG" },
                 key = { it.noteId }
             ) { note ->
-
-                Log.d(
-                    "TAG",
-                    "Keepo: $note"
-                )
 
                 DefaultNote(
                     note,
@@ -131,7 +127,7 @@ private fun NotesList(
 }
 
 @Composable
-private fun CategoryTitle(category: NoteCategory) {
+private fun CategoryTitle(category : Category) {
     Text(
         text = category.categoryTitle,
         modifier = Modifier
@@ -149,9 +145,9 @@ private fun CategoryTitle(category: NoteCategory) {
 
 @Composable
 private fun DefaultNote(
-    note: SavedNote,
-    onNoteClick: (Int) -> Unit,
-    onNoteSwipe: (SavedNote) -> Unit
+    note : Note,
+    onNoteClick : (Int) -> Unit,
+    onNoteSwipe : (Note) -> Unit
 ) {
     SwipeableNoteRow(
         deleteNote = { onNoteSwipe(note) }
@@ -167,9 +163,9 @@ private fun DefaultNote(
 
 @Composable
 private fun AllNotesDrawer(
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    onOptionsClick: (Int) -> Unit
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onOptionsClick : (Int) -> Unit
 ) {
     Drawer(
         drawerOptionsList = listOf(
@@ -209,7 +205,7 @@ private fun AllNotesDrawer(
 }
 
 @Composable
-private fun ExtendedFab(listState: LazyListState, onNoteClick: (Int) -> Unit) {
+private fun ExtendedFab(listState : LazyListState, onNoteClick : (Int) -> Unit) {
     ExtendedFloatingActionButton(
         text = {
             Text(
@@ -231,7 +227,7 @@ private fun ExtendedFab(listState: LazyListState, onNoteClick: (Int) -> Unit) {
 }
 
 @Composable
-fun LazyListState.isScrollingUp(): Boolean {
+fun LazyListState.isScrollingUp() : Boolean {
     var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
     var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
     return remember(this) {

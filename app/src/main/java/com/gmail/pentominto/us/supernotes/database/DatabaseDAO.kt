@@ -4,19 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gmail.pentominto.us.supernotes.data.DiscardedNote
-import com.gmail.pentominto.us.supernotes.data.NoteCategory
-import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.data.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: SavedNote): Long
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTrashNote(trashNote: DiscardedNote): Long
+    suspend fun insertNote(note: Note): Long
 
     @Query(
         "UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody WHERE note_db_id = :noteId"
@@ -26,44 +22,38 @@ interface DatabaseDAO {
     @Query("UPDATE note_table SET category = :chosenCategory WHERE note_db_id = :noteId")
     suspend fun updateNoteCategory(chosenCategory: String, noteId: Int)
 
-    @Query("SELECT * FROM trash_note_table WHERE trash_note_db_id = :id")
-    fun getTrashNote(id: Int): Flow<DiscardedNote>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCategory(category: NoteCategory)
+    suspend fun insertCategory(category: Category)
 
     @Query("DELETE FROM note_table WHERE note_db_id = :id")
     suspend fun deleteNote(id: Int)
-
-    @Query("DELETE FROM trash_note_table WHERE trash_note_db_id = :id")
-    suspend fun deleteTrashNote(id: Int)
 
     @Query("DELETE FROM category_table WHERE category_db_id = :id")
     suspend fun deleteCategory(id: Int)
 
     @Query("SELECT * FROM note_table WHERE category = :category")
-    fun getNotesOfThisCategory(category: String): Flow<List<SavedNote>>
+    fun getNotesOfThisCategory(category: String): Flow<List<Note>>
 
     @Query(
         "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle"
     )
-    fun getAllCategoriesAndNotes(): Flow<Map<NoteCategory, List<SavedNote>>>
-
-    @Query("SELECT * FROM trash_note_table")
-    fun getAllTrashNotes(): Flow<List<DiscardedNote>>
+    fun getAllCategoriesAndNotes(): Flow<Map<Category, List<Note>>>
 
     @Query(
         "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle WHERE note_db_id = :id"
     )
-    fun getNoteWithCategory(id: Int): Flow<Map<NoteCategory, SavedNote>>
+    fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>>
+
+    @Query("SELECT * FROM note_table WHERE note_db_id = :id")
+    fun getNote(id : Int): Flow<Note>
 
     @Query("SELECT * FROM category_table")
-    fun getAllCategories(): Flow<List<NoteCategory>>
+    fun getAllCategories(): Flow<List<Category>>
 
     @Query("DELETE FROM note_table ")
     suspend fun deleteAllNotes()
 
-    @Query("DELETE FROM trash_note_table ")
+    @Query("DELETE FROM note_table WHERE category = 'TrashNotesAPPTAG' ")
     suspend fun deleteAllTrashNotes()
 
     // temporary while prepoluated database gets fixed

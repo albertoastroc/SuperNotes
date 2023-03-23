@@ -8,12 +8,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.SavedNote
-import com.gmail.pentominto.us.supernotes.data.toTrashNote
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
@@ -39,22 +38,23 @@ class AllNotesViewModel @Inject constructor(
         }
     }
 
-    private fun deleteNote(note: SavedNote) {
+    private fun deleteNote(note: Note) {
         viewModelScope.launch {
             repository.deleteNote(note.noteId)
         }
     }
 
-    private fun sendToTrash(note: SavedNote) {
+    private fun sendToTrash(note: Note) {
         viewModelScope.launch {
-            repository.insertTrashNote(note.toTrashNote())
+
+            repository.updateNoteCategory("TrashNotesAPPTAG", note.noteId)
+
         }
     }
 
-    fun onNoteSwipe(note: SavedNote) {
+    fun onNoteSwipe(note: Note) {
         if (allNotesState.value.trashEnabled) {
             sendToTrash(note)
-            deleteNote(note)
         } else {
             deleteNote(note)
         }

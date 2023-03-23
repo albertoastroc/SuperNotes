@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.NoteCategory
+import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
@@ -64,7 +64,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             if (!repository.defaultCategoryExists()) {
                 repository.insertCategory(
-                    NoteCategory()
+                    Category()
                 )
             }
         }

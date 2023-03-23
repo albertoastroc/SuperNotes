@@ -6,14 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.NoteCategory
-import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
@@ -43,7 +43,7 @@ class NoteEditScreenViewModel @Inject constructor(
     fun insertNewNote() {
         viewModelScope.launch {
             noteId = repository.insertNote(
-                SavedNote(
+                Note(
                     category = DEFAULT_CATEGORY,
                     createdDate = getCurrentDate()
                 )
@@ -62,11 +62,11 @@ class NoteEditScreenViewModel @Inject constructor(
     fun insertCategory(categoryName: String) {
         viewModelScope.launch {
             saveNoteText()
-            repository.insertCategory(NoteCategory(categoryName))
+            repository.insertCategory(Category(categoryName))
         }
     }
 
-    fun deleteCategory(category: NoteCategory) {
+    fun deleteCategory(category: Category) {
         viewModelScope.launch {
             val notesToUpdate = repository.getNotesOfThisCategory(category.categoryTitle)
 
@@ -95,7 +95,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveNoteCategory(category: NoteCategory) {
+    fun saveNoteCategory(category: Category) {
         viewModelScope.launch {
             saveNoteText()
             repository.updateNoteCategory(
