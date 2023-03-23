@@ -8,6 +8,5 @@ data class NoteEditState(
     val noteTitle: String = "",
     val noteBody: String = "",
     val categories: List<NoteCategory> = emptyList(),
-    val noteCategory: NoteCategory = NoteCategory(),
     val currentDate: String = ""
 )

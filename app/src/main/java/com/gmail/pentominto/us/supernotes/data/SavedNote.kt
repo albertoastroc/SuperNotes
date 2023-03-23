@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "note_table")
 data class SavedNote(
 
-    var noteTitle: String,
+    var noteTitle: String = "",
 
-    var noteBody: String,
+    var noteBody: String = "",
 
     var category: String = "No Category",
 
@@ -19,3 +19,11 @@ data class SavedNote(
     @ColumnInfo(name = "note_db_id")
     var noteId: Int = 0
 )
+
+fun SavedNote.toTrashNote(): DiscardedNote {
+    return DiscardedNote(
+        noteTitle = this.noteTitle,
+        noteBody = this.noteBody,
+        createdDate = this.createdDate
+    )
+}

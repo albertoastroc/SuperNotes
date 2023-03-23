@@ -30,6 +30,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
@@ -71,7 +72,10 @@ fun NoteEditScreen(
         val observer = LifecycleEventObserver { _, event ->
 
             when (event) {
-                Lifecycle.Event.ON_STOP -> viewModel.saveNoteText()
+                Lifecycle.Event.ON_STOP, Lifecycle.Event.ON_PAUSE
+                -> {
+                    viewModel.saveNoteText()
+                }
                 else -> {}
             }
         }
@@ -274,16 +278,15 @@ fun NoteEditScreen(
         sheetContent = {
             CategoriesList(
                 categories = noteState.value.categories,
-                currentCategory = noteState.value.noteCategory,
+                currentCategory = noteState.value.note?.category ?: DEFAULT_CATEGORY,
                 onClickDialog = { viewModel.insertCategory(it) },
-                onDeleteCategory = { viewModel.deleteCategory(it) },
-                onClickCategory = {
-                    viewModel.saveNoteCategory(it)
-                    coroutineScope.launch {
-                        bottomSheetScaffoldState.bottomSheetState.collapse()
-                    }
+                onDeleteCategory = { viewModel.deleteCategory(it) }
+            ) {
+                viewModel.saveNoteCategory(it)
+                coroutineScope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.collapse()
                 }
-            )
+            }
         }
     )
 }
@@ -291,7 +294,7 @@ fun NoteEditScreen(
 @Composable
 fun CategoriesList(
     categories: List<NoteCategory>,
-    currentCategory: NoteCategory,
+    currentCategory: String,
     onClickDialog: (String) -> Unit,
     onDeleteCategory: (NoteCategory) -> Unit,
     onClickCategory: (NoteCategory) -> Unit
@@ -350,7 +353,7 @@ fun CategoriesList(
                                 value = dialogInput.value,
                                 modifier = Modifier
                                     .padding(top = 8.dp),
-                                placeholder = { Text(text = "New NoteCategory Name...") },
+                                placeholder = { Text(text = "New Category Name...") },
                                 onValueChange = {
                                     dialogInput.value = it
                                     dialogTitleState.value = ""
@@ -387,7 +390,7 @@ fun CategoriesList(
                                         openCategoryDialog.value = false
                                         dialogInput.value = ""
                                     } else {
-                                        dialogTitleState.value = "NoteCategory name is empty"
+                                        dialogTitleState.value = "Note Category name is empty"
                                     }
                                 },
                                 modifier = Modifier.width(100.dp),
@@ -419,7 +422,7 @@ fun CategoriesList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = if (category == currentCategory) {
+                        color = if (category.categoryTitle == currentCategory) {
                             MaterialTheme.colors.secondary
                         } else {
                             MaterialTheme.colors.secondaryVariant
@@ -444,7 +447,7 @@ fun CategoriesList(
                     maxLines = 2
                 )
 
-                if (category.categoryTitle != "No NoteCategory") {
+                if (category.categoryTitle != "No Category") {
                     Icon(
                         painterResource(id = R.drawable.ic_baseline_delete_24),
                         modifier = Modifier

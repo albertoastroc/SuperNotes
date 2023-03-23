@@ -32,7 +32,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
                 categoryNoteMap.forEach {
                     _noteEditState.value = _noteEditState.value.copy(
-                        noteCategory = it.key,
                         noteTitle = it.value.noteTitle,
                         noteBody = it.value.noteBody
                     )
@@ -41,14 +40,12 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    private fun insertNewNote() {
+    fun insertNewNote() {
         viewModelScope.launch {
             noteId = repository.insertNote(
                 SavedNote(
                     category = DEFAULT_CATEGORY,
-                    createdDate = getCurrentDate(),
-                    noteBody = noteEditState.value.noteBody,
-                    noteTitle = noteEditState.value.noteTitle
+                    createdDate = getCurrentDate()
                 )
             ).toInt()
         }

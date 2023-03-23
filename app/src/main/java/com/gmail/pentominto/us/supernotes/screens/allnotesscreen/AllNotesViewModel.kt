@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,12 +8,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.DiscardedNote
 import com.gmail.pentominto.us.supernotes.data.SavedNote
+import com.gmail.pentominto.us.supernotes.data.toTrashNote
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
@@ -26,55 +25,38 @@ class AllNotesViewModel @Inject constructor(
     val allNotesState: State<AllNotesState> = _allNotesState
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
-    private val trashEnabled = booleanPreferencesKey("trash_enabled")
+    private val isTrashEnabledKey = booleanPreferencesKey("trash_enabled")
 
     fun onSearchChange(input: String) {
         viewModelScope.launch {
             _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
-
-            val notesSearchResults = _allNotesState.value.notes.values.flatten().filter { note ->
-
-                note.noteBody.contains(
-                    input,
-                    true
-                )
-            }
-
-            _allNotesState.value = _allNotesState.value.copy(
-                notesSearchResults = notesSearchResults
-            )
         }
     }
 
-    fun getNotesList() = viewModelScope.launch {
+    private fun getNotesList() = viewModelScope.launch {
         repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
-
             _allNotesState.value = _allNotesState.value.copy(notes = categoryNotesMap)
         }
     }
 
-    fun deleteNote(noteId: Int) = viewModelScope.launch {
-        repository.deleteNote(noteId)
+    private fun deleteNote(note: SavedNote) {
+        viewModelScope.launch {
+            repository.deleteNote(note.noteId)
+        }
     }
 
-    fun sendToTrash(note: SavedNote) {
-
-        Log.d(
-            "TAG",
-            "sendToTrash: $note"
-        )
-
+    private fun sendToTrash(note: SavedNote) {
         viewModelScope.launch {
-            val noteForTrash = DiscardedNote(
-                noteTitle = note.noteTitle,
-                noteBody = note.noteBody,
-                createdDate = note.createdDate
-            )
+            repository.insertTrashNote(note.toTrashNote())
+        }
+    }
 
-            repository.insertTrashNote(
-                noteForTrash
-            )
-            repository.deleteNote(note.noteId)
+    fun onNoteSwipe(note: SavedNote) {
+        if (allNotesState.value.trashEnabled) {
+            sendToTrash(note)
+            deleteNote(note)
+        } else {
+            deleteNote(note)
         }
     }
 
@@ -92,9 +74,9 @@ class AllNotesViewModel @Inject constructor(
                     )
                 }
 
-                if (preferences.contains(trashEnabled)) {
+                if (preferences.contains(isTrashEnabledKey)) {
                     _allNotesState.value = _allNotesState.value.copy(
-                        trashEnabled = preferences[trashEnabled] ?: true
+                        trashEnabled = preferences[isTrashEnabledKey] ?: true
                     )
                 }
             }

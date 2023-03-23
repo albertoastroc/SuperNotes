@@ -17,18 +17,12 @@ import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 @Composable
 fun SwipeableNoteRow(
     deleteNote: () -> Unit,
-    sendToTrash: () -> Unit,
-    trashEnabled: Boolean,
     content: @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(
         confirmStateChange = {
             if (it == DismissValue.DismissedToEnd) {
-                if (trashEnabled) {
-                    sendToTrash()
-                } else {
-                    deleteNote()
-                }
+                deleteNote()
             }
             true
         }

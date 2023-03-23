@@ -25,7 +25,6 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.NoteCategory
 import com.gmail.pentominto.us.supernotes.data.SavedNote
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.*
-import com.gmail.pentominto.us.supernotes.utility.Constants.MINIMUM_SEARCH_INPUT_LENGTH
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -35,18 +34,13 @@ fun AllNotesScreen(
     onNoteClick: (Int) -> Unit,
     onOptionsClick: (Int) -> Unit
 ) {
-    val notesState by remember { viewModel.allNotesState }
+    val allNotesState by remember { viewModel.allNotesState }
 
     val scaffoldState = rememberScaffoldState()
 
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    val listState = rememberLazyListState()
-
-    LaunchedEffect(
-        key1 = notesState.notes.size,
-        block = { viewModel.getNotesList() }
-    )
+    val lazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -56,7 +50,7 @@ fun AllNotesScreen(
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
             AllNotesDrawer(
-                scope,
+                coroutineScope,
                 scaffoldState,
                 onOptionsClick
             )
@@ -64,18 +58,20 @@ fun AllNotesScreen(
         content = { paddingValues ->
 
             NotesList(
-                listState,
-                paddingValues,
-                notesState,
-                viewModel,
-                scope,
-                scaffoldState,
-                onNoteClick
+                paddingValues = paddingValues,
+                listState = lazyListState,
+                allNotesState = allNotesState,
+                scope = coroutineScope,
+                scaffoldState = scaffoldState,
+                onNoteClick = onNoteClick,
+                onNoteSwipe = viewModel::onNoteSwipe,
+                onSearchChange = viewModel::onSearchChange,
+                clearSearchBar = viewModel::clearSearchBar
             )
         },
         floatingActionButton = {
             ExtendedFab(
-                listState,
+                lazyListState,
                 onNoteClick
             )
         }
@@ -84,13 +80,15 @@ fun AllNotesScreen(
 
 @Composable
 private fun NotesList(
-    listState: LazyListState,
     paddingValues: PaddingValues,
+    listState: LazyListState,
     allNotesState: AllNotesState,
-    viewModel: AllNotesViewModel,
     scope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    onNoteClick: (Int) -> Unit
+    onNoteClick: (Int) -> Unit,
+    onSearchChange: (String) -> Unit,
+    clearSearchBar: () -> Unit,
+    onNoteSwipe: (SavedNote) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -101,41 +99,32 @@ private fun NotesList(
         item {
             SearchBarWithMenu(
                 input = allNotesState.searchBarInput,
-                onInputChange = { viewModel.onSearchChange(it) },
-                onXClick = { viewModel.clearSearchBar() },
+                onInputChange = { onSearchChange(it) },
+                onXClick = { clearSearchBar() },
                 onMenuIconClick = { scope.launch { scaffoldState.drawerState.open() } }
             )
         }
+        allNotesState.notes.entries.forEach { (category, notes) ->
 
-        if (allNotesState.searchBarInput.length >= MINIMUM_SEARCH_INPUT_LENGTH) {
-            items(allNotesState.notesSearchResults) { note ->
-
-                SearchResultsNote(
-                    viewModel,
-                    note,
-                    allNotesState,
-                    onNoteClick
-                )
+            if (allNotesState.showCategoryTitles && allNotesState.searchBarInput.isEmpty()) {
+                item { CategoryTitle(category) }
             }
-        } else {
-            allNotesState.notes.entries.forEach { (category, notes) ->
 
-                if (allNotesState.showCategoryTitles) {
-                    item { CategoryTitle(category) }
-                }
+            items(
+                items = notes.filter { it.noteBody.contains(allNotesState.searchBarInput) },
+                key = { it.noteId }
+            ) { note ->
 
-                items(
-                    items = notes,
-                    key = { it.noteId }
-                ) { note ->
+                Log.d(
+                    "TAG",
+                    "Keepo: $note"
+                )
 
-                    DefaultNote(
-                        viewModel,
-                        note,
-                        allNotesState,
-                        onNoteClick
-                    )
-                }
+                DefaultNote(
+                    note,
+                    onNoteClick,
+                    onNoteSwipe
+                )
             }
         }
     }
@@ -160,50 +149,16 @@ private fun CategoryTitle(category: NoteCategory) {
 
 @Composable
 private fun DefaultNote(
-    viewModel: AllNotesViewModel,
     note: SavedNote,
-    allNotesState: AllNotesState,
-    onNoteClick: (Int) -> Unit
+    onNoteClick: (Int) -> Unit,
+    onNoteSwipe: (SavedNote) -> Unit
 ) {
-    Log.d(
-        "TAG",
-        "DefaultNote: $note"
-    )
-
     SwipeableNoteRow(
-        deleteNote = { viewModel.deleteNote(note.noteId) },
-        trashEnabled = allNotesState.trashEnabled,
-        sendToTrash = {
-            Log.d(
-                "TAG",
-                "DefaultNote sendToTrash : $note"
-            )
-            viewModel.sendToTrash(note)
-        }
+        deleteNote = { onNoteSwipe(note) }
+
     ) {
         NoteItem(
             note = note,
-            modifier = Modifier,
-            onClick = { onNoteClick(note.noteId) }
-        )
-    }
-}
-
-@Composable
-private fun SearchResultsNote(
-    viewModel: AllNotesViewModel,
-    note: SavedNote,
-    allNotesState: AllNotesState,
-    onNoteClick: (Int) -> Unit
-) {
-    SwipeableNoteRow(
-        deleteNote = { viewModel.deleteNote(note.noteId) },
-        trashEnabled = allNotesState.trashEnabled,
-        sendToTrash = { viewModel.sendToTrash(note) }
-    ) {
-        NoteItemSearchResult(
-            note = note,
-            query = allNotesState.searchBarInput,
             modifier = Modifier,
             onClick = { onNoteClick(note.noteId) }
         )
