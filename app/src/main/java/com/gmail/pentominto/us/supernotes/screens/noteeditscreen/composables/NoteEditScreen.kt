@@ -15,7 +15,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
@@ -38,11 +37,9 @@ fun NoteEditScreen(
     viewModel: NoteEditScreenViewModel = hiltViewModel()
 
 ) {
-    val context = LocalContext.current
-
-    val clipboardManager = LocalClipboardManager.current
-
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
+
+    val context = LocalContext.current
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -50,11 +47,7 @@ fun NoteEditScreen(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
 
-    val focusManager = LocalFocusManager.current
-
     val noteState by remember { viewModel.noteEditState }
-
-    var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
     val customTextSelectionColors = TextSelectionColors(
         handleColor = MaterialTheme.colors.secondary,
@@ -98,15 +91,12 @@ fun NoteEditScreen(
                     )
             ) {
                 TitleCard(
-                    customTextSelectionColors,
-                    noteState,
-                    viewModel,
-                    dropDownMenuExpanded,
-                    clipboardManager,
-                    context,
-                    coroutineScope,
-                    bottomSheetScaffoldState,
-                    focusManager
+                    customTextSelectionColors = customTextSelectionColors,
+                    noteState = noteState,
+                    onTitleValueChange = viewModel::onTitleInputChange,
+                    context = context,
+                    coroutineScope = coroutineScope,
+                    bottomSheetScaffoldState = bottomSheetScaffoldState,
                 )
 
                 Divider(
@@ -117,9 +107,9 @@ fun NoteEditScreen(
                 )
 
                 BodyCard(
-                    customTextSelectionColors,
-                    noteState,
-                    viewModel
+                    customTextSelectionColors = customTextSelectionColors,
+                    noteState = noteState,
+                    onBodyValueChange = viewModel::onBodyInputChange,
                 )
             }
         },
@@ -144,7 +134,7 @@ fun NoteEditScreen(
 private fun BodyCard(
     customTextSelectionColors : TextSelectionColors,
     noteState : NoteEditState,
-    viewModel : NoteEditScreenViewModel
+    onBodyValueChange : (String) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxSize(),
@@ -164,7 +154,7 @@ private fun BodyCard(
                         fontSize = 18.sp
                     )
                 },
-                onValueChange = { viewModel.onBodyInputChange(it) },
+                onValueChange = { onBodyValueChange(it) },
                 modifier = Modifier
                     .padding(
                         start = 8.dp,
@@ -195,15 +185,18 @@ private fun BodyCard(
 private fun TitleCard(
     customTextSelectionColors : TextSelectionColors,
     noteState : NoteEditState,
-    viewModel : NoteEditScreenViewModel,
-    dropDownMenuExpanded : Boolean,
-    clipboardManager : ClipboardManager,
+    onTitleValueChange : (String) -> Unit,
     context : Context,
     coroutineScope : CoroutineScope,
-    bottomSheetScaffoldState : BottomSheetScaffoldState,
-    focusManager : FocusManager
+    bottomSheetScaffoldState : BottomSheetScaffoldState
 ) {
-    var dropDownMenuExpanded1 = dropDownMenuExpanded
+
+    val clipboardManager = LocalClipboardManager.current
+
+    val focusManager = LocalFocusManager.current
+
+    var dropDownMenuExpanded by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier,
         shape = RoundedCornerShape(2.dp),
@@ -226,7 +219,7 @@ private fun TitleCard(
                             fontSize = 18.sp
                         )
                     },
-                    onValueChange = { viewModel.onTitleInputChange(it) },
+                    onValueChange = { onTitleValueChange(it) },
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .weight(1f)
@@ -257,7 +250,7 @@ private fun TitleCard(
                         .clickable(
                             interactionSource = NoRippleInteractionSource(),
                             onClick = {
-                                dropDownMenuExpanded1 = true
+                                dropDownMenuExpanded = true
                             },
                             indication = null
                         ),
@@ -265,82 +258,57 @@ private fun TitleCard(
                     tint = MaterialTheme.colors.onBackground
                 )
 
-                EditScreenDropDownMenu(
-                    dropDownMenuExpanded1,
-                    clipboardManager,
-                    noteState,
-                    context,
-                    coroutineScope,
-                    bottomSheetScaffoldState,
-                    focusManager
-                )
+                DropdownMenu(
+                    expanded = dropDownMenuExpanded,
+                    onDismissRequest = { dropDownMenuExpanded = false }
+                ) {
+                    DropdownMenuItem(onClick = {
+                        clipboardManager.setText(
+                            AnnotatedString(
+                                noteState.noteBody
+                            )
+                        )
+                        dropDownMenuExpanded = false
+                        Toast.makeText(
+                            context,
+                            "Text Copied",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }) {
+                        Text(text = "Copy to clipboard")
+                    }
+
+                    DropdownMenuItem(onClick = {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.expand()
+                            focusManager.clearFocus()
+                            dropDownMenuExpanded = false
+                        }
+                    }) {
+                        Text(text = "Set category")
+                    }
+
+                    DropdownMenuItem(onClick = {
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                noteState.noteBody
+                            )
+                            type = "text/plain"
+                        }
+                        val shareIntent = Intent.createChooser(
+                            sendIntent,
+                            null
+                        )
+
+                        context.startActivity(shareIntent)
+                        dropDownMenuExpanded = false
+                    }) {
+                        Text(text = "Share")
+                    }
+                }
             }
         }
     }
 }
-
-@Composable
-private fun EditScreenDropDownMenu(
-    dropDownMenuExpanded : Boolean,
-    clipboardManager : ClipboardManager,
-    noteState : NoteEditState,
-    context : Context,
-    coroutineScope : CoroutineScope,
-    bottomSheetScaffoldState : BottomSheetScaffoldState,
-    focusManager : FocusManager
-) {
-    var dropDownMenuExpanded1 = dropDownMenuExpanded
-    DropdownMenu(
-        expanded = dropDownMenuExpanded1,
-        onDismissRequest = { dropDownMenuExpanded1 = false }
-    ) {
-        DropdownMenuItem(onClick = {
-            clipboardManager.setText(
-                AnnotatedString(
-                    noteState.noteBody
-                )
-            )
-            dropDownMenuExpanded1 = false
-            Toast.makeText(
-                context,
-                "Text Copied",
-                Toast.LENGTH_SHORT
-            ).show()
-        }) {
-            Text(text = "Copy to clipboard")
-        }
-
-        DropdownMenuItem(onClick = {
-            coroutineScope.launch {
-                bottomSheetScaffoldState.bottomSheetState.expand()
-                focusManager.clearFocus()
-                dropDownMenuExpanded1 = false
-            }
-        }) {
-            Text(text = "Set category")
-        }
-
-        DropdownMenuItem(onClick = {
-            val sendIntent : Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    noteState.noteBody
-                )
-                type = "text/plain"
-            }
-            val shareIntent = Intent.createChooser(
-                sendIntent,
-                null
-            )
-
-            context.startActivity(shareIntent)
-            dropDownMenuExpanded1 = false
-        }) {
-            Text(text = "Share")
-        }
-    }
-}
-
-
-
