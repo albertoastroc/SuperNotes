@@ -3,7 +3,7 @@ package com.gmail.pentominto.us.supernotes.utility
 import android.content.Intent
 import android.net.Uri
 
-object NavIntentsGetter {
+object NavIntents {
 
     fun getPlaystoreIntent(): Intent {
         return Intent()

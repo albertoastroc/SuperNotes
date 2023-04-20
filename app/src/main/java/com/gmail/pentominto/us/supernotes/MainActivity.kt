@@ -2,27 +2,27 @@
 
 package com.gmail.pentominto.us.supernotes
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.*
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.ReadOnlyNoteScreen
-import com.gmail.pentominto.us.supernotes.ui.theme.Spider
+import com.gmail.pentominto.us.supernotes.ui.theme.MostlyBlackBlue
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.gmail.pentominto.us.supernotes.utility.Constants.ALL_NOTES_DESTINATION
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_ANIMATION_DURATION
@@ -33,7 +33,7 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.OPTIONS_DESTINATION
 import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_DESTINATION
 import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE
 import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE_ID
-import com.gmail.pentominto.us.supernotes.utility.NavIntentsGetter
+import com.gmail.pentominto.us.supernotes.utility.NavIntents
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -45,8 +45,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModels()
-
     @Inject
     lateinit var dataStore: DataStore<Preferences>
 
@@ -55,25 +53,26 @@ class MainActivity : ComponentActivity() {
 
         actionBar?.hide()
 
-        val isDarkTheme: MutableState<Boolean> = viewModel.isDarkThemeState
+        ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
         setContent {
             SuperNotesTheme(
-                darkTheme = isDarkTheme.value
+                darkTheme = isSystemInDarkTheme()
             ) {
+                val isSystemDarkTheme = isSystemInDarkTheme()
                 val systemUiController = rememberSystemUiController()
                 LaunchedEffect(
-                    key1 = isDarkTheme.value
+                    key1 = isSystemDarkTheme
                 ) {
-                    if (!isDarkTheme.value) {
+                    if (isSystemDarkTheme) {
                         systemUiController.setSystemBarsColor(
-                            color = Color.White,
-                            darkIcons = true
+                            color = MostlyBlackBlue,
+                            darkIcons = false
                         )
                     } else {
                         systemUiController.setSystemBarsColor(
-                            color = Spider,
-                            darkIcons = false
+                            color = Color.White,
+                            darkIcons = true
                         )
                     }
                 }
@@ -85,18 +84,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SuperNotesApp() {
-    val context = LocalContext.current
 
     val navController = rememberAnimatedNavController()
 
     MyNavHost(
-        navController,
-        context
+        navController
     )
 }
 
 @Composable
-private fun MyNavHost(navController: NavHostController, context: Context) {
+private fun MyNavHost(navController: NavHostController) {
+
+    val context = LocalContext.current
+
     AnimatedNavHost(
         navController = navController,
         startDestination = ALL_NOTES_DESTINATION
@@ -119,8 +119,8 @@ private fun MyNavHost(navController: NavHostController, context: Context) {
                     when (menuItemId) {
                         2 -> navController.navigate(OPTIONS_DESTINATION)
                         3 -> navController.navigate(TRASH_DESTINATION)
-                        4 -> context.startActivity(NavIntentsGetter.getPlaystoreIntent())
-                        5 -> context.startActivity(NavIntentsGetter.getPrivacyPolicyIntent())
+                        4 -> context.startActivity(NavIntents.getPlaystoreIntent())
+                        5 -> context.startActivity(NavIntents.getPrivacyPolicyIntent())
                     }
                 }
             )

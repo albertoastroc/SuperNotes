@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
 fun SwipeableTrashNoteRow(
@@ -48,10 +47,10 @@ fun SwipeableTrashNoteRow(
                 dismissState.progress.fraction <= .99f && direction == DismissDirection.StartToEnd.name
             ) {
                 Box(
-                    modifier = Modifier
-                        .background(
-                            Scarlet
-                        )
+                    modifier = Modifier.background(
+                        MaterialTheme.colors.secondary
+                    )
+
                 ) {
                     Row(
                         modifier = Modifier

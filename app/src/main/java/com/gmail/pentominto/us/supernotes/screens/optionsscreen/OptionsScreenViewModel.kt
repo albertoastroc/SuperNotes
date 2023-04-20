@@ -16,12 +16,11 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_NOTE
 import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_TITLE
 import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_HIDE_CATEGORIES_KEY
-import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
@@ -35,7 +34,6 @@ class OptionsScreenViewModel @Inject constructor(
     val optionsScreenState: State<OptionsScreenState> = _optionsScreenState
 
     private val hideCategoriesKey = booleanPreferencesKey(USER_HIDE_CATEGORIES_KEY)
-    private val userDarkThemeKey = booleanPreferencesKey(USER_THEME_KEY)
     private val trashEnabledKey = booleanPreferencesKey(USER_TRASH_ENABLED_KEY)
     private val userIdKey = stringPreferencesKey(FIREBASE_ID_KEY)
 
@@ -48,19 +46,6 @@ class OptionsScreenViewModel @Inject constructor(
                 )
 
                 settings[hideCategoriesKey] = _optionsScreenState.value.categoriesOption
-            }
-        }
-    }
-
-    fun themeToggle() {
-        viewModelScope.launch {
-            dataStore.edit { settings ->
-
-                _optionsScreenState.value = _optionsScreenState.value.copy(
-                    darkThemeOption = !_optionsScreenState.value.darkThemeOption
-                )
-
-                settings[userDarkThemeKey] = _optionsScreenState.value.darkThemeOption
             }
         }
     }
@@ -98,12 +83,6 @@ class OptionsScreenViewModel @Inject constructor(
                 if (preferences.contains(hideCategoriesKey)) {
                     _optionsScreenState.value = _optionsScreenState.value.copy(
                         categoriesOption = preferences[hideCategoriesKey] ?: true
-                    )
-                }
-
-                if (preferences.contains(userDarkThemeKey)) {
-                    _optionsScreenState.value = _optionsScreenState.value.copy(
-                        darkThemeOption = preferences[userDarkThemeKey] ?: false
                     )
                 }
 

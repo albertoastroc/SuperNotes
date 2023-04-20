@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
+import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE_CATEGORY_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +23,7 @@ class TrashNotesViewModel @Inject constructor(
 
     private fun getTrashNotesList() {
         viewModelScope.launch {
-            repository.getNotesOfThisCategory("TrashNotesAPPTAG").collect { noteList ->
+            repository.getNotesOfThisCategory(TRASH_NOTE_CATEGORY_TAG).collect { noteList ->
 
                 _trashNotesList.value = noteList
             }
@@ -34,14 +36,11 @@ class TrashNotesViewModel @Inject constructor(
 
     fun restoreTrashNote(note: Note) {
         viewModelScope.launch {
-
-            repository.updateNoteCategory("No Category", note.noteId)
-
+            repository.updateNoteCategory(DEFAULT_CATEGORY, note.noteId)
         }
     }
 
     init {
-
         getTrashNotesList()
     }
 }

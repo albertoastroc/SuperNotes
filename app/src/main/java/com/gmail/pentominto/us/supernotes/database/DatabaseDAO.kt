@@ -35,7 +35,7 @@ interface DatabaseDAO {
     fun getNotesOfThisCategory(category: String): Flow<List<Note>>
 
     @Query(
-        "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle"
+        "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle ORDER BY categoryTitle COLLATE NOCASE ASC"
     )
     fun getAllCategoriesAndNotes(): Flow<Map<Category, List<Note>>>
 

@@ -4,16 +4,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,8 +41,6 @@ fun AllNotesScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val lazyListState = rememberLazyListState()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = MaterialTheme.colors.background,
@@ -58,7 +58,6 @@ fun AllNotesScreen(
 
             NotesList(
                 paddingValues = paddingValues,
-                listState = lazyListState,
                 allNotesState = allNotesState,
                 scope = coroutineScope,
                 scaffoldState = scaffoldState,
@@ -69,8 +68,7 @@ fun AllNotesScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFab(
-                lazyListState,
+            CustomFab(
                 onNoteClick
             )
         }
@@ -80,7 +78,6 @@ fun AllNotesScreen(
 @Composable
 private fun NotesList(
     paddingValues : PaddingValues,
-    listState : LazyListState,
     allNotesState : AllNotesState,
     scope : CoroutineScope,
     scaffoldState : ScaffoldState,
@@ -92,7 +89,6 @@ private fun NotesList(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(1f),
-        state = listState,
         contentPadding = paddingValues
     ) {
         item {
@@ -156,7 +152,7 @@ private fun DefaultNote(
         NoteItem(
             note = note,
             modifier = Modifier,
-            onClick = { onNoteClick(note.noteId) }
+            onClick = { onNoteClick(it) }
         )
     }
 }
@@ -205,41 +201,18 @@ private fun AllNotesDrawer(
 }
 
 @Composable
-private fun ExtendedFab(listState : LazyListState, onNoteClick : (Int) -> Unit) {
-    ExtendedFloatingActionButton(
-        text = {
-            Text(
-                text = "New Note",
-                color = MaterialTheme.colors.onSecondary
-            )
-        },
-        icon = {
+private fun CustomFab(onNoteClick: (Int) -> Unit) {
+    FloatingActionButton(
+        modifier = Modifier.testTag("FAB"),
+        content = {
             Icon(
                 painterResource(id = R.drawable.ic_baseline_add_24),
                 contentDescription = null,
                 tint = MaterialTheme.colors.onSecondary
             )
         },
-        expanded = listState.isScrollingUp(),
         onClick = { onNoteClick(0) },
-        containerColor = MaterialTheme.colors.secondary
+        backgroundColor = MaterialTheme.colors.secondary,
+        shape = RoundedCornerShape(12.dp)
     )
-}
-
-@Composable
-fun LazyListState.isScrollingUp() : Boolean {
-    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) {
-        derivedStateOf {
-            if (previousIndex != firstVisibleItemIndex) {
-                previousIndex > firstVisibleItemIndex
-            } else {
-                previousScrollOffset >= firstVisibleItemScrollOffset
-            }.also {
-                previousIndex = firstVisibleItemIndex
-                previousScrollOffset = firstVisibleItemScrollOffset
-            }
-        }
-    }.value
 }

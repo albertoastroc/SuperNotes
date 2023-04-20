@@ -30,6 +30,8 @@ object Constants {
     const val TRASH_NOTE = "trashNote"
     const val TRASH_NOTE_ID = "trashNoteId"
 
+    const val TRASH_NOTE_CATEGORY_TAG = "TrashNotesAPPTAG"
+
     // Composables
 
     // AllNotes

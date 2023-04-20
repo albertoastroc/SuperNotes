@@ -88,7 +88,7 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     //System UI controller
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.26.2-beta"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
 
     //Room
     implementation("androidx.room:room-runtime:2.5.0")

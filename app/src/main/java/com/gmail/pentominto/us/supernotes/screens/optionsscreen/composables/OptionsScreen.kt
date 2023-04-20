@@ -49,14 +49,6 @@ fun OptionsScreen(
             )
 
             OptionsRowWithSwitch(
-                title = "Dark mode",
-                subTitle = "App specific theme",
-                optionsState.darkThemeOption
-            ) {
-                viewModel.themeToggle()
-            }
-
-            OptionsRowWithSwitch(
                 title = "Enable categories",
                 subTitle = "When disabled one uncategorized list will be shown",
                 switchState = optionsState.categoriesOption
@@ -99,8 +91,8 @@ fun OptionsScreen(
                 noButtonMessage = "Cancel"
             ) {
                 val uriText = "mailto:simplenotesacf@gmail.com" +
-                    "?subject=" + "Data deletion request" +
-                    "&body=" + "Delete data for ID ${optionsState.userId}"
+                        "?subject=" + "Data deletion request" +
+                        "&body=" + "Delete data for ID ${optionsState.userId}"
 
                 val emailIntent = Intent()
                     .setData(Uri.parse(uriText))
@@ -244,8 +236,8 @@ fun OptionsRowWithSwitch(
             colors = SwitchDefaults.colors(
                 checkedThumbColor = MaterialTheme.colors.primary,
                 uncheckedThumbColor = MaterialTheme.colors.primary,
-                checkedTrackColor = MaterialTheme.colors.primaryVariant,
-                uncheckedTrackColor = MaterialTheme.colors.primaryVariant,
+                checkedTrackColor = MaterialTheme.colors.secondary,
+                uncheckedTrackColor = MaterialTheme.colors.secondary,
                 checkedTrackAlpha = 1f,
                 uncheckedTrackAlpha = 1f
             )

@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.ui.theme.Scarlet
 
 @Composable
 fun SwipeableNoteRow(
@@ -40,8 +39,7 @@ fun SwipeableNoteRow(
                 Box(
                     modifier = Modifier
                         .background(
-                            Scarlet
-//                            MaterialTheme.colors.secondary
+                            MaterialTheme.colors.secondary
                         )
                 ) {
                     Row(
