@@ -7,33 +7,31 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.*
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesState
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
+import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SwipeableNoteRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
-    viewModel : AllNotesViewModel = hiltViewModel(),
-    onNoteClick : (Int) -> Unit,
-    onOptionsClick : (Int) -> Unit
+    viewModel: AllNotesViewModel = hiltViewModel(),
+    onNoteClick: (Int) -> Unit,
+    onOptionsClick: (Int) -> Unit
 ) {
     val allNotesState by remember { viewModel.allNotesState }
 
@@ -76,15 +74,15 @@ fun AllNotesScreen(
 }
 
 @Composable
-private fun NotesList(
-    paddingValues : PaddingValues,
-    allNotesState : AllNotesState,
-    scope : CoroutineScope,
-    scaffoldState : ScaffoldState,
-    onNoteClick : (Int) -> Unit,
-    onSearchChange : (String) -> Unit,
-    clearSearchBar : () -> Unit,
-    onNoteSwipe : (Note) -> Unit
+fun NotesList(
+    paddingValues: PaddingValues,
+    allNotesState: AllNotesState,
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    onNoteClick: (Int) -> Unit,
+    onSearchChange: (String) -> Unit,
+    clearSearchBar: () -> Unit,
+    onNoteSwipe: (Note) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -113,9 +111,9 @@ private fun NotesList(
             ) { note ->
 
                 DefaultNote(
-                    note,
-                    onNoteClick,
-                    onNoteSwipe
+                    note = note,
+                    onNoteClick = onNoteClick,
+                    onNoteSwipe = onNoteSwipe
                 )
             }
         }
@@ -123,7 +121,7 @@ private fun NotesList(
 }
 
 @Composable
-private fun CategoryTitle(category : Category) {
+private fun CategoryTitle(category: Category) {
     Text(
         text = category.categoryTitle,
         modifier = Modifier
@@ -141,9 +139,9 @@ private fun CategoryTitle(category : Category) {
 
 @Composable
 private fun DefaultNote(
-    note : Note,
-    onNoteClick : (Int) -> Unit,
-    onNoteSwipe : (Note) -> Unit
+    note: Note,
+    onNoteClick: (Int) -> Unit,
+    onNoteSwipe: (Note) -> Unit
 ) {
     SwipeableNoteRow(
         deleteNote = { onNoteSwipe(note) }
@@ -158,52 +156,8 @@ private fun DefaultNote(
 }
 
 @Composable
-private fun AllNotesDrawer(
-    scope : CoroutineScope,
-    scaffoldState : ScaffoldState,
-    onOptionsClick : (Int) -> Unit
-) {
-    Drawer(
-        drawerOptionsList = listOf(
-            MenuItem(
-                id = 1,
-                title = "Home",
-                icon = Icons.Default.Home
-            ),
-            MenuItem(
-                id = 2,
-                title = "Options",
-                icon = Icons.Default.Settings
-            ),
-            MenuItem(
-                id = 3,
-                title = "Trash",
-                icon = Icons.Default.Delete
-            ),
-            MenuItem(
-                id = 4,
-                title = "Rate me in the Play Store!",
-                icon = Icons.Default.Star
-            ),
-            MenuItem(
-                id = 5,
-                title = "Privacy policy and info",
-                icon = Icons.Default.Info
-            )
-        ),
-        onSettingClick = {
-            scope.launch {
-                scaffoldState.drawerState.close()
-                onOptionsClick(it)
-            }
-        }
-    )
-}
-
-@Composable
 private fun CustomFab(onNoteClick: (Int) -> Unit) {
     FloatingActionButton(
-        modifier = Modifier.testTag("FAB"),
         content = {
             Icon(
                 painterResource(id = R.drawable.ic_baseline_add_24),

@@ -1,12 +1,13 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
+import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -14,25 +15,23 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.CategoriesList
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(
-    ExperimentalMaterialApi::class
-)
 @Composable
 fun NoteEditScreen(
     noteId: Int,
@@ -67,7 +66,7 @@ fun NoteEditScreen(
 
             when (event) {
                 Lifecycle.Event.ON_STOP, Lifecycle.Event.ON_PAUSE
-                     -> {
+                -> {
                     viewModel.saveNoteText()
                 }
                 else -> {}
@@ -98,122 +97,17 @@ fun NoteEditScreen(
                         end = 16.dp
                     )
             ) {
-                Card(
-                    modifier = Modifier,
-                    shape = RoundedCornerShape(2.dp),
-                    elevation = 1.dp,
-                    backgroundColor = MaterialTheme.colors.primary
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .weight(1f),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CompositionLocalProvider(
-                            LocalTextSelectionColors provides customTextSelectionColors
-                        ) {
-                            TextField(
-                                value = noteState.noteTitle,
-                                singleLine = true,
-                                placeholder = {
-                                    Text(
-                                        text = "Enter a Title...",
-                                        color = MaterialTheme.colors.onPrimary,
-                                        fontSize = 18.sp
-                                    )
-                                },
-                                onValueChange = { viewModel.onTitleInputChange(it) },
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .weight(1f)
-                                    .background(
-                                        color = Color.Transparent
-                                    ),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    disabledTextColor = Color.Transparent,
-                                    backgroundColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    disabledIndicatorColor = Color.Transparent,
-                                    cursorColor = MaterialTheme.colors.onPrimary
-                                ),
-                                textStyle = TextStyle(
-                                    color = MaterialTheme.colors.onBackground,
-                                    fontSize = 18.sp
-                                )
-
-                            )
-                        }
-
-                        Column {
-                            Icon(
-                                painterResource(id = R.drawable.ic_baseline_more_vert_24),
-                                modifier = Modifier
-                                    .padding(20.dp)
-                                    .clickable(
-                                        interactionSource = NoRippleInteractionSource(),
-                                        onClick = {
-                                            dropDownMenuExpanded = true
-                                        },
-                                        indication = null
-                                    ),
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.onBackground
-                            )
-
-                            DropdownMenu(
-                                expanded = dropDownMenuExpanded,
-                                onDismissRequest = { dropDownMenuExpanded = false }
-                            ) {
-                                DropdownMenuItem(onClick = {
-                                    clipboardManager.setText(
-                                        AnnotatedString(
-                                            noteState.noteBody
-                                        )
-                                    )
-                                    dropDownMenuExpanded = false
-                                    Toast.makeText(
-                                        context,
-                                        "Text Copied",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }) {
-                                    Text(text = "Copy to clipboard")
-                                }
-
-                                DropdownMenuItem(onClick = {
-                                    coroutineScope.launch {
-                                        bottomSheetScaffoldState.bottomSheetState.expand()
-                                        focusManager.clearFocus()
-                                        dropDownMenuExpanded = false
-                                    }
-                                }) {
-                                    Text(text = "Set category")
-                                }
-
-                                DropdownMenuItem(onClick = {
-                                    val sendIntent: Intent = Intent().apply {
-                                        action = Intent.ACTION_SEND
-                                        putExtra(
-                                            Intent.EXTRA_TEXT,
-                                            noteState.noteBody
-                                        )
-                                        type = "text/plain"
-                                    }
-                                    val shareIntent = Intent.createChooser(
-                                        sendIntent,
-                                        null
-                                    )
-
-                                    context.startActivity(shareIntent)
-                                    dropDownMenuExpanded = false
-                                }) {
-                                    Text(text = "Share")
-                                }
-                            }
-                        }
-                    }
-                }
+                TitleCard(
+                    customTextSelectionColors,
+                    noteState,
+                    viewModel,
+                    dropDownMenuExpanded,
+                    clipboardManager,
+                    context,
+                    coroutineScope,
+                    bottomSheetScaffoldState,
+                    focusManager
+                )
 
                 Divider(
                     color = MaterialTheme.colors.onBackground,
@@ -222,50 +116,11 @@ fun NoteEditScreen(
                         .height(1.dp)
                 )
 
-                Card(
-                    modifier = Modifier
-                        .weight(1f),
-                    elevation = 1.dp,
-                    shape = RoundedCornerShape(2.dp),
-                    backgroundColor = MaterialTheme.colors.primary
-                ) {
-                    CompositionLocalProvider(
-                        LocalTextSelectionColors provides customTextSelectionColors
-                    ) {
-                        TextField(
-                            value = noteState.noteBody.toString(),
-                            placeholder = {
-                                Text(
-                                    text = "Enter Text...",
-                                    color = MaterialTheme.colors.onPrimary,
-                                    fontSize = 18.sp
-                                )
-                            },
-                            onValueChange = { viewModel.onBodyInputChange(it) },
-                            modifier = Modifier
-                                .padding(
-                                    start = 8.dp,
-                                    top = 8.dp
-                                )
-                                .fillMaxWidth()
-                                .background(
-                                    color = Color.Transparent
-                                ),
-                            colors = TextFieldDefaults.textFieldColors(
-                                disabledTextColor = Color.Transparent,
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent,
-                                cursorColor = MaterialTheme.colors.onPrimary
-                            ),
-                            textStyle = TextStyle(
-                                color = MaterialTheme.colors.onBackground,
-                                fontSize = 18.sp
-                            )
-                        )
-                    }
-                }
+                BodyCard(
+                    customTextSelectionColors,
+                    noteState,
+                    viewModel
+                )
             }
         },
 
@@ -286,212 +141,206 @@ fun NoteEditScreen(
 }
 
 @Composable
-fun CategoriesList(
-    categories: List<Category>,
-    currentCategory: String,
-    onClickDialog: (String) -> Unit,
-    onDeleteCategory: (Category) -> Unit,
-    onClickCategory: (Category) -> Unit
+private fun BodyCard(
+    customTextSelectionColors : TextSelectionColors,
+    noteState : NoteEditState,
+    viewModel : NoteEditScreenViewModel
 ) {
-    val openCategoryDialog = remember { mutableStateOf(false) }
-
-    val dialogInput = remember { mutableStateOf(String()) }
-
-    val dialogTitleState = remember { mutableStateOf(String()) }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = 450.dp)
+    Card(
+        modifier = Modifier.fillMaxSize(),
+        elevation = 1.dp,
+        shape = RoundedCornerShape(2.dp),
+        backgroundColor = MaterialTheme.colors.primary
     ) {
-        item {
-            AddItemRow(openCategoryDialog)
-
-            if (openCategoryDialog.value) {
-                AddCategoryDialog(
-                    openCategoryDialog = openCategoryDialog,
-                    dialogTitleState = dialogTitleState,
-                    dialogInput = dialogInput,
-                    onClickDialog = onClickDialog
-                )
-            }
-        }
-
-        items(
-            items = categories,
-            key = { it.categoryId }
-        ) { category ->
-
-            CategoryItem(
-                category = category,
-                currentCategory = currentCategory,
-                onClickCategory = onClickCategory,
-                onDeleteCategory = onDeleteCategory
-            )
-        }
-    }
-}
-
-@Composable
-private fun AddItemRow(openCategoryDialog: MutableState<Boolean>) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.secondaryVariant),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_baseline_add_24),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(20.dp)
-                .clickable(
-                    interactionSource = NoRippleInteractionSource(),
-                    indication = null,
-                    onClick = {
-                        openCategoryDialog.value = true
-                    }
+        CompositionLocalProvider(
+            LocalTextSelectionColors provides customTextSelectionColors
+        ) {
+            TextField(
+                value = noteState.noteBody,
+                placeholder = {
+                    Text(
+                        text = "Enter Text...",
+                        color = MaterialTheme.colors.onPrimary,
+                        fontSize = 18.sp
+                    )
+                },
+                onValueChange = { viewModel.onBodyInputChange(it) },
+                modifier = Modifier
+                    .padding(
+                        start = 8.dp,
+                        top = 8.dp
+                    )
+                    .fillMaxWidth()
+                    .background(
+                        color = Color.Transparent
+                    ),
+                colors = TextFieldDefaults.textFieldColors(
+                    disabledTextColor = Color.Transparent,
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onPrimary
                 ),
-            tint = MaterialTheme.colors.onBackground
-        )
+                textStyle = TextStyle(
+                    color = MaterialTheme.colors.onBackground,
+                    fontSize = 18.sp
+                )
+            )
+        }
     }
-
-    Divider(
-        modifier = Modifier
-            .height(1.dp),
-        color = MaterialTheme.colors.onPrimary
-    )
 }
 
 @Composable
-private fun AddCategoryDialog(
-    openCategoryDialog: MutableState<Boolean>,
-    dialogTitleState: MutableState<String>,
-    dialogInput: MutableState<String>,
-    onClickDialog: (String) -> Unit
+private fun TitleCard(
+    customTextSelectionColors : TextSelectionColors,
+    noteState : NoteEditState,
+    viewModel : NoteEditScreenViewModel,
+    dropDownMenuExpanded : Boolean,
+    clipboardManager : ClipboardManager,
+    context : Context,
+    coroutineScope : CoroutineScope,
+    bottomSheetScaffoldState : BottomSheetScaffoldState,
+    focusManager : FocusManager
 ) {
-    AlertDialog(
-        modifier = Modifier.width(400.dp),
-        onDismissRequest = { openCategoryDialog.value = false },
-        backgroundColor = MaterialTheme.colors.background,
-        title = {
-            Text(
-                text = dialogTitleState.value
-            )
-        },
-        text = {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
+    var dropDownMenuExpanded1 = dropDownMenuExpanded
+    Card(
+        modifier = Modifier,
+        shape = RoundedCornerShape(2.dp),
+        elevation = 1.dp,
+        backgroundColor = MaterialTheme.colors.primary
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CompositionLocalProvider(
+                LocalTextSelectionColors provides customTextSelectionColors
             ) {
                 TextField(
-                    value = dialogInput.value,
+                    value = noteState.noteTitle,
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Enter a Title...",
+                            color = MaterialTheme.colors.onPrimary,
+                            fontSize = 18.sp
+                        )
+                    },
+                    onValueChange = { viewModel.onTitleInputChange(it) },
                     modifier = Modifier
-                        .padding(top = 8.dp),
-                    placeholder = { Text(text = "New Category Name...") },
-                    onValueChange = {
-                        dialogInput.value = it
-                        dialogTitleState.value = ""
-                    },
+                        .padding(start = 8.dp)
+                        .weight(1f)
+                        .background(
+                            color = Color.Transparent
+                        ),
                     colors = TextFieldDefaults.textFieldColors(
+                        disabledTextColor = Color.Transparent,
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
                         cursorColor = MaterialTheme.colors.onPrimary
+                    ),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colors.onBackground,
+                        fontSize = 18.sp
                     )
+
                 )
             }
-        },
-        buttons = {
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-            ) {
-                Button(
-                    onClick = { openCategoryDialog.value = false },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = MaterialTheme.colors.onSecondary,
-                        backgroundColor = MaterialTheme.colors.secondary
-                    ),
-                    modifier = Modifier.width(100.dp)
 
-                ) {
-                    Text(text = "Cancel")
-                }
-
-                Button(
-                    onClick = {
-                        if (dialogInput.value.isNotEmpty()) {
-                            onClickDialog(dialogInput.value)
-                            openCategoryDialog.value = false
-                            dialogInput.value = ""
-                        } else {
-                            dialogTitleState.value = "Note Category name is empty"
-                        }
-                    },
-                    modifier = Modifier.width(100.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = MaterialTheme.colors.onSecondary,
-                        backgroundColor = MaterialTheme.colors.secondary
-                    )
-                ) {
-                    Text(text = "Add")
-                }
-            }
-        }
-    )
-}
-
-@Composable
-private fun CategoryItem(
-    category: Category,
-    currentCategory: String,
-    onClickCategory: (Category) -> Unit,
-    onDeleteCategory: (Category) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = if (category.categoryTitle == currentCategory) {
-                    MaterialTheme.colors.secondary
-                } else {
-                    MaterialTheme.colors.secondaryVariant
-                }
-            )
-            .height(60.dp)
-            .clickable {
-                onClickCategory(category)
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = category.categoryTitle,
-            modifier = Modifier
-                .padding(
-                    top = 8.dp,
-                    start = 16.dp,
-                    bottom = 8.dp
+            Column {
+                Icon(
+                    painterResource(id = R.drawable.ic_baseline_more_vert_24),
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .clickable(
+                            interactionSource = NoRippleInteractionSource(),
+                            onClick = {
+                                dropDownMenuExpanded1 = true
+                            },
+                            indication = null
+                        ),
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onBackground
                 )
-                .weight(1f),
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 2
-        )
 
-        if (category.categoryTitle != "No Category") {
-            Icon(
-                painterResource(id = R.drawable.ic_baseline_delete_24),
-                modifier = Modifier
-                    .padding(20.dp)
-                    .clickable(
-                        interactionSource = NoRippleInteractionSource(),
-                        onClick = {
-                            onDeleteCategory(category)
-                        },
-                        indication = null
-                    ),
-                contentDescription = null
-            )
+                EditScreenDropDownMenu(
+                    dropDownMenuExpanded1,
+                    clipboardManager,
+                    noteState,
+                    context,
+                    coroutineScope,
+                    bottomSheetScaffoldState,
+                    focusManager
+                )
+            }
         }
     }
 }
+
+@Composable
+private fun EditScreenDropDownMenu(
+    dropDownMenuExpanded : Boolean,
+    clipboardManager : ClipboardManager,
+    noteState : NoteEditState,
+    context : Context,
+    coroutineScope : CoroutineScope,
+    bottomSheetScaffoldState : BottomSheetScaffoldState,
+    focusManager : FocusManager
+) {
+    var dropDownMenuExpanded1 = dropDownMenuExpanded
+    DropdownMenu(
+        expanded = dropDownMenuExpanded1,
+        onDismissRequest = { dropDownMenuExpanded1 = false }
+    ) {
+        DropdownMenuItem(onClick = {
+            clipboardManager.setText(
+                AnnotatedString(
+                    noteState.noteBody
+                )
+            )
+            dropDownMenuExpanded1 = false
+            Toast.makeText(
+                context,
+                "Text Copied",
+                Toast.LENGTH_SHORT
+            ).show()
+        }) {
+            Text(text = "Copy to clipboard")
+        }
+
+        DropdownMenuItem(onClick = {
+            coroutineScope.launch {
+                bottomSheetScaffoldState.bottomSheetState.expand()
+                focusManager.clearFocus()
+                dropDownMenuExpanded1 = false
+            }
+        }) {
+            Text(text = "Set category")
+        }
+
+        DropdownMenuItem(onClick = {
+            val sendIntent : Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    noteState.noteBody
+                )
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(
+                sendIntent,
+                null
+            )
+
+            context.startActivity(shareIntent)
+            dropDownMenuExpanded1 = false
+        }) {
+            Text(text = "Share")
+        }
+    }
+}
+
+
+

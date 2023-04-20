@@ -13,8 +13,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.*
 import com.gmail.pentominto.us.supernotes.screens.TrashNotesScreen
@@ -40,13 +38,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +78,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SuperNotesApp() {
-
     val navController = rememberAnimatedNavController()
 
     MyNavHost(
@@ -94,7 +87,6 @@ fun SuperNotesApp() {
 
 @Composable
 private fun MyNavHost(navController: NavHostController) {
-
     val context = LocalContext.current
 
     AnimatedNavHost(

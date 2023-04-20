@@ -46,9 +46,7 @@ class AllNotesViewModel @Inject constructor(
 
     private fun sendToTrash(note: Note) {
         viewModelScope.launch {
-
             repository.updateNoteCategory("TrashNotesAPPTAG", note.noteId)
-
         }
     }
 

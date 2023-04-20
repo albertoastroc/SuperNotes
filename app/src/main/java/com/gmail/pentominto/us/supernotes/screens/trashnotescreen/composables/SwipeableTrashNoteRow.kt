@@ -13,6 +13,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Note
+import com.gmail.pentominto.us.supernotes.utility.Constants.CURRENT_POSITION
+import com.gmail.pentominto.us.supernotes.utility.Constants.FRACTION_THRESHOLD
 
 @Composable
 fun SwipeableTrashNoteRow(
@@ -39,12 +41,12 @@ fun SwipeableTrashNoteRow(
             DismissDirection.StartToEnd,
             DismissDirection.EndToStart
         ),
-        dismissThresholds = { FractionalThreshold(.6f) },
+        dismissThresholds = { FractionalThreshold(FRACTION_THRESHOLD) },
         background = {
             val direction = dismissState.dismissDirection?.name
 
             if (
-                dismissState.progress.fraction <= .99f && direction == DismissDirection.StartToEnd.name
+                dismissState.progress.fraction <= CURRENT_POSITION && direction == DismissDirection.StartToEnd.name
             ) {
                 Box(
                     modifier = Modifier.background(
@@ -73,7 +75,7 @@ fun SwipeableTrashNoteRow(
                     }
                 }
             } else if (
-                dismissState.progress.fraction <= .99f && direction == DismissDirection.EndToStart.name
+                dismissState.progress.fraction <= CURRENT_POSITION && direction == DismissDirection.EndToStart.name
             ) {
                 Box(
                     modifier = Modifier

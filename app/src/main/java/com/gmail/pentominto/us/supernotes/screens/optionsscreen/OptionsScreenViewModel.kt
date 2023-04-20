@@ -19,8 +19,8 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.USER_HIDE_CATEGORIES
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(

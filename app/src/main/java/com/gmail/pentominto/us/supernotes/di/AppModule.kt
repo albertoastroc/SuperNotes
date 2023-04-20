@@ -8,8 +8,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.gmail.pentominto.us.supernotes.database.DatabaseDAO
 import com.gmail.pentominto.us.supernotes.database.NoteDatabase
+import com.gmail.pentominto.us.supernotes.database.NotesDao
 import com.gmail.pentominto.us.supernotes.utility.Constants.DATABASE_NAME
 import com.gmail.pentominto.us.supernotes.utility.Constants.PREFERENCES_STORE_NAME
 import dagger.Module
@@ -41,7 +41,7 @@ object AppModule {
     @Provides
     fun providesDAO(
         database: NoteDatabase
-    ): DatabaseDAO {
+    ): NotesDao {
         return database.notesDAO()
     }
 

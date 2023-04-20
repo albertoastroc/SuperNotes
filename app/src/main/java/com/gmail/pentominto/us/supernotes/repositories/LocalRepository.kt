@@ -28,7 +28,7 @@ interface LocalRepository {
 
     fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>>
 
-    fun getNote(id : Int): Flow<Note>
+    fun getNote(id: Int): Flow<Note>
 
     fun getAllCategories(): Flow<List<Category>>
 

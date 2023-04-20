@@ -34,8 +34,12 @@ object Constants {
 
     // Composables
 
+    //SwipeableTrashNoteRow
+
+    const val CURRENT_POSITION = .99f
+    const val FRACTION_THRESHOLD = .6f
+
     // AllNotes
-    const val MINIMUM_SEARCH_INPUT_LENGTH = 3
 
     const val DEFAULT_CATEGORY = "No Category"
 

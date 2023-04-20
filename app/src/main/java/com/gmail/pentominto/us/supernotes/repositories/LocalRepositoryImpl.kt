@@ -2,14 +2,14 @@ package com.gmail.pentominto.us.supernotes.repositories
 
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.database.DatabaseDAO
-import kotlinx.coroutines.flow.Flow
+import com.gmail.pentominto.us.supernotes.database.NotesDao
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
-    private val dao: DatabaseDAO
+    private val dao: NotesDao
 ) : LocalRepository {
 
     override suspend fun insertNote(note: Note): Long {
@@ -60,7 +60,7 @@ class LocalRepositoryImpl @Inject constructor(
         return dao.getNoteWithCategory(id)
     }
 
-    override fun getNote(id : Int) : Flow<Note> {
+    override fun getNote(id: Int): Flow<Note> {
         return dao.getNote(id)
     }
 

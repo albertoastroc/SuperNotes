@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SuperNotes" parent="Theme.SplashScreen">
-        <item name="android:statusBarColor">@color/transparent</item>
-        <item name="windowSplashScreenBackground">@color/light_green</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon</item>
-        <item name="windowSplashScreenIconBackgroundColor">@color/light_green</item>
-        <item name="windowSplashScreenAnimationDuration">1000</item>
-    </style>
-
-    <style name="SuperNotes" parent="android:Theme.Material.Light.NoActionBar">
-
+    <style name="Theme.SuperNotes" parent="android:Theme.Material.NoActionBar">
     </style>
 </resources>

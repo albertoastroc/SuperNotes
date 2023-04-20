@@ -9,7 +9,7 @@ import com.gmail.pentominto.us.supernotes.data.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DatabaseDAO {
+interface NotesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note): Long
@@ -45,7 +45,7 @@ interface DatabaseDAO {
     fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>>
 
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
-    fun getNote(id : Int): Flow<Note>
+    fun getNote(id: Int): Flow<Note>
 
     @Query("SELECT * FROM category_table")
     fun getAllCategories(): Flow<List<Category>>

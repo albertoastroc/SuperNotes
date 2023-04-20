@@ -1,9 +1,7 @@
 package com.gmail.pentominto.us.supernotes
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
@@ -11,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
-import com.gmail.pentominto.us.supernotes.utility.Constants.USER_THEME_KEY
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -26,10 +23,7 @@ class MainActivityViewModel @Inject constructor(
     private val repository: LocalRepository
 ) : ViewModel() {
 
-    val userDarkThemeKey = booleanPreferencesKey(USER_THEME_KEY)
     val userIdKey = stringPreferencesKey(FIREBASE_ID_KEY)
-
-    val isDarkThemeState = mutableStateOf(false)
 
     private fun setUpFirebaseId() {
         viewModelScope.launch {
@@ -49,17 +43,6 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun isDarkThemePreferred() {
-        viewModelScope.launch {
-            dataStore.data.collect { preferences ->
-
-                if (preferences.contains(userDarkThemeKey)) {
-                    isDarkThemeState.value = preferences[userDarkThemeKey] ?: false
-                }
-            }
-        }
-    }
-
     private fun setDefaultCategory() {
         viewModelScope.launch {
             if (!repository.defaultCategoryExists()) {
@@ -72,7 +55,6 @@ class MainActivityViewModel @Inject constructor(
 
     init {
 
-        isDarkThemePreferred()
         setDefaultCategory()
         setUpFirebaseId()
     }
