@@ -10,16 +10,16 @@ import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE_CATEGORY_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class TrashNotesViewModel @Inject constructor(
-    val repository: LocalRepository
+    val repository : LocalRepository
 ) : ViewModel() {
 
-    private val _trashNotesList: MutableState<List<Note>> = mutableStateOf(emptyList())
-    val trashNotesList: State<List<Note>> = _trashNotesList
+    private val _trashNotesList : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val trashNotesList : State<List<Note>> = _trashNotesList
 
     private fun getTrashNotesList() {
         viewModelScope.launch {
@@ -30,13 +30,16 @@ class TrashNotesViewModel @Inject constructor(
         }
     }
 
-    fun deleteTrashNote(noteId: Int) = viewModelScope.launch {
+    fun deleteTrashNote(noteId : Int) = viewModelScope.launch {
         repository.deleteNote(noteId)
     }
 
-    fun restoreTrashNote(note: Note) {
+    fun restoreTrashNote(note : Note) {
         viewModelScope.launch {
-            repository.updateNoteCategory(DEFAULT_CATEGORY, note.noteId)
+            repository.updateNoteCategory(
+                DEFAULT_CATEGORY,
+                note.noteId
+            )
         }
     }
 

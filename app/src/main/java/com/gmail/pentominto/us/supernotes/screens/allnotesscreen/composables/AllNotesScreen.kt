@@ -1,5 +1,9 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,16 +26,14 @@ import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesState
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SearchBarWithMenu
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.SwipeableNoteRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
-    viewModel: AllNotesViewModel = hiltViewModel(),
-    onNoteClick: (Int) -> Unit,
-    onOptionsClick: (Int) -> Unit
+    viewModel : AllNotesViewModel = hiltViewModel(),
+    onNoteClick : (Int) -> Unit,
+    onOptionsClick : (Int) -> Unit
 ) {
     val allNotesState by remember { viewModel.allNotesState }
 
@@ -75,14 +77,14 @@ fun AllNotesScreen(
 
 @Composable
 fun NotesList(
-    paddingValues: PaddingValues,
-    allNotesState: AllNotesState,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    onNoteClick: (Int) -> Unit,
-    onSearchChange: (String) -> Unit,
-    clearSearchBar: () -> Unit,
-    onNoteSwipe: (Note) -> Unit
+    paddingValues : PaddingValues,
+    allNotesState : AllNotesState,
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onNoteClick : (Int) -> Unit,
+    onSearchChange : (String) -> Unit,
+    clearSearchBar : () -> Unit,
+    onNoteSwipe : (Note) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -113,7 +115,10 @@ fun NotesList(
                 DefaultNote(
                     note = note,
                     onNoteClick = onNoteClick,
-                    onNoteSwipe = onNoteSwipe
+                    onNoteSwipe = onNoteSwipe,
+                    modifier = Modifier.animateItemPlacement(
+                        animationSpec = tween(durationMillis = 600)
+                    )
                 )
             }
         }
@@ -121,7 +126,7 @@ fun NotesList(
 }
 
 @Composable
-private fun CategoryTitle(category: Category) {
+private fun CategoryTitle(category : Category) {
     Text(
         text = category.categoryTitle,
         modifier = Modifier
@@ -139,24 +144,26 @@ private fun CategoryTitle(category: Category) {
 
 @Composable
 private fun DefaultNote(
-    note: Note,
-    onNoteClick: (Int) -> Unit,
-    onNoteSwipe: (Note) -> Unit
+    note : Note,
+    onNoteClick : (Int) -> Unit,
+    onNoteSwipe : (Note) -> Unit,
+    modifier : Modifier
 ) {
-    SwipeableNoteRow(
+    SwipeNoteRowContainer(
+        modifier = modifier,
         deleteNote = { onNoteSwipe(note) }
 
     ) {
         NoteItem(
             note = note,
-            modifier = Modifier,
+            modifier = modifier,
             onClick = { onNoteClick(it) }
         )
     }
 }
 
 @Composable
-private fun CustomFab(onNoteClick: (Int) -> Unit) {
+private fun CustomFab(onNoteClick : (Int) -> Unit) {
     FloatingActionButton(
         content = {
             Icon(

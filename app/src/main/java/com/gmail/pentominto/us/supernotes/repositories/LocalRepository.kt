@@ -6,35 +6,35 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
 
-    suspend fun insertNote(note: Note): Long
+    suspend fun insertNote(note : Note) : Long
 
-    suspend fun insertTrashNote(trashNote: Note): Long
+    suspend fun insertTrashNote(trashNote : Note) : Long
 
-    suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int)
+    suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Int)
 
-    suspend fun updateNoteCategory(chosenCategory: String, noteId: Int)
+    suspend fun updateNoteCategory(chosenCategory : String, noteId : Int)
 
-    suspend fun insertCategory(category: Category)
+    suspend fun insertCategory(category : Category)
 
-    suspend fun deleteNote(id: Int)
+    suspend fun deleteNote(id : Int)
 
-    suspend fun deleteTrashNote(id: Int)
+    suspend fun deleteTrashNote(id : Int)
 
-    suspend fun deleteCategory(id: Int)
+    suspend fun deleteCategory(id : Int)
 
-    fun getNotesOfThisCategory(category: String): Flow<List<Note>>
+    fun getNotesOfThisCategory(category : String) : Flow<List<Note>>
 
-    fun getAllCategoriesAndNotes(): Flow<Map<Category, List<Note>>>
+    fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>>
 
-    fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>>
+    fun getNoteWithCategory(id : Int) : Flow<Map<Category, Note>>
 
-    fun getNote(id: Int): Flow<Note>
+    fun getNote(id : Int) : Flow<Note>
 
-    fun getAllCategories(): Flow<List<Category>>
+    fun getAllCategories() : Flow<List<Category>>
 
     suspend fun deleteAllNotes()
 
     suspend fun deleteAllTrashNotes()
 
-    suspend fun defaultCategoryExists(): Boolean
+    suspend fun defaultCategoryExists() : Boolean
 }

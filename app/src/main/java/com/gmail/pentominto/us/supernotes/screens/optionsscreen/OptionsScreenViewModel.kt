@@ -19,19 +19,19 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.USER_HIDE_CATEGORIES
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
-    private val repository: LocalRepository
+    private val dataStore : DataStore<Preferences>,
+    private val repository : LocalRepository
 ) : ViewModel() {
 
-    private val _optionsScreenState: MutableState<OptionsScreenState> = mutableStateOf(
+    private val _optionsScreenState : MutableState<OptionsScreenState> = mutableStateOf(
         OptionsScreenState()
     )
-    val optionsScreenState: State<OptionsScreenState> = _optionsScreenState
+    val optionsScreenState : State<OptionsScreenState> = _optionsScreenState
 
     private val hideCategoriesKey = booleanPreferencesKey(USER_HIDE_CATEGORIES_KEY)
     private val trashEnabledKey = booleanPreferencesKey(USER_TRASH_ENABLED_KEY)
@@ -42,7 +42,7 @@ class OptionsScreenViewModel @Inject constructor(
             dataStore.edit { settings ->
 
                 _optionsScreenState.value = _optionsScreenState.value.copy(
-                    categoriesOption = !_optionsScreenState.value.categoriesOption
+                    categoriesOption = ! _optionsScreenState.value.categoriesOption
                 )
 
                 settings[hideCategoriesKey] = _optionsScreenState.value.categoriesOption
@@ -56,7 +56,7 @@ class OptionsScreenViewModel @Inject constructor(
 
                 _optionsScreenState.value = _optionsScreenState.value.copy(
                     trashEnabled =
-                    !_optionsScreenState.value.trashEnabled
+                    ! _optionsScreenState.value.trashEnabled
                 )
 
                 settings[trashEnabledKey] = _optionsScreenState.value.trashEnabled

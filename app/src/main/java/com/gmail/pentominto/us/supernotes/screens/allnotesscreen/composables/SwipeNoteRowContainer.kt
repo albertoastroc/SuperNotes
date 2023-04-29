@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,9 +14,10 @@ import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 
 @Composable
-fun SwipeableNoteRow(
-    deleteNote: () -> Unit,
-    content: @Composable () -> Unit
+fun SwipeNoteRowContainer(
+    modifier : Modifier,
+    deleteNote : () -> Unit,
+    content : @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(
         confirmStateChange = {
@@ -28,6 +29,7 @@ fun SwipeableNoteRow(
     )
 
     SwipeToDismiss(
+        modifier = modifier,
         state = dismissState,
         directions = setOf(DismissDirection.StartToEnd),
         dismissThresholds = { FractionalThreshold(.6f) },

@@ -2,7 +2,6 @@ package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import com.gmail.pentominto.us.supernotes.Drawer
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.DrawerMenuOptions
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
 import kotlinx.coroutines.CoroutineScope
@@ -10,9 +9,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesDrawer(
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    onOptionsClick: (Int) -> Unit
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onOptionsClick : (Int) -> Unit
 ) {
     Drawer(
         drawerOptionsList = listOf(

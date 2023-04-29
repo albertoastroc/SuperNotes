@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.gmail.pentominto.us.supernotes.screens.trashnotescreen
+package com.gmail.pentominto.us.supernotes.screens.trashnotescreen.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +21,7 @@ fun SwipeableTrashNoteRow(
     deleteNote: (Int) -> Unit,
     restoreNote: () -> Unit,
     trashNote: Note,
+    modifier : Modifier,
     content: @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(
@@ -37,6 +38,7 @@ fun SwipeableTrashNoteRow(
 
     SwipeToDismiss(
         state = dismissState,
+        modifier = modifier,
         directions = setOf(
             DismissDirection.StartToEnd,
             DismissDirection.EndToStart

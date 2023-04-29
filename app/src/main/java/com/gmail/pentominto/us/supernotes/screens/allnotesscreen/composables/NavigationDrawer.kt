@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes
+package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,13 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
 
 @Composable
 fun Drawer(
-    drawerOptionsList: List<MenuItem>,
-    onSettingClick: (Int) -> Unit,
-    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
+    drawerOptionsList : List<MenuItem>,
+    onSettingClick : (Int) -> Unit,
+    itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp)
 ) {
     LazyColumn {
         item {

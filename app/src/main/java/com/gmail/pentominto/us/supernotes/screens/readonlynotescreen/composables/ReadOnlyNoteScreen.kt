@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.trashnotescreen
+package com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,8 +18,8 @@ import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.ReadOnlyNot
 
 @Composable
 fun ReadOnlyNoteScreen(
-    trashNoteId: Int,
-    viewModel: ReadOnlyNoteViewModel = hiltViewModel()
+    trashNoteId : Int,
+    viewModel : ReadOnlyNoteViewModel = hiltViewModel()
 ) {
     val trashNoteState = remember { viewModel.readOnlyNoteState }
 

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
+package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
 import android.content.Context
 import android.content.Intent
@@ -26,15 +26,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.CategoriesList
+import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenViewModel
+import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun NoteEditScreen(
-    noteId: Int,
-    viewModel: NoteEditScreenViewModel = hiltViewModel()
+    noteId : Int,
+    viewModel : NoteEditScreenViewModel = hiltViewModel()
 
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
@@ -96,7 +97,7 @@ fun NoteEditScreen(
                     onTitleValueChange = viewModel::onTitleInputChange,
                     context = context,
                     coroutineScope = coroutineScope,
-                    bottomSheetScaffoldState = bottomSheetScaffoldState,
+                    bottomSheetScaffoldState = bottomSheetScaffoldState
                 )
 
                 Divider(
@@ -109,7 +110,7 @@ fun NoteEditScreen(
                 BodyCard(
                     customTextSelectionColors = customTextSelectionColors,
                     noteState = noteState,
-                    onBodyValueChange = viewModel::onBodyInputChange,
+                    onBodyValueChange = viewModel::onBodyInputChange
                 )
             }
         },
@@ -190,7 +191,6 @@ private fun TitleCard(
     coroutineScope : CoroutineScope,
     bottomSheetScaffoldState : BottomSheetScaffoldState
 ) {
-
     val clipboardManager = LocalClipboardManager.current
 
     val focusManager = LocalFocusManager.current
@@ -289,7 +289,7 @@ private fun TitleCard(
                     }
 
                     DropdownMenuItem(onClick = {
-                        val sendIntent: Intent = Intent().apply {
+                        val sendIntent : Intent = Intent().apply {
                             action = Intent.ACTION_SEND
                             putExtra(
                                 Intent.EXTRA_TEXT,
