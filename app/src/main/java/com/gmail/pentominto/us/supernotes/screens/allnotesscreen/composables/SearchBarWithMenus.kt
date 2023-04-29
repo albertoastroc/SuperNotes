@@ -23,10 +23,10 @@ import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 
 @Composable
 fun SearchBarWithMenu(
-    input : String,
-    onInputChange : (String) -> Unit,
-    onMenuIconClick : () -> Unit,
-    onXClick : () -> Unit
+    input: String,
+    onInputChange: (String) -> Unit,
+    onMenuIconClick: () -> Unit,
+    onXClick: () -> Unit
 ) {
     val customTextSelectionColors = TextSelectionColors(
         handleColor = Color.Transparent,

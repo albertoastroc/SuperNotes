@@ -15,11 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.*
-import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.composables.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.composables.ReadOnlyNoteScreen
+import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.composables.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.MostlyBlackBlue
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.gmail.pentominto.us.supernotes.utility.Constants.ALL_NOTES_DESTINATION
@@ -42,7 +42,7 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState : Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         actionBar?.hide()
@@ -86,7 +86,7 @@ fun SuperNotesApp() {
 }
 
 @Composable
-private fun MyNavHost(navController : NavHostController) {
+private fun MyNavHost(navController: NavHostController) {
     val context = LocalContext.current
 
     AnimatedNavHost(
@@ -175,10 +175,10 @@ private fun MyNavHost(navController : NavHostController) {
 }
 
 fun NavGraphBuilder.navigationWithTransition(
-    routeName : String,
-    destinations : List<String>,
-    arguments : List<NamedNavArgument>,
-    content : @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
+    routeName: String,
+    destinations: List<String>,
+    arguments: List<NamedNavArgument>,
+    content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
 ) {
     composable(
         routeName,
@@ -190,7 +190,7 @@ fun NavGraphBuilder.navigationWithTransition(
                         AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                     )
-                else            -> null
+                else -> null
             }
         },
         exitTransition = {
@@ -200,7 +200,7 @@ fun NavGraphBuilder.navigationWithTransition(
                         AnimatedContentScope.SlideDirection.Left,
                         animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                     )
-                else            -> null
+                else -> null
             }
         },
         popEnterTransition = {
@@ -210,7 +210,7 @@ fun NavGraphBuilder.navigationWithTransition(
                         AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                     )
-                else            -> null
+                else -> null
             }
         },
         popExitTransition = {
@@ -220,7 +220,7 @@ fun NavGraphBuilder.navigationWithTransition(
                         AnimatedContentScope.SlideDirection.Right,
                         animationSpec = tween(DEFAULT_ANIMATION_DURATION)
                     )
-                else            -> null
+                else -> null
             }
         },
         content = content,

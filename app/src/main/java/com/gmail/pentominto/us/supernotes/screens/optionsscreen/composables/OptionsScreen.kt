@@ -26,7 +26,7 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreenVie
 
 @Composable
 fun OptionsScreen(
-    viewModel : OptionsScreenViewModel = hiltViewModel()
+    viewModel: OptionsScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -62,9 +62,9 @@ private fun OptionsTitle() {
 
 @Composable
 private fun OptionsList(
-    optionsState : OptionsScreenState,
-    viewModel : OptionsScreenViewModel,
-    context : Context
+    optionsState: OptionsScreenState,
+    viewModel: OptionsScreenViewModel,
+    context: Context
 ) {
     OptionsRowWithSwitch(
         title = "Enable categories",
@@ -109,8 +109,8 @@ private fun OptionsList(
         noButtonMessage = "Cancel"
     ) {
         val uriText = "mailto:simplenotesacf@gmail.com" +
-                "?subject=" + "Data deletion request" +
-                "&body=" + "Delete data for ID ${optionsState.userId}"
+            "?subject=" + "Data deletion request" +
+            "&body=" + "Delete data for ID ${optionsState.userId}"
 
         val emailIntent = Intent()
             .setData(Uri.parse(uriText))
@@ -131,12 +131,12 @@ private fun OptionsList(
 
 @Composable
 fun OptionsRowWithAlertDialog(
-    title : String,
-    subTitle : String?,
-    message : String,
-    yesButtonMessage : String,
-    noButtonMessage : String,
-    onClick : () -> Unit
+    title: String,
+    subTitle: String?,
+    message: String,
+    yesButtonMessage: String,
+    noButtonMessage: String,
+    onClick: () -> Unit
 ) {
     val openConfirmDialog = remember { mutableStateOf(false) }
 
@@ -206,10 +206,10 @@ fun OptionsRowWithAlertDialog(
 
 @Composable
 fun OptionsRowWithSwitch(
-    title : String,
-    subTitle : String?,
-    switchState : Boolean,
-    onClick : (Boolean) -> Unit
+    title: String,
+    subTitle: String?,
+    switchState: Boolean,
+    onClick: (Boolean) -> Unit
 ) {
     val checkedState = remember { mutableStateOf(switchState) }
 

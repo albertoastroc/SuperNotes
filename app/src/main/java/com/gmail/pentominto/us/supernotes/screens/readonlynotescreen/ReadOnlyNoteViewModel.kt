@@ -8,23 +8,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ReadOnlyNoteViewModel @Inject constructor(
-    private val repository : LocalRepository,
-    savedStateHandle : SavedStateHandle
+    private val repository: LocalRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val trashNoteId : Int = checkNotNull(savedStateHandle["trashNoteId"])
+    private val trashNoteId: Int = checkNotNull(savedStateHandle["trashNoteId"])
 
-    private val _readOnlyNoteState : MutableState<ReadOnlyNoteScreenState> = mutableStateOf(
+    private val _readOnlyNoteState: MutableState<ReadOnlyNoteScreenState> = mutableStateOf(
         ReadOnlyNoteScreenState()
     )
-    val readOnlyNoteState : State<ReadOnlyNoteScreenState> = _readOnlyNoteState
+    val readOnlyNoteState: State<ReadOnlyNoteScreenState> = _readOnlyNoteState
 
-    private fun getTrashNote(trashNoteId : Int) {
+    private fun getTrashNote(trashNoteId: Int) {
         viewModelScope.launch {
             repository.getNote(trashNoteId).collect { trashNote ->
 

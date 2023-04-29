@@ -65,10 +65,10 @@ fun TrashNotesScreen(
 
 @Composable
 private fun TrashNote(
-    viewModel : TrashNotesViewModel,
-    note : Note,
-    onTrashNoteClick : (Int) -> Unit,
-    modifier : Modifier
+    viewModel: TrashNotesViewModel,
+    note: Note,
+    onTrashNoteClick: (Int) -> Unit,
+    modifier: Modifier
 ) {
     SwipeableTrashNoteRow(
         modifier = modifier,

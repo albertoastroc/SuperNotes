@@ -46,15 +46,15 @@ object Constants {
     const val ABOUT_THIS_APP_TITLE = "About this app"
 
     const val ABOUT_THIS_APP_NOTE = "Thanks for installing the app.  This note includes some basic info and works as a mini FAQ.\n" +
-            "\n" +
-            "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
-            "\n" +
-            "2. There is no save button, the app auto-saves everything.\n" +
-            "\n" +
-            "3. To delete a note, swipe it to the right, to restore a note from the Trash, swipe it to the left.\n" +
-            "\n" +
-            "4. To add and set a category use the menu at the top right of this screen. \n" +
-            "\n" +
-            "5. If this note is deleted, it can later be restored in Options.\n" +
-            "\n"
+        "\n" +
+        "1.  If you have a suggestion for a feature you would like to see you can mention it in your review or send an email to simplenotesacf@gmail.com.\n" +
+        "\n" +
+        "2. There is no save button, the app auto-saves everything.\n" +
+        "\n" +
+        "3. To delete a note, swipe it to the right, to restore a note from the Trash, swipe it to the left.\n" +
+        "\n" +
+        "4. To add and set a category use the menu at the top right of this screen. \n" +
+        "\n" +
+        "5. If this note is deleted, it can later be restored in Options.\n" +
+        "\n"
 }

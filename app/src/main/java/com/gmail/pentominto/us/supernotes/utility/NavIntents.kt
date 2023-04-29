@@ -5,18 +5,18 @@ import android.net.Uri
 
 object NavIntents {
 
-    fun getPlaystoreIntent() : Intent {
+    fun getPlaystoreIntent(): Intent {
         return Intent()
             .setData(Uri.parse("market://details?id=com.gmail.pentominto.us.supernotes"))
             .setAction(Intent.ACTION_VIEW)
             .addFlags(
                 Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                        Intent.FLAG_ACTIVITY_NO_HISTORY or
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                    Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK
             )
     }
 
-    fun getPrivacyPolicyIntent() : Intent {
+    fun getPrivacyPolicyIntent(): Intent {
         return Intent()
             .setAction(Intent.ACTION_VIEW)
             .setData(

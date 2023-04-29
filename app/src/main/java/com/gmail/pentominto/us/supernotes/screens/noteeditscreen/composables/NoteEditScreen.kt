@@ -34,8 +34,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoteEditScreen(
-    noteId : Int,
-    viewModel : NoteEditScreenViewModel = hiltViewModel()
+    noteId: Int,
+    viewModel: NoteEditScreenViewModel = hiltViewModel()
 
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
@@ -133,9 +133,9 @@ fun NoteEditScreen(
 
 @Composable
 private fun BodyCard(
-    customTextSelectionColors : TextSelectionColors,
-    noteState : NoteEditState,
-    onBodyValueChange : (String) -> Unit
+    customTextSelectionColors: TextSelectionColors,
+    noteState: NoteEditState,
+    onBodyValueChange: (String) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxSize(),
@@ -184,12 +184,12 @@ private fun BodyCard(
 
 @Composable
 private fun TitleCard(
-    customTextSelectionColors : TextSelectionColors,
-    noteState : NoteEditState,
-    onTitleValueChange : (String) -> Unit,
-    context : Context,
-    coroutineScope : CoroutineScope,
-    bottomSheetScaffoldState : BottomSheetScaffoldState
+    customTextSelectionColors: TextSelectionColors,
+    noteState: NoteEditState,
+    onTitleValueChange: (String) -> Unit,
+    context: Context,
+    coroutineScope: CoroutineScope,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
     val clipboardManager = LocalClipboardManager.current
 
@@ -289,7 +289,7 @@ private fun TitleCard(
                     }
 
                     DropdownMenuItem(onClick = {
-                        val sendIntent : Intent = Intent().apply {
+                        val sendIntent: Intent = Intent().apply {
                             action = Intent.ACTION_SEND
                             putExtra(
                                 Intent.EXTRA_TEXT,

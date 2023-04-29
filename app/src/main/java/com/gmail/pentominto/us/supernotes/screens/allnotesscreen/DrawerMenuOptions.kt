@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
-enum class DrawerMenuOptions(val menuId : Int, val title : String, val icon : ImageVector) {
+enum class DrawerMenuOptions(val menuId: Int, val title: String, val icon: ImageVector) {
 
     HOME(
         1,

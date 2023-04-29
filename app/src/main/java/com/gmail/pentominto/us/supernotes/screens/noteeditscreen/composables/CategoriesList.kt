@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,11 +22,11 @@ import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 
 @Composable
 fun CategoriesList(
-    categories : List<Category>,
-    currentCategory : String,
-    onClickDialog : (String) -> Unit,
-    onDeleteCategory : (Category) -> Unit,
-    onClickCategory : (Category) -> Unit
+    categories: List<Category>,
+    currentCategory: String,
+    onClickDialog: (String) -> Unit,
+    onDeleteCategory: (Category) -> Unit,
+    onClickCategory: (Category) -> Unit
 ) {
     val openCategoryDialog = remember { mutableStateOf(false) }
 
@@ -67,7 +68,7 @@ fun CategoriesList(
 }
 
 @Composable
-private fun AddItemRow(openCategoryDialog : MutableState<Boolean>) {
+private fun AddItemRow(openCategoryDialog: MutableState<Boolean>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,10 +101,10 @@ private fun AddItemRow(openCategoryDialog : MutableState<Boolean>) {
 
 @Composable
 private fun AddCategoryDialog(
-    openCategoryDialog : MutableState<Boolean>,
-    dialogTitleState : MutableState<String>,
-    dialogInput : MutableState<String>,
-    onClickDialog : (String) -> Unit
+    openCategoryDialog: MutableState<Boolean>,
+    dialogTitleState: MutableState<String>,
+    dialogInput: MutableState<String>,
+    onClickDialog: (String) -> Unit
 ) {
     AlertDialog(
         modifier = Modifier.width(400.dp),
@@ -178,11 +179,21 @@ private fun AddCategoryDialog(
 
 @Composable
 private fun CategoryItem(
-    category : Category,
-    currentCategory : String,
-    onClickCategory : (Category) -> Unit,
-    onDeleteCategory : (Category) -> Unit
+    category: Category,
+    currentCategory: String,
+    onClickCategory: (Category) -> Unit,
+    onDeleteCategory: (Category) -> Unit
 ) {
+    Log.d(
+        "TAG",
+        "CategoryItem: $category"
+    )
+
+    Log.d(
+        "TAG",
+        "CurrentCategory: $currentCategory"
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()

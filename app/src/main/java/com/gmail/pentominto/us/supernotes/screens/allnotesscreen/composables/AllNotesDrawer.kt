@@ -9,9 +9,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesDrawer(
-    scope : CoroutineScope,
-    scaffoldState : ScaffoldState,
-    onOptionsClick : (Int) -> Unit
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    onOptionsClick: (Int) -> Unit
 ) {
     Drawer(
         drawerOptionsList = listOf(

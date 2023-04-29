@@ -11,22 +11,22 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
-    private val repository : LocalRepository,
-    private val dataStore : DataStore<Preferences>
+    private val repository: LocalRepository,
+    private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
-    private val _allNotesState : MutableState<AllNotesState> = mutableStateOf(AllNotesState())
-    val allNotesState : State<AllNotesState> = _allNotesState
+    private val _allNotesState: MutableState<AllNotesState> = mutableStateOf(AllNotesState())
+    val allNotesState: State<AllNotesState> = _allNotesState
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     private val isTrashEnabledKey = booleanPreferencesKey("trash_enabled")
 
-    fun onSearchChange(input : String) {
+    fun onSearchChange(input: String) {
         viewModelScope.launch {
             _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
         }
@@ -38,13 +38,13 @@ class AllNotesViewModel @Inject constructor(
         }
     }
 
-    private fun deleteNote(note : Note) {
+    private fun deleteNote(note: Note) {
         viewModelScope.launch {
             repository.deleteNote(note.noteId)
         }
     }
 
-    private fun sendToTrash(note : Note) {
+    private fun sendToTrash(note: Note) {
         viewModelScope.launch {
             repository.updateNoteCategory(
                 "TrashNotesAPPTAG",
@@ -53,7 +53,7 @@ class AllNotesViewModel @Inject constructor(
         }
     }
 
-    fun onNoteSwipe(note : Note) {
+    fun onNoteSwipe(note: Note) {
         if (allNotesState.value.trashEnabled) {
             sendToTrash(note)
         } else {

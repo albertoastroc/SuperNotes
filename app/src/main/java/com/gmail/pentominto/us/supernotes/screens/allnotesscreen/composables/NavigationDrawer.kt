@@ -21,9 +21,9 @@ import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
 
 @Composable
 fun Drawer(
-    drawerOptionsList : List<MenuItem>,
-    onSettingClick : (Int) -> Unit,
-    itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp)
+    drawerOptionsList: List<MenuItem>,
+    onSettingClick: (Int) -> Unit,
+    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
 ) {
     LazyColumn {
         item {

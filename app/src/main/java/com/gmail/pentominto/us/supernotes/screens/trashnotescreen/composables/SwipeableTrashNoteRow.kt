@@ -21,7 +21,7 @@ fun SwipeableTrashNoteRow(
     deleteNote: (Int) -> Unit,
     restoreNote: () -> Unit,
     trashNote: Note,
-    modifier : Modifier,
+    modifier: Modifier,
     content: @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(
