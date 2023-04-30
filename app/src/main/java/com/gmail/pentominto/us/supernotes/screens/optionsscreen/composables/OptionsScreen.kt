@@ -118,15 +118,6 @@ private fun OptionsList(
 
         context.startActivity(emailIntent)
     }
-    OptionsRowWithAlertDialog(
-        title = "Restore Welcome/FAQ note",
-        subTitle = null,
-        message = "Are you sure you want to restore the Welcome/FAQ note?",
-        yesButtonMessage = "Continue",
-        noButtonMessage = "Cancel"
-    ) {
-        viewModel.restoreWelcomeNote()
-    }
 }
 
 @Composable
@@ -255,7 +246,7 @@ fun OptionsRowWithSwitch(
                 checkedTrackColor = MaterialTheme.colors.secondary,
                 uncheckedTrackColor = MaterialTheme.colors.secondary,
                 checkedTrackAlpha = 1f,
-                uncheckedTrackAlpha = 1f
+                uncheckedTrackAlpha = .5f
             )
         )
     }

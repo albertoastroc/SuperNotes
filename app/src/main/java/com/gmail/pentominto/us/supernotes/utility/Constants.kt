@@ -4,14 +4,12 @@ object Constants {
 
     // DB
     const val DATABASE_NAME = "notes_database"
-    const val PREPOP_DATABASE_NAME = "notes_database.db"
 
     // DataStore
     const val PREFERENCES_STORE_NAME = "user_preferences"
 
     const val FIREBASE_ID_KEY = "user_id"
 
-    const val USER_THEME_KEY = "user_theme"
     const val USER_TRASH_ENABLED_KEY = "trash_enabled"
     const val USER_HIDE_CATEGORIES_KEY = "hide_categories"
 

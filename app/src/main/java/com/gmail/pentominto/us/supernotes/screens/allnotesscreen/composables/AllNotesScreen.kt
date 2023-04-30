@@ -11,10 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,9 +28,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
-    viewModel: AllNotesViewModel = hiltViewModel(),
-    onNoteClick: (Int) -> Unit,
-    onOptionsClick: (Int) -> Unit
+    viewModel : AllNotesViewModel = hiltViewModel(),
+    onNoteClick : (Int) -> Unit,
+    onOptionsClick : (Int) -> Unit
 ) {
     val allNotesState by remember { viewModel.allNotesState }
 
@@ -77,20 +74,21 @@ fun AllNotesScreen(
 
 @Composable
 fun NotesList(
-    paddingValues: PaddingValues,
-    allNotesState: AllNotesState,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    onNoteClick: (Int) -> Unit,
-    onSearchChange: (String) -> Unit,
-    clearSearchBar: () -> Unit,
-    onNoteSwipe: (Note) -> Unit
+    paddingValues : PaddingValues,
+    allNotesState : AllNotesState,
+    scope : CoroutineScope,
+    scaffoldState : ScaffoldState,
+    onNoteClick : (Int) -> Unit,
+    onSearchChange : (String) -> Unit,
+    clearSearchBar : () -> Unit,
+    onNoteSwipe : (Note) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(1f),
-        contentPadding = paddingValues
-    ) {
+        contentPadding = paddingValues,
+
+        ) {
         item {
             SearchBarWithMenu(
                 input = allNotesState.searchBarInput,
@@ -102,7 +100,14 @@ fun NotesList(
         allNotesState.notes.entries.forEach { (category, notes) ->
 
             if (allNotesState.showCategoryTitles && allNotesState.searchBarInput.isEmpty()) {
-                item { CategoryTitle(category) }
+                item(key = category.categoryId) {
+                    CategoryTitle(
+                        category,
+                        modifier = Modifier.animateItemPlacement(
+                            animationSpec = tween(durationMillis = 400)
+                        )
+                    )
+                }
             }
 
             items(
@@ -117,7 +122,7 @@ fun NotesList(
                     onNoteClick = onNoteClick,
                     onNoteSwipe = onNoteSwipe,
                     modifier = Modifier.animateItemPlacement(
-                        animationSpec = tween(durationMillis = 600)
+                        animationSpec = tween(durationMillis = 400)
                     )
                 )
             }
@@ -126,10 +131,13 @@ fun NotesList(
 }
 
 @Composable
-private fun CategoryTitle(category: Category) {
+private fun CategoryTitle(
+    category : Category,
+    modifier : Modifier
+) {
     Text(
         text = category.categoryTitle,
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 start = 16.dp,
                 top = 8.dp,
@@ -144,10 +152,10 @@ private fun CategoryTitle(category: Category) {
 
 @Composable
 private fun DefaultNote(
-    note: Note,
-    onNoteClick: (Int) -> Unit,
-    onNoteSwipe: (Note) -> Unit,
-    modifier: Modifier
+    note : Note,
+    onNoteClick : (Int) -> Unit,
+    onNoteSwipe : (Note) -> Unit,
+    modifier : Modifier
 ) {
     SwipeNoteRowContainer(
         modifier = modifier,
@@ -163,7 +171,7 @@ private fun DefaultNote(
 }
 
 @Composable
-private fun CustomFab(onNoteClick: (Int) -> Unit) {
+private fun CustomFab(onNoteClick : (Int) -> Unit) {
     FloatingActionButton(
         content = {
             Icon(

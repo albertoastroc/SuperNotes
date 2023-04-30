@@ -56,7 +56,7 @@ fun TrashNotesScreen(
                 note,
                 onTrashNoteClick,
                 modifier = Modifier.animateItemPlacement(
-                    tween(durationMillis = 600)
+                    tween(durationMillis = 400)
                 )
             )
         }

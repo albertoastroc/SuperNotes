@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.data.Category
+import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 
 @Composable
@@ -184,15 +184,6 @@ private fun CategoryItem(
     onClickCategory: (Category) -> Unit,
     onDeleteCategory: (Category) -> Unit
 ) {
-    Log.d(
-        "TAG",
-        "CategoryItem: $category"
-    )
-
-    Log.d(
-        "TAG",
-        "CurrentCategory: $currentCategory"
-    )
 
     Row(
         modifier = Modifier
@@ -223,7 +214,7 @@ private fun CategoryItem(
             maxLines = 2
         )
 
-        if (category.categoryTitle != "No Category") {
+        if (category.categoryTitle != DEFAULT_CATEGORY) {
             Icon(
                 painterResource(id = R.drawable.ic_baseline_delete_24),
                 modifier = Modifier
