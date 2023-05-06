@@ -11,8 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
@@ -28,7 +28,7 @@ class AllNotesViewModel @Inject constructor(
 
     fun onSearchChange(input: String) {
         viewModelScope.launch {
-            _allNotesState.value = _allNotesState.value.copy(searchBarInput = input)
+            _allNotesState.value = _allNotesState.value.copy(searchBarInput = input.lowercase())
         }
     }
 

@@ -100,7 +100,7 @@ fun NotesList(
         allNotesState.notes.entries.forEach { (category, notes) ->
 
             if (allNotesState.showCategoryTitles && allNotesState.searchBarInput.isEmpty()) {
-                item(key = category.categoryId) {
+                item(key = category.categoryTitle) {
                     CategoryTitle(
                         category,
                         modifier = Modifier.animateItemPlacement(
@@ -112,7 +112,7 @@ fun NotesList(
 
             items(
                 items = notes.filter
-                { it.noteBody.contains(allNotesState.searchBarInput) }.filter
+                { it.noteBody.lowercase().contains(allNotesState.searchBarInput) }.filter
                 { it.category != "TrashNotesAPPTAG" },
                 key = { it.noteId }
             ) { note ->
