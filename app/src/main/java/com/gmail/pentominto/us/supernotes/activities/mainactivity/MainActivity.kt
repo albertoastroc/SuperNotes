@@ -1,8 +1,9 @@
 @file:OptIn(ExperimentalAnimationApi::class)
 
-package com.gmail.pentominto.us.supernotes
+package com.gmail.pentominto.us.supernotes.activities.mainactivity
 
 import android.os.Bundle
+import android.os.Process
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.*
+import com.gmail.pentominto.us.supernotes.MainActivityViewModel
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
@@ -22,16 +24,9 @@ import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.composables
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.composables.TrashNotesScreen
 import com.gmail.pentominto.us.supernotes.ui.theme.MostlyBlackBlue
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
-import com.gmail.pentominto.us.supernotes.utility.Constants.ALL_NOTES_DESTINATION
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_ANIMATION_DURATION
-import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_EDIT_DESTINATION
-import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_EDIT_NOTE_EDIT_DESTINATION
 import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_ID
-import com.gmail.pentominto.us.supernotes.utility.Constants.OPTIONS_DESTINATION
-import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_DESTINATION
-import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE
 import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE_ID
-import com.gmail.pentominto.us.supernotes.utility.NavIntents
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -48,6 +43,8 @@ class MainActivity : ComponentActivity() {
         actionBar?.hide()
 
         ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+        Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT)
 
         setContent {
             SuperNotesTheme(
@@ -91,51 +88,51 @@ private fun MyNavHost(navController: NavHostController) {
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = ALL_NOTES_DESTINATION
+        startDestination = NavigationId.ALL_NOTES.destination
     ) {
         navigationWithTransition(
-            routeName = ALL_NOTES_DESTINATION,
+            routeName = NavigationId.ALL_NOTES.destination,
             destinations = listOf(
-                NOTE_EDIT_NOTE_EDIT_DESTINATION,
-                OPTIONS_DESTINATION,
-                TRASH_DESTINATION
+                NavigationId.EDIT_NOTE.destination + "/{$NOTE_ID}",
+                NavigationId.OPTIONS.destination,
+                NavigationId.ALL_TRASH_NOTES.destination
             ),
             arguments = emptyList()
         ) {
             AllNotesScreen(
                 onNoteClick = { noteId ->
-                    navController.navigate("$NOTE_EDIT_DESTINATION/$noteId")
+                    navController.navigate("${NavigationId.EDIT_NOTE.destination}/$noteId")
                 },
                 onOptionsClick = { menuItemId ->
 
                     when (menuItemId) {
-                        2 -> navController.navigate(OPTIONS_DESTINATION)
-                        3 -> navController.navigate(TRASH_DESTINATION)
-                        4 -> context.startActivity(NavIntents.getPlaystoreIntent())
-                        5 -> context.startActivity(NavIntents.getPrivacyPolicyIntent())
+                        OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(NavigationId.OPTIONS.destination)
+                        OptionMenuId.TRASH.optionMenuId     -> navController.navigate(NavigationId.ALL_TRASH_NOTES.destination)
+                        OptionMenuId.PLAY_STORE.optionMenuId     -> context.startActivity(NavIntents.getPlaystoreIntent())
+                        OptionMenuId.PRIVACY_POLICY.optionMenuId -> context.startActivity(NavIntents.getPrivacyPolicyIntent())
                     }
                 }
             )
         }
 
         navigationWithTransition(
-            routeName = TRASH_DESTINATION,
+            routeName = NavigationId.ALL_TRASH_NOTES.destination,
             destinations = listOf(
-                ALL_NOTES_DESTINATION,
-                "$TRASH_NOTE/{$TRASH_NOTE_ID}"
+                NavigationId.ALL_NOTES.destination,
+                NavigationId.TRASH_NOTE.destination + "/{$TRASH_NOTE_ID}"
             ),
             arguments = emptyList()
         ) {
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
-                    navController.navigate("$TRASH_NOTE/$trashNoteId")
+                    navController.navigate(NavigationId.TRASH_NOTE.destination + "/$trashNoteId")
                 }
             )
         }
 
         navigationWithTransition(
-            routeName = NOTE_EDIT_NOTE_EDIT_DESTINATION,
-            destinations = listOf(ALL_NOTES_DESTINATION),
+            routeName = NavigationId.EDIT_NOTE.destination + "/{$NOTE_ID}",
+            destinations = listOf(NavigationId.ALL_NOTES.destination),
             arguments = listOf(
                 navArgument(NOTE_ID) { type = NavType.IntType }
             )
@@ -150,8 +147,8 @@ private fun MyNavHost(navController: NavHostController) {
         }
 
         navigationWithTransition(
-            routeName = "$TRASH_NOTE/{$TRASH_NOTE_ID}",
-            destinations = listOf(TRASH_DESTINATION),
+            routeName = NavigationId.TRASH_NOTE.destination + "/{$TRASH_NOTE_ID}",
+            destinations = listOf(NavigationId.ALL_TRASH_NOTES.destination),
             arguments = listOf(
                 navArgument(TRASH_NOTE_ID) { type = NavType.IntType }
             )
@@ -165,8 +162,8 @@ private fun MyNavHost(navController: NavHostController) {
         }
 
         navigationWithTransition(
-            routeName = OPTIONS_DESTINATION,
-            destinations = listOf(ALL_NOTES_DESTINATION),
+            routeName = NavigationId.OPTIONS.destination,
+            destinations = listOf(NavigationId.ALL_NOTES.destination),
             arguments = emptyList()
         ) {
             OptionsScreen()

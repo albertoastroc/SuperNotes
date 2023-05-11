@@ -2,16 +2,33 @@ package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -34,35 +51,42 @@ fun CategoriesList(
 
     val dialogTitleState = remember { mutableStateOf(String()) }
 
-    LazyColumn(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = 450.dp)
+            .padding(horizontal = 8.dp)
     ) {
-        item {
-            AddItemRow(openCategoryDialog)
 
-            if (openCategoryDialog.value) {
-                AddCategoryDialog(
-                    openCategoryDialog = openCategoryDialog,
-                    dialogTitleState = dialogTitleState,
-                    dialogInput = dialogInput,
-                    onClickDialog = onClickDialog
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(4.dp))
+                .heightIn(max = 450.dp)
+        ) {
+            item {
+                AddItemRow(openCategoryDialog)
+
+                if (openCategoryDialog.value) {
+                    AddCategoryDialog(
+                        openCategoryDialog = openCategoryDialog,
+                        dialogTitleState = dialogTitleState,
+                        dialogInput = dialogInput,
+                        onClickDialog = onClickDialog
+                    )
+                }
+            }
+
+            items(
+                items = categories,
+                key = { it.categoryId }
+            ) { category ->
+
+                CategoryItem(
+                    category = category,
+                    currentCategory = currentCategory,
+                    onClickCategory = onClickCategory,
+                    onDeleteCategory = onDeleteCategory
                 )
             }
-        }
-
-        items(
-            items = categories,
-            key = { it.categoryId }
-        ) { category ->
-
-            CategoryItem(
-                category = category,
-                currentCategory = currentCategory,
-                onClickCategory = onClickCategory,
-                onDeleteCategory = onDeleteCategory
-            )
         }
     }
 }
@@ -211,7 +235,8 @@ private fun CategoryItem(
                 )
                 .weight(1f),
             overflow = TextOverflow.Ellipsis,
-            maxLines = 2
+            maxLines = 2,
+            color = MaterialTheme.colors.onBackground
         )
 
         if (category.categoryTitle != DEFAULT_CATEGORY) {

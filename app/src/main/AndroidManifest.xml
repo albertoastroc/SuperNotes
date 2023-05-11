@@ -14,7 +14,7 @@
         android:theme="@style/Theme.SuperNotes"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.mainactivity.MainActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
             android:theme="@style/Theme.SuperNotes"

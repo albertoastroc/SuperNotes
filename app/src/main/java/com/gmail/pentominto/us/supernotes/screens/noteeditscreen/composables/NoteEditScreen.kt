@@ -79,6 +79,7 @@ fun NoteEditScreen(
             .background(MaterialTheme.colors.background)
             .testTag("Note Edit Screen"),
         scaffoldState = bottomSheetScaffoldState,
+        sheetBackgroundColor = Color.Transparent,
         sheetGesturesEnabled = true,
         sheetPeekHeight = 0.dp,
         content = {

@@ -14,18 +14,9 @@ object Constants {
     const val USER_HIDE_CATEGORIES_KEY = "hide_categories"
 
     // MainActivity
-    const val DEFAULT_ANIMATION_DURATION = 700
+    const val DEFAULT_ANIMATION_DURATION = 500
 
-    const val ALL_NOTES_DESTINATION = "allNotes"
-
-    const val NOTE_EDIT_DESTINATION = "noteEdit"
-    const val NOTE_EDIT_NOTE_EDIT_DESTINATION = "noteEdit/{noteId}"
     const val NOTE_ID = "noteId"
-
-    const val OPTIONS_DESTINATION = "options"
-
-    const val TRASH_DESTINATION = "trash"
-    const val TRASH_NOTE = "trashNote"
     const val TRASH_NOTE_ID = "trashNoteId"
 
     const val TRASH_NOTE_CATEGORY_TAG = "TrashNotesAPPTAG"
