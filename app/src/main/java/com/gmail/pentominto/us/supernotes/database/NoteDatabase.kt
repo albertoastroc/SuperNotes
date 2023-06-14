@@ -7,7 +7,7 @@ import com.gmail.pentominto.us.supernotes.data.Note
 
 @Database(
     entities = [Note::class, Category::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class NoteDatabase : RoomDatabase() {

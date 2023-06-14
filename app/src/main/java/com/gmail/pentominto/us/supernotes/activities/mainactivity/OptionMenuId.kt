@@ -1,8 +1,8 @@
 package com.gmail.pentominto.us.supernotes.activities.mainactivity
 
 enum class OptionMenuId(
-    val optionName : String,
-    val optionMenuId : Int
+    val optionName: String,
+    val optionMenuId: Int
 ) {
 
     OPTIONS(

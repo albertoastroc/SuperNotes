@@ -28,9 +28,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AllNotesScreen(
-    viewModel : AllNotesViewModel = hiltViewModel(),
-    onNoteClick : (Int) -> Unit,
-    onOptionsClick : (Int) -> Unit
+    viewModel: AllNotesViewModel = hiltViewModel(),
+    onNoteClick: (Int) -> Unit,
+    onOptionsClick: (Int) -> Unit
 ) {
     val allNotesState by remember { viewModel.allNotesState }
 
@@ -74,21 +74,21 @@ fun AllNotesScreen(
 
 @Composable
 fun NotesList(
-    paddingValues : PaddingValues,
-    allNotesState : AllNotesState,
-    scope : CoroutineScope,
-    scaffoldState : ScaffoldState,
-    onNoteClick : (Int) -> Unit,
-    onSearchChange : (String) -> Unit,
-    clearSearchBar : () -> Unit,
-    onNoteSwipe : (Note) -> Unit
+    paddingValues: PaddingValues,
+    allNotesState: AllNotesState,
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    onNoteClick: (Int) -> Unit,
+    onSearchChange: (String) -> Unit,
+    clearSearchBar: () -> Unit,
+    onNoteSwipe: (Note) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(1f),
-        contentPadding = paddingValues,
+        contentPadding = paddingValues
 
-        ) {
+    ) {
         item {
             SearchBarWithMenu(
                 input = allNotesState.searchBarInput,
@@ -132,8 +132,8 @@ fun NotesList(
 
 @Composable
 private fun CategoryTitle(
-    category : Category,
-    modifier : Modifier
+    category: Category,
+    modifier: Modifier
 ) {
     Text(
         text = category.categoryTitle,
@@ -152,10 +152,10 @@ private fun CategoryTitle(
 
 @Composable
 private fun DefaultNote(
-    note : Note,
-    onNoteClick : (Int) -> Unit,
-    onNoteSwipe : (Note) -> Unit,
-    modifier : Modifier
+    note: Note,
+    onNoteClick: (Int) -> Unit,
+    onNoteSwipe: (Note) -> Unit,
+    modifier: Modifier
 ) {
     SwipeNoteRowContainer(
         modifier = modifier,
@@ -171,7 +171,7 @@ private fun DefaultNote(
 }
 
 @Composable
-private fun CustomFab(onNoteClick : (Int) -> Unit) {
+private fun CustomFab(onNoteClick: (Int) -> Unit) {
     FloatingActionButton(
         content = {
             Icon(

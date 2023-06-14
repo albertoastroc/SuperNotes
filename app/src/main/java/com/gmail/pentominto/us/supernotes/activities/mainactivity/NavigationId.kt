@@ -1,7 +1,7 @@
 package com.gmail.pentominto.us.supernotes.activities.mainactivity
 
 enum class NavigationId(
-    val destination : String
+    val destination: String
 ) {
 
     ALL_NOTES(
@@ -19,5 +19,4 @@ enum class NavigationId(
     TRASH_NOTE(
         destination = "trashNote"
     )
-
 }

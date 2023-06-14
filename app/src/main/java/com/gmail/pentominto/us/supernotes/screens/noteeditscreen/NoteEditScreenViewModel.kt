@@ -1,19 +1,25 @@
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.MainActivity
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
+import com.gmail.pentominto.us.supernotes.utility.AlarmReceiver
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
@@ -26,8 +32,23 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _noteEditState: MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState: State<NoteEditState> = _noteEditState
 
+    private val _note: MutableState<Note> = mutableStateOf(Note(createdDate = getCurrentDate(), date = null))
+
     private fun getNote(noteId: Int) {
+
         viewModelScope.launch {
+
+            repository.getNote(noteId).collect() {note ->
+
+                _note.value = _note.value.copy(
+                    noteId = note.noteId,
+                    noteTitle = note.noteTitle,
+                    noteBody = note.noteBody,
+                    category = note.category,
+                )
+
+            }
+
             repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
 
                 categoryNoteMap.forEach {
@@ -46,7 +67,8 @@ class NoteEditScreenViewModel @Inject constructor(
             noteId = repository.insertNote(
                 Note(
                     category = DEFAULT_CATEGORY,
-                    createdDate = getCurrentDate()
+                    createdDate = getCurrentDate(),
+                    date = null
                 )
             ).toInt()
         }
@@ -110,6 +132,22 @@ class NoteEditScreenViewModel @Inject constructor(
         _noteEditState.value = _noteEditState.value.copy(
             noteTitle = newInput
         )
+    }
+
+    fun setAlarm(context : Context, testLong : Long) {
+        // creating alarmManager instance
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        // adding intent and pending intent to go to AlarmReceiver Class in future
+        val intent = Intent(context, AlarmReceiver::class.java)
+        intent.putExtra("task_info", _note.value)
+        val pendingIntent = PendingIntent.getBroadcast(context, _note.value.noteId, intent, PendingIntent.FLAG_IMMUTABLE)
+        // when using setAlarmClock() it displays a notification until alarm rings and when pressed it takes us to mainActivity
+        val mainActivityIntent = Intent(context, MainActivity::class.java)
+        val basicPendingIntent = PendingIntent.getActivity(context, _note.value.noteId, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)
+        // creating clockInfo instance
+        val clockInfo =  AlarmManager.AlarmClockInfo(testLong, basicPendingIntent)
+        // setting the alarm
+        alarmManager.setAlarmClock(clockInfo, pendingIntent)
     }
 
     fun onBodyInputChange(newInput: String) {

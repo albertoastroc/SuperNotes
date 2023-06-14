@@ -2,8 +2,14 @@
 
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.Notification
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +28,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -31,6 +39,7 @@ import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @Composable
 fun NoteEditScreen(
@@ -96,6 +105,7 @@ fun NoteEditScreen(
                     customTextSelectionColors = customTextSelectionColors,
                     noteState = noteState,
                     onTitleValueChange = viewModel::onTitleInputChange,
+                    setAlarm = viewModel::setAlarm,
                     context = context,
                     coroutineScope = coroutineScope,
                     bottomSheetScaffoldState = bottomSheetScaffoldState
@@ -183,12 +193,14 @@ private fun BodyCard(
     }
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 private fun TitleCard(
     customTextSelectionColors: TextSelectionColors,
     noteState: NoteEditState,
     onTitleValueChange: (String) -> Unit,
     context: Context,
+    setAlarm : (Context, Long) -> Unit,
     coroutineScope: CoroutineScope,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
@@ -197,6 +209,45 @@ private fun TitleCard(
     val focusManager = LocalFocusManager.current
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
+
+
+
+
+
+
+
+    val calendar = Calendar.getInstance()
+
+    val year = calendar[Calendar.YEAR]
+    val month = calendar[Calendar.MONTH]
+    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+
+    val hour = calendar[Calendar.HOUR_OF_DAY]
+    val minute = calendar[Calendar.MINUTE]
+
+    var builder = NotificationCompat.Builder(context, "1")
+        .setDefaults(Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_baseline_menu_24)
+        .setContentTitle("sample title")
+        .setContentText("sample content")
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+    val datePicker = DatePickerDialog(
+        context,
+        { datePicker : DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+            calendar.set(selectedYear, selectedMonth, selectedDayOfMonth)
+        }, year, month, dayOfMonth
+    )
+
+    val timePicker = TimePickerDialog(
+        context,
+        { _, selectedHour: Int, selectedMinute: Int ->
+           calendar.set(datePicker.datePicker.year, datePicker.datePicker.month, datePicker.datePicker.dayOfMonth, selectedHour, selectedMinute)
+        }, hour, minute, false
+    )
+
+    datePicker.datePicker.minDate = calendar.timeInMillis
+
 
     Card(
         modifier = Modifier,
@@ -307,6 +358,39 @@ private fun TitleCard(
                         dropDownMenuExpanded = false
                     }) {
                         Text(text = "Share")
+                    }
+
+                    DropdownMenuItem(onClick = {
+                        datePicker.show()
+                        datePicker.setOnDateSetListener { view, year, month, dayOfMonth ->
+
+                            timePicker.show()
+                            timePicker.setOnDismissListener {
+
+                                setAlarm(context, calendar.timeInMillis)
+                                Log.d("TAG",
+                                    "TitleCard: ${calendar.time}"
+                                )
+                            }
+                        }
+
+
+
+
+                    }) {
+                        Text(text = "Set reminder")
+                    }
+
+                    DropdownMenuItem(onClick = {
+
+                        with(NotificationManagerCompat.from(context)) {
+
+                            notify(1, builder.build())
+
+                        }
+
+                    }) {
+                        Text(text = "Show notification")
                     }
                 }
             }

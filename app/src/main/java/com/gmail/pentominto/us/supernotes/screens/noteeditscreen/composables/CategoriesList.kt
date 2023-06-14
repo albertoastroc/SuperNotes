@@ -55,7 +55,6 @@ fun CategoriesList(
         modifier = Modifier
             .padding(horizontal = 8.dp)
     ) {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -208,7 +207,6 @@ private fun CategoryItem(
     onClickCategory: (Category) -> Unit,
     onDeleteCategory: (Category) -> Unit
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()

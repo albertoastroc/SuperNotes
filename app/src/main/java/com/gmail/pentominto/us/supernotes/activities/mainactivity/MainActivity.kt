@@ -2,6 +2,9 @@
 
 package com.gmail.pentominto.us.supernotes.activities.mainactivity
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.ComponentActivity
@@ -39,6 +42,20 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val name = "channel 1"
+        val descriptionText = "description text"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel("1",
+            name,
+            importance
+        ).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
 
         actionBar?.hide()
 
@@ -106,10 +123,18 @@ private fun MyNavHost(navController: NavHostController) {
                 onOptionsClick = { menuItemId ->
 
                     when (menuItemId) {
-                        OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(NavigationId.OPTIONS.destination)
-                        OptionMenuId.TRASH.optionMenuId     -> navController.navigate(NavigationId.ALL_TRASH_NOTES.destination)
-                        OptionMenuId.PLAY_STORE.optionMenuId     -> context.startActivity(NavIntents.getPlaystoreIntent())
-                        OptionMenuId.PRIVACY_POLICY.optionMenuId -> context.startActivity(NavIntents.getPrivacyPolicyIntent())
+                        OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(
+                            NavigationId.OPTIONS.destination
+                        )
+                        OptionMenuId.TRASH.optionMenuId -> navController.navigate(
+                            NavigationId.ALL_TRASH_NOTES.destination
+                        )
+                        OptionMenuId.PLAY_STORE.optionMenuId -> context.startActivity(
+                            NavIntents.getPlaystoreIntent()
+                        )
+                        OptionMenuId.PRIVACY_POLICY.optionMenuId -> context.startActivity(
+                            NavIntents.getPrivacyPolicyIntent()
+                        )
                     }
                 }
             )

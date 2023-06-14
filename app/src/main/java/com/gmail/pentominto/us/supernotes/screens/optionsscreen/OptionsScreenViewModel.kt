@@ -19,8 +19,8 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.USER_HIDE_CATEGORIES
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class OptionsScreenViewModel @Inject constructor(
@@ -70,7 +70,8 @@ class OptionsScreenViewModel @Inject constructor(
                 Note(
                     noteTitle = ABOUT_THIS_APP_TITLE,
                     noteBody = ABOUT_THIS_APP_NOTE,
-                    createdDate = getCurrentDate()
+                    createdDate = getCurrentDate(),
+                    date = null
                 )
             )
         }

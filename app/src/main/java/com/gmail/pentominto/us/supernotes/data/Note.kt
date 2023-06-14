@@ -3,6 +3,7 @@ package com.gmail.pentominto.us.supernotes.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "note_table")
 data class Note(
@@ -15,7 +16,9 @@ data class Note(
 
     var createdDate: String,
 
+    var date : Long?,
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_db_id")
     var noteId: Int = 0
-)
+) : Serializable
