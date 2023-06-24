@@ -43,7 +43,7 @@ import java.util.Calendar
 
 @Composable
 fun NoteEditScreen(
-    noteId: Int,
+    noteid: Int,
     viewModel: NoteEditScreenViewModel = hiltViewModel()
 
 ) {

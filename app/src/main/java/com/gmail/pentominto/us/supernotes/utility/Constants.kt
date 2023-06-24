@@ -16,7 +16,7 @@ object Constants {
     // MainActivity
     const val DEFAULT_ANIMATION_DURATION = 500
 
-    const val NOTE_ID = "noteId"
+    const val NOTE_ID = "noteid"
     const val TRASH_NOTE_ID = "trashNoteId"
 
     const val TRASH_NOTE_CATEGORY_TAG = "TrashNotesAPPTAG"

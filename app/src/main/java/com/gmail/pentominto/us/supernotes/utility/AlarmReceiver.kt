@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.MainActivity
 import com.gmail.pentominto.us.supernotes.data.Note
@@ -17,11 +18,13 @@ import com.gmail.pentominto.us.supernotes.data.Note
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
 
+    //"myapp://compose/noteeditscreen/{${taskInfo?.noteId}}".toUri()
+
     @SuppressLint("MissingPermission")
     override fun onReceive(p0: Context?, p1: Intent?) {
         val taskInfo = p1?.getSerializableExtra("task_info") as? Note
         // tapResultIntent gets executed when user taps the notification
-        val tapResultIntent = Intent(p0, MainActivity::class.java)
+        val tapResultIntent = Intent(Intent.ACTION_VIEW, "myapp://supernotes/noteeditscreen/{${taskInfo?.noteId}}".toUri(), p0, MainActivity::class.java)
         tapResultIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         val pendingIntent: PendingIntent = getActivity( p0,0,tapResultIntent,FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
 

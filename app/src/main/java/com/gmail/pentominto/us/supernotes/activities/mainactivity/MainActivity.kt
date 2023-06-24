@@ -5,6 +5,7 @@ package com.gmail.pentominto.us.supernotes.activities.mainactivity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Process
 import androidx.activity.ComponentActivity
@@ -114,7 +115,8 @@ private fun MyNavHost(navController: NavHostController) {
                 NavigationId.OPTIONS.destination,
                 NavigationId.ALL_TRASH_NOTES.destination
             ),
-            arguments = emptyList()
+            arguments = emptyList(),
+            deepLinks = listOf()
         ) {
             AllNotesScreen(
                 onNoteClick = { noteId ->
@@ -146,7 +148,8 @@ private fun MyNavHost(navController: NavHostController) {
                 NavigationId.ALL_NOTES.destination,
                 NavigationId.TRASH_NOTE.destination + "/{$TRASH_NOTE_ID}"
             ),
-            arguments = emptyList()
+            arguments = emptyList(),
+            deepLinks = listOf()
         ) {
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
@@ -155,28 +158,39 @@ private fun MyNavHost(navController: NavHostController) {
             )
         }
 
+        //****************************************************************************
+
+        //adb shell am start -W -a android.intent.action.VIEW -d "myapp://screens/noteeditscreen/1"
+
         navigationWithTransition(
             routeName = NavigationId.EDIT_NOTE.destination + "/{$NOTE_ID}",
             destinations = listOf(NavigationId.ALL_NOTES.destination),
             arguments = listOf(
                 navArgument(NOTE_ID) { type = NavType.IntType }
-            )
+            ),
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "myapp://supernotes/noteeditscreen/{noteid}"
+                action = Intent.ACTION_VIEW
+            })
         ) {
             val noteId = remember {
                 it.arguments?.getInt(NOTE_ID)
             }
 
             if (noteId != null) {
-                NoteEditScreen(noteId = noteId)
+                NoteEditScreen(noteid = noteId)
             }
         }
+
+        //****************************************************************************
 
         navigationWithTransition(
             routeName = NavigationId.TRASH_NOTE.destination + "/{$TRASH_NOTE_ID}",
             destinations = listOf(NavigationId.ALL_TRASH_NOTES.destination),
             arguments = listOf(
                 navArgument(TRASH_NOTE_ID) { type = NavType.IntType }
-            )
+            ),
+            deepLinks = listOf()
         ) {
             val trashNoteId = remember {
                 it.arguments?.getInt(TRASH_NOTE_ID)
@@ -189,7 +203,8 @@ private fun MyNavHost(navController: NavHostController) {
         navigationWithTransition(
             routeName = NavigationId.OPTIONS.destination,
             destinations = listOf(NavigationId.ALL_NOTES.destination),
-            arguments = emptyList()
+            arguments = emptyList(),
+            deepLinks = listOf()
         ) {
             OptionsScreen()
         }
@@ -198,12 +213,14 @@ private fun MyNavHost(navController: NavHostController) {
 
 fun NavGraphBuilder.navigationWithTransition(
     routeName: String,
+    deepLinks : List<NavDeepLink>,
     destinations: List<String>,
     arguments: List<NamedNavArgument>,
     content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
 ) {
     composable(
         routeName,
+        deepLinks = deepLinks,
         enterTransition = {
             when (initialState.destination.route) {
                 in destinations ->
