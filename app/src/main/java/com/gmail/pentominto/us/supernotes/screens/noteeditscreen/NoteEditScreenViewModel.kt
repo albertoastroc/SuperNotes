@@ -38,25 +38,24 @@ class NoteEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            repository.getNote(noteId).collect() {note ->
-
-                _note.value = _note.value.copy(
-                    noteId = note.noteId,
-                    noteTitle = note.noteTitle,
-                    noteBody = note.noteBody,
-                    category = note.category,
-                )
-
-            }
-
             repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
+
 
                 categoryNoteMap.forEach {
                     _noteEditState.value = _noteEditState.value.copy(
                         noteTitle = it.value.noteTitle,
                         noteBody = it.value.noteBody,
                         noteCategory = it.value.category
+
                     )
+
+                    _note.value = _note.value.copy(
+                        noteId = it.value.noteId,
+                        noteTitle = it.value.noteTitle,
+                        noteBody = it.value.noteBody,
+                        category = it.value.category,
+                    )
+
                 }
             }
         }
