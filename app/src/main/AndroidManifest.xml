@@ -34,15 +34,10 @@
                 <!--on below line we are adding a default category to our intent-->
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <!--on below line we are adding a category to make our app browsable-->
-                <category android:name="android.intent.category.BROWSABLE" />
-
                 <!--on below line we are specifying the host name and
                     the scheme type from which we will be calling our app-->
                 <data
                     android:host="supernotes"
-                    android:pathPrefix="/noteeditscreen"
-                    android:path="/{noteid}"
                     android:scheme="myapp" />
 
             </intent-filter>

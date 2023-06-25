@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.gmail.pentominto.us.supernotes.R
@@ -22,10 +21,6 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(p0: Context?, p1: Intent?) {
         val taskInfo = p1?.getSerializableExtra("task_info") as? Note
         val id = taskInfo?.noteId
-
-        Log.d("goingGiga",
-            "onReceive: $id"
-        )
 
         // tapResultIntent gets executed when user taps the notification
         val tapResultIntent = Intent().setAction(Intent.ACTION_VIEW).setData(Uri.parse("myapp://supernotes/noteeditscreen/$id"))
