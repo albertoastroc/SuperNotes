@@ -41,6 +41,8 @@
                     the scheme type from which we will be calling our app-->
                 <data
                     android:host="supernotes"
+                    android:pathPrefix="/noteeditscreen"
+                    android:path="/{noteid}"
                     android:scheme="myapp" />
 
             </intent-filter>
