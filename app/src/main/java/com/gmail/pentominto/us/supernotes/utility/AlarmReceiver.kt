@@ -3,7 +3,6 @@ package com.gmail.pentominto.us.supernotes.utility
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -27,8 +26,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
 
        // val tapResultIntent = Intent(Intent.ACTION_VIEW, "myapp://supernotes/noteeditscreen/${taskInfo?.noteId}".toUri(), p0, MainActivity::class.java)
-        tapResultIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val pendingIntent: PendingIntent = getActivity( p0,taskInfo!!.noteId,tapResultIntent,FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+
+        val pendingIntent: PendingIntent = getActivity( p0,taskInfo!!.noteId,tapResultIntent,FLAG_IMMUTABLE)
 
         val notification = p0?.let {
             NotificationCompat.Builder(it, "1")
