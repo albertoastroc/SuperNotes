@@ -4,7 +4,6 @@ package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.app.Notification
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -28,8 +27,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -210,12 +207,6 @@ private fun TitleCard(
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
 
-
-
-
-
-
-
     val calendar = Calendar.getInstance()
 
     val year = calendar[Calendar.YEAR]
@@ -224,13 +215,6 @@ private fun TitleCard(
 
     val hour = calendar[Calendar.HOUR_OF_DAY]
     val minute = calendar[Calendar.MINUTE]
-
-    var builder = NotificationCompat.Builder(context, "1")
-        .setDefaults(Notification.DEFAULT_ALL)
-        .setSmallIcon(R.drawable.ic_baseline_menu_24)
-        .setContentTitle("sample title")
-        .setContentText("sample content")
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
 
     val datePicker = DatePickerDialog(
         context,
@@ -373,24 +357,8 @@ private fun TitleCard(
                                 )
                             }
                         }
-
-
-
-
                     }) {
                         Text(text = "Set reminder")
-                    }
-
-                    DropdownMenuItem(onClick = {
-
-                        with(NotificationManagerCompat.from(context)) {
-
-                            notify(1, builder.build())
-
-                        }
-
-                    }) {
-                        Text(text = "Show notification")
                     }
                 }
             }

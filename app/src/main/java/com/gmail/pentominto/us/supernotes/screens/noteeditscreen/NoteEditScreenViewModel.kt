@@ -32,8 +32,6 @@ class NoteEditScreenViewModel @Inject constructor(
     private val _noteEditState: MutableState<NoteEditState> = mutableStateOf(NoteEditState())
     val noteEditState: State<NoteEditState> = _noteEditState
 
-    private val _note: MutableState<Note> = mutableStateOf(Note(createdDate = getCurrentDate(), date = null))
-
     private fun getNote(noteId: Int) {
 
         viewModelScope.launch {
@@ -48,14 +46,6 @@ class NoteEditScreenViewModel @Inject constructor(
                         noteCategory = it.value.category
 
                     )
-
-                    _note.value = _note.value.copy(
-                        noteId = it.value.noteId,
-                        noteTitle = it.value.noteTitle,
-                        noteBody = it.value.noteBody,
-                        category = it.value.category,
-                    )
-
                 }
             }
         }
@@ -138,11 +128,11 @@ class NoteEditScreenViewModel @Inject constructor(
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // adding intent and pending intent to go to AlarmReceiver Class in future
         val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra("task_info", _note.value)
-        val pendingIntent = PendingIntent.getBroadcast(context, _note.value.noteId, intent, PendingIntent.FLAG_IMMUTABLE)
+        intent.putExtra("note_id", noteId)
+        val pendingIntent = PendingIntent.getBroadcast(context, noteId, intent, PendingIntent.FLAG_IMMUTABLE)
         // when using setAlarmClock() it displays a notification until alarm rings and when pressed it takes us to mainActivity
         val mainActivityIntent = Intent(context, MainActivity::class.java)
-        val basicPendingIntent = PendingIntent.getActivity(context, _note.value.noteId, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)
+        val basicPendingIntent = PendingIntent.getActivity(context, noteId, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)
         // creating clockInfo instance
         val clockInfo =  AlarmManager.AlarmClockInfo(testLong, basicPendingIntent)
         // setting the alarm

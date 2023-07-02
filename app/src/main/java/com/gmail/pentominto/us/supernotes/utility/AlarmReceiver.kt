@@ -11,38 +11,34 @@ import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.gmail.pentominto.us.supernotes.R
-import com.gmail.pentominto.us.supernotes.data.Note
 
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
 
     @SuppressLint("MissingPermission")
-    override fun onReceive(p0: Context?, p1: Intent?) {
-        val taskInfo = p1?.getSerializableExtra("task_info") as? Note
-        val id = taskInfo?.noteId
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val idParcelable = intent?.getSerializableExtra("note_id") as? Int
 
-        // tapResultIntent gets executed when user taps the notification
-        val tapResultIntent = Intent().setAction(Intent.ACTION_VIEW).setData(Uri.parse("myapp://supernotes/noteeditscreen/$id"))
+        idParcelable?.let { id ->
 
+            val tapResultIntent = Intent().setAction(Intent.ACTION_VIEW).setData(Uri.parse("myapp://supernotes/noteeditscreen/$id"))
 
-       // val tapResultIntent = Intent(Intent.ACTION_VIEW, "myapp://supernotes/noteeditscreen/${taskInfo?.noteId}".toUri(), p0, MainActivity::class.java)
+            val pendingIntent: PendingIntent = getActivity( context,id,tapResultIntent,FLAG_IMMUTABLE)
 
-        val pendingIntent: PendingIntent = getActivity( p0,taskInfo!!.noteId,tapResultIntent,FLAG_IMMUTABLE)
+            val notification = context?.let {
+                NotificationCompat.Builder(it, "1")
+                    .setContentTitle("Task Reminder")
+                    .setContentText("Content Text")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent)
+                    .build()
+            }
 
-        val notification = p0?.let {
-            NotificationCompat.Builder(it, "1")
-                .setContentTitle("Task Reminder")
-                .setContentText("Content Text")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
-                .build()
+            notificationManager = context?.let { NotificationManagerCompat.from(it) }
+            notification?.let { notificationManager?.notify(id, it) }
+
         }
-
-        notificationManager = p0?.let { NotificationManagerCompat.from(it) }
-        notification?.let { taskInfo?.let { todd -> notificationManager?.notify(todd.noteId, it) } }
     }
-
-
 }
