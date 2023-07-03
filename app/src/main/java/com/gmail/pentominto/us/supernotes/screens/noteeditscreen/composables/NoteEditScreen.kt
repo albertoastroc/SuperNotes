@@ -7,7 +7,6 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -209,25 +208,18 @@ private fun TitleCard(
 
     val calendar = Calendar.getInstance()
 
-    val year = calendar[Calendar.YEAR]
-    val month = calendar[Calendar.MONTH]
-    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
-
-    val hour = calendar[Calendar.HOUR_OF_DAY]
-    val minute = calendar[Calendar.MINUTE]
-
     val datePicker = DatePickerDialog(
         context,
-        { datePicker : DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+        { _ : DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
             calendar.set(selectedYear, selectedMonth, selectedDayOfMonth)
-        }, year, month, dayOfMonth
+        }, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]
     )
 
     val timePicker = TimePickerDialog(
         context,
         { _, selectedHour: Int, selectedMinute: Int ->
            calendar.set(datePicker.datePicker.year, datePicker.datePicker.month, datePicker.datePicker.dayOfMonth, selectedHour, selectedMinute)
-        }, hour, minute, false
+        }, calendar[Calendar.HOUR_OF_DAY], calendar[Calendar.MINUTE], false
     )
 
     datePicker.datePicker.minDate = calendar.timeInMillis
@@ -345,18 +337,19 @@ private fun TitleCard(
                     }
 
                     DropdownMenuItem(onClick = {
+
                         datePicker.show()
-                        datePicker.setOnDateSetListener { view, year, month, dayOfMonth ->
+                        datePicker.setOnDateSetListener { _, _, _, _ ->
 
                             timePicker.show()
                             timePicker.setOnDismissListener {
 
                                 setAlarm(context, calendar.timeInMillis)
-                                Log.d("TAG",
-                                    "TitleCard: ${calendar.time}"
-                                )
+
                             }
                         }
+
+                        dropDownMenuExpanded = false
                     }) {
                         Text(text = "Set reminder")
                     }

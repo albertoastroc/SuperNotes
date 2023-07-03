@@ -10,14 +10,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
-import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_NOTE
-import com.gmail.pentominto.us.supernotes.utility.Constants.ABOUT_THIS_APP_TITLE
 import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_HIDE_CATEGORIES_KEY
 import com.gmail.pentominto.us.supernotes.utility.Constants.USER_TRASH_ENABLED_KEY
-import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -61,19 +57,6 @@ class OptionsScreenViewModel @Inject constructor(
 
                 settings[trashEnabledKey] = _optionsScreenState.value.trashEnabled
             }
-        }
-    }
-
-    fun restoreWelcomeNote() {
-        viewModelScope.launch {
-            repository.insertNote(
-                Note(
-                    noteTitle = ABOUT_THIS_APP_TITLE,
-                    noteBody = ABOUT_THIS_APP_NOTE,
-                    createdDate = getCurrentDate(),
-                    date = null
-                )
-            )
         }
     }
 
