@@ -42,7 +42,7 @@ class NoteEditScreenViewModel @Inject constructor(
                     _noteEditState.value = _noteEditState.value.copy(
                         noteTitle = it.value.noteTitle,
                         noteBody = it.value.noteBody,
-                        noteCategory = it.value.category
+                        currentCategory = it.value.category
 
                     )
                 }

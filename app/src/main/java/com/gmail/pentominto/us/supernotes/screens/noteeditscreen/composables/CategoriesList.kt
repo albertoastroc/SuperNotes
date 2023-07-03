@@ -41,9 +41,9 @@ import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 fun CategoriesList(
     categories: List<Category>,
     currentCategory: String,
-    onClickDialog: (String) -> Unit,
+    onAddCategory: (String) -> Unit,
     onDeleteCategory: (Category) -> Unit,
-    onClickCategory: (Category) -> Unit
+    onSelectCategory: (Category) -> Unit
 ) {
     val openCategoryDialog = remember { mutableStateOf(false) }
 
@@ -69,7 +69,7 @@ fun CategoriesList(
                         openCategoryDialog = openCategoryDialog,
                         dialogTitleState = dialogTitleState,
                         dialogInput = dialogInput,
-                        onClickDialog = onClickDialog
+                        onClickDialog = onAddCategory
                     )
                 }
             }
@@ -82,7 +82,7 @@ fun CategoriesList(
                 CategoryItem(
                     category = category,
                     currentCategory = currentCategory,
-                    onClickCategory = onClickCategory,
+                    onClickCategory = onSelectCategory,
                     onDeleteCategory = onDeleteCategory
                 )
             }

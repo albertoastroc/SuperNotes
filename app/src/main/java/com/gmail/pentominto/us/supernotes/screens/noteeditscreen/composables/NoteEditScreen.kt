@@ -81,8 +81,7 @@ fun NoteEditScreen(
 
     BottomSheetScaffold(
         modifier = Modifier
-            .background(MaterialTheme.colors.background)
-            .testTag("Note Edit Screen"),
+            .background(MaterialTheme.colors.background),
         scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = Color.Transparent,
         sheetGesturesEnabled = true,
@@ -97,7 +96,7 @@ fun NoteEditScreen(
                         end = 16.dp
                     )
             ) {
-                TitleCard(
+                TitleAndMenuCard(
                     customTextSelectionColors = customTextSelectionColors,
                     noteState = noteState,
                     onTitleValueChange = viewModel::onTitleInputChange,
@@ -105,13 +104,6 @@ fun NoteEditScreen(
                     context = context,
                     coroutineScope = coroutineScope,
                     bottomSheetScaffoldState = bottomSheetScaffoldState
-                )
-
-                Divider(
-                    color = MaterialTheme.colors.onBackground,
-                    modifier = Modifier
-                        .padding(horizontal = 2.dp)
-                        .height(1.dp)
                 )
 
                 BodyCard(
@@ -125,9 +117,9 @@ fun NoteEditScreen(
         sheetContent = {
             CategoriesList(
                 categories = noteState.categories,
-                currentCategory = noteState.noteCategory,
-                onClickDialog = { viewModel.insertCategory(it) },
-                onDeleteCategory = { viewModel.deleteCategory(it) }
+                currentCategory = noteState.currentCategory,
+                onAddCategory = viewModel::insertCategory,
+                onDeleteCategory = viewModel::deleteCategory
             ) {
                 viewModel.saveNoteCategory(it)
                 coroutineScope.launch {
@@ -191,7 +183,7 @@ private fun BodyCard(
 
 @SuppressLint("MissingPermission")
 @Composable
-private fun TitleCard(
+private fun TitleAndMenuCard(
     customTextSelectionColors: TextSelectionColors,
     noteState: NoteEditState,
     onTitleValueChange: (String) -> Unit,
@@ -357,4 +349,12 @@ private fun TitleCard(
             }
         }
     }
+
+    Divider(
+        color = MaterialTheme.colors.onBackground,
+        modifier = Modifier
+            .padding(horizontal = 2.dp)
+            .height(1.dp)
+    )
+
 }
