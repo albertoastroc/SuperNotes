@@ -44,16 +44,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val name = "channel 1"
-        val descriptionText = "description text"
+        val channelName = "notifications"
+        val channelDescriptionText = "reminder notifications"
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel("1",
-            name,
+            channelName,
             importance
         ).apply {
-            description = descriptionText
+            description = channelDescriptionText
         }
-        // Register the channel with the system
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
@@ -85,30 +84,22 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
-                SuperNotesApp()
+                SuperNotesApp(navController = rememberAnimatedNavController())
             }
         }
     }
 }
 
 @Composable
-fun SuperNotesApp() {
-    val navController = rememberAnimatedNavController()
+private fun SuperNotesApp(navController: NavHostController) {
 
-    MyNavHost(
-        navController
-    )
-}
-
-@Composable
-private fun MyNavHost(navController: NavHostController) {
     val context = LocalContext.current
 
     AnimatedNavHost(
         navController = navController,
         startDestination = NavigationId.ALL_NOTES.destination
     ) {
-        navigationWithTransition(
+        transitionDestination(
             routeName = NavigationId.ALL_NOTES.destination,
             destinations = listOf(
                 NavigationId.EDIT_NOTE.destination + "/{$NOTE_ID}",
@@ -116,7 +107,7 @@ private fun MyNavHost(navController: NavHostController) {
                 NavigationId.ALL_TRASH_NOTES.destination
             ),
             arguments = emptyList(),
-            deepLinks = listOf()
+            deepLinks = emptyList()
         ) {
             AllNotesScreen(
                 onNoteClick = { noteId ->
@@ -142,14 +133,14 @@ private fun MyNavHost(navController: NavHostController) {
             )
         }
 
-        navigationWithTransition(
+        transitionDestination(
             routeName = NavigationId.ALL_TRASH_NOTES.destination,
             destinations = listOf(
                 NavigationId.ALL_NOTES.destination,
                 NavigationId.TRASH_NOTE.destination + "/{$TRASH_NOTE_ID}"
             ),
             arguments = emptyList(),
-            deepLinks = listOf()
+            deepLinks = emptyList()
         ) {
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
@@ -158,11 +149,7 @@ private fun MyNavHost(navController: NavHostController) {
             )
         }
 
-        //****************************************************************************
-
-        //adb shell am start -W -a android.intent.action.VIEW -d "myapp://screens/noteeditscreen/1"
-
-        navigationWithTransition(
+        transitionDestination(
             routeName = NavigationId.EDIT_NOTE.destination + "/{$NOTE_ID}",
             destinations = listOf(NavigationId.ALL_NOTES.destination),
             arguments = listOf(
@@ -182,15 +169,13 @@ private fun MyNavHost(navController: NavHostController) {
             }
         }
 
-        //****************************************************************************
-
-        navigationWithTransition(
+        transitionDestination(
             routeName = NavigationId.TRASH_NOTE.destination + "/{$TRASH_NOTE_ID}",
             destinations = listOf(NavigationId.ALL_TRASH_NOTES.destination),
             arguments = listOf(
                 navArgument(TRASH_NOTE_ID) { type = NavType.IntType }
             ),
-            deepLinks = listOf()
+            deepLinks = emptyList()
         ) {
             val trashNoteId = remember {
                 it.arguments?.getInt(TRASH_NOTE_ID)
@@ -200,18 +185,18 @@ private fun MyNavHost(navController: NavHostController) {
             }
         }
 
-        navigationWithTransition(
+        transitionDestination(
             routeName = NavigationId.OPTIONS.destination,
             destinations = listOf(NavigationId.ALL_NOTES.destination),
             arguments = emptyList(),
-            deepLinks = listOf()
+            deepLinks = emptyList()
         ) {
             OptionsScreen()
         }
     }
 }
 
-fun NavGraphBuilder.navigationWithTransition(
+fun NavGraphBuilder.transitionDestination(
     routeName: String,
     deepLinks : List<NavDeepLink>,
     destinations: List<String>,
