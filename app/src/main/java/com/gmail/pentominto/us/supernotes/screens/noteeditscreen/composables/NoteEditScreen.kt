@@ -2,13 +2,17 @@
 
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,6 +30,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -192,6 +197,9 @@ private fun TitleAndMenuCard(
     coroutineScope: CoroutineScope,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
+
+
+
     val clipboardManager = LocalClipboardManager.current
 
     val focusManager = LocalFocusManager.current
@@ -214,8 +222,33 @@ private fun TitleAndMenuCard(
         }, calendar[Calendar.HOUR_OF_DAY], calendar[Calendar.MINUTE], false
     )
 
+    val showAlarmDialogs = {
+
+
+        datePicker.show()
+        datePicker.setOnDateSetListener { _, _, _, _ ->
+
+            timePicker.show()
+            timePicker.setOnDismissListener {
+
+                setAlarm(context, calendar.timeInMillis)
+
+            }
+        }
+
+    }
+
     datePicker.datePicker.minDate = calendar.timeInMillis
 
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+
+        if (isGranted){
+
+            showAlarmDialogs()
+
+        }
+    }
 
     Card(
         modifier = Modifier,
@@ -330,16 +363,16 @@ private fun TitleAndMenuCard(
 
                     DropdownMenuItem(onClick = {
 
-                        datePicker.show()
-                        datePicker.setOnDateSetListener { _, _, _, _ ->
 
-                            timePicker.show()
-                            timePicker.setOnDismissListener {
-
-                                setAlarm(context, calendar.timeInMillis)
+                        when(PackageManager.PERMISSION_GRANTED){
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) -> showAlarmDialogs()
+                            else -> {
+                                launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
 
                             }
                         }
+
+
 
                         dropDownMenuExpanded = false
                     }) {
@@ -356,5 +389,7 @@ private fun TitleAndMenuCard(
             .padding(horizontal = 2.dp)
             .height(1.dp)
     )
+
+
 
 }
