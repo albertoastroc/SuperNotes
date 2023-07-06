@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class,
+    ExperimentalPermissionsApi::class
+)
 
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
@@ -9,6 +11,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,6 +33,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -38,10 +42,15 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenViewModel
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
+import com.gmail.pentominto.us.supernotes.utility.findActivity
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteEditScreen(
     noteid: Int,
@@ -198,8 +207,6 @@ private fun TitleAndMenuCard(
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
 
-
-
     val clipboardManager = LocalClipboardManager.current
 
     val focusManager = LocalFocusManager.current
@@ -239,9 +246,11 @@ private fun TitleAndMenuCard(
     }
 
     datePicker.datePicker.minDate = calendar.timeInMillis
-
+    val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
+
+
 
         if (isGranted){
 
@@ -363,13 +372,56 @@ private fun TitleAndMenuCard(
 
                     DropdownMenuItem(onClick = {
 
+                        Log.d("TAG",
+                            "TitleAndMenuCard: should show ${(ActivityCompat.shouldShowRequestPermissionRationale(context.findActivity() ,Manifest.permission.POST_NOTIFICATIONS))}"
+                        )
+
+                        Log.d("TAG",
+                            "TitleAndMenuCard: state should show ${permissionState.status.shouldShowRationale}"
+                        )
 
                         when(PackageManager.PERMISSION_GRANTED){
                             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) -> showAlarmDialogs()
                             else -> {
-                                launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+
+                                if (permissionState.status.shouldShowRationale)
+                                 {
+
+                                    coroutineScope.launch {
+
+                                        val snackBarResult = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                                            "Please allow notifications to use reminders.",
+                                            "Go to Permissions",
+                                            SnackbarDuration.Long
+                                        )
+
+                                        if (snackBarResult == SnackbarResult.ActionPerformed) {
+
+                                            val intent = Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                                            intent.putExtra("android.provider.extra.APP_PACKAGE", context.applicationInfo.packageName)
+
+                                            context.startActivity(intent)
+
+                                        }
+
+                                    }
+
+
+
+                                } else {
+                                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                }
 
                             }
+                        }
+
+
+
+                        if (!permissionState.status.shouldShowRationale) {
+
+                            //show snakcbar
                         }
 
 
