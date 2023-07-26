@@ -246,6 +246,7 @@ private fun TitleAndMenuCard(
     }
 
     datePicker.datePicker.minDate = calendar.timeInMillis
+
     val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -381,7 +382,9 @@ private fun TitleAndMenuCard(
                         )
 
                         when(PackageManager.PERMISSION_GRANTED){
+
                             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) -> showAlarmDialogs()
+
                             else -> {
 
                                 if (permissionState.status.shouldShowRationale)
@@ -415,13 +418,6 @@ private fun TitleAndMenuCard(
                                 }
 
                             }
-                        }
-
-
-
-                        if (!permissionState.status.shouldShowRationale) {
-
-                            //show snakcbar
                         }
 
 

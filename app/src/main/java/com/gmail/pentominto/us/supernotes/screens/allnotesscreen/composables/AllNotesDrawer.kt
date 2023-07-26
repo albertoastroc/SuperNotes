@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 fun AllNotesDrawer(
     scope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    onOptionsClick: (Int) -> Unit
+    onDrawerItemClick: (Int) -> Unit
 ) {
     Drawer(
         drawerOptionsList = listOf(
@@ -44,7 +44,7 @@ fun AllNotesDrawer(
         onSettingClick = {
             scope.launch {
                 scaffoldState.drawerState.close()
-                onOptionsClick(it)
+                onDrawerItemClick(it)
             }
         }
     )

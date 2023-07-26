@@ -50,8 +50,8 @@ interface NotesDao {
     @Query("SELECT * FROM category_table")
     fun getAllCategories(): Flow<List<Category>>
 
-    @Query("DELETE FROM note_table ")
-    suspend fun deleteAllNotes()
+    @Query("DELETE FROM note_table WHERE category != 'TrashNotesAPPTAG' ")
+    suspend fun deleteHomeScreenNotes()
 
     @Query("DELETE FROM note_table WHERE category = 'TrashNotesAPPTAG' ")
     suspend fun deleteAllTrashNotes()

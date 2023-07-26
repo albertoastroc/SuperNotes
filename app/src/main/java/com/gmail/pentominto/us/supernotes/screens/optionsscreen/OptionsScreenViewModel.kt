@@ -87,7 +87,7 @@ class OptionsScreenViewModel @Inject constructor(
 
     fun deleteAllNotes() {
         viewModelScope.launch {
-            repository.deleteAllNotes()
+            repository.deleteHomeScreenNotes()
         }
     }
 

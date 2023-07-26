@@ -3,9 +3,9 @@ package com.gmail.pentominto.us.supernotes.repositories
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.NotesDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
@@ -75,8 +75,8 @@ class LocalRepositoryImpl @Inject constructor(
         return dao.getAllCategories()
     }
 
-    override suspend fun deleteAllNotes() {
-        dao.deleteAllNotes()
+    override suspend fun deleteHomeScreenNotes() {
+        dao.deleteHomeScreenNotes()
     }
 
     override suspend fun deleteAllTrashNotes() {

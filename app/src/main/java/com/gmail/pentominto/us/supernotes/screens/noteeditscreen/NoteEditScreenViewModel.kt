@@ -121,6 +121,12 @@ class NoteEditScreenViewModel @Inject constructor(
         )
     }
 
+    fun onBodyInputChange(newInput : String) {
+        _noteEditState.value = _noteEditState.value.copy(
+            noteBody = newInput
+        )
+    }
+
     fun setAlarm(context : Context, alarmTime : Long) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -158,12 +164,6 @@ class NoteEditScreenViewModel @Inject constructor(
 
         alarmManager.setAlarmClock(clockInfo,
             broadcastPendingIntent
-        )
-    }
-
-    fun onBodyInputChange(newInput : String) {
-        _noteEditState.value = _noteEditState.value.copy(
-            noteBody = newInput
         )
     }
 

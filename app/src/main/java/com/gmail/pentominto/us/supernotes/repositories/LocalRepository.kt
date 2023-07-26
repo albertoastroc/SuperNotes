@@ -32,7 +32,7 @@ interface LocalRepository {
 
     fun getAllCategories(): Flow<List<Category>>
 
-    suspend fun deleteAllNotes()
+    suspend fun deleteHomeScreenNotes()
 
     suspend fun deleteAllTrashNotes()
 
