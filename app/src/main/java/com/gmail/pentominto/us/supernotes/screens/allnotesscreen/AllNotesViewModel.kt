@@ -31,12 +31,21 @@ class AllNotesViewModel @Inject constructor(
             _allNotesState.value = _allNotesState.value.copy(searchBarInput = input.lowercase())
         }
     }
+    private fun showCategories() {
+
+        if ( _allNotesState.value.showCategoryTitles && allNotesState.value.searchBarInput.isEmpty()){
+            _allNotesState.value = _allNotesState.value.copy(showCategoryTitles = true)
+        } else {_allNotesState.value = _allNotesState.value.copy(showCategoryTitles = false)}
+
+    }
 
     private fun getNotesList() = viewModelScope.launch {
         repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
+
             _allNotesState.value = _allNotesState.value.copy(notes = categoryNotesMap)
         }
     }
+
 
     private fun deleteNote(note: Note) {
         viewModelScope.launch {
@@ -87,5 +96,6 @@ class AllNotesViewModel @Inject constructor(
     init {
         getPrefs()
         getNotesList()
+        showCategories()
     }
 }

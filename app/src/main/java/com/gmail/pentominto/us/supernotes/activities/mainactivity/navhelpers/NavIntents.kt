@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.activities.mainactivity
+package com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers
 
 import android.content.Intent
 import android.net.Uri

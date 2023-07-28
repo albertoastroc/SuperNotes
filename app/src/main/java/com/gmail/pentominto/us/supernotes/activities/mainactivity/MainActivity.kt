@@ -15,20 +15,22 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.*
-import com.gmail.pentominto.us.supernotes.MainActivityViewModel
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavIntents
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavigationId
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.OptionMenuId
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables.AllNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.composables.ReadOnlyNoteScreen
 import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.composables.TrashNotesScreen
-import com.gmail.pentominto.us.supernotes.ui.theme.MostlyBlackBlue
 import com.gmail.pentominto.us.supernotes.ui.theme.SuperNotesTheme
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_ANIMATION_DURATION
+import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_EDIT_NAVIGATION_URI
 import com.gmail.pentominto.us.supernotes.utility.Constants.NOTE_ID
 import com.gmail.pentominto.us.supernotes.utility.Constants.TRASH_NOTE_ID
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -44,18 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val channelName = "notifications"
-        val channelDescriptionText = "reminder notifications"
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel("1",
-            channelName,
-            importance
-        ).apply {
-            description = channelDescriptionText
-        }
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+        createNotificationChannel(this)
 
         actionBar?.hide()
 
@@ -63,23 +54,26 @@ class MainActivity : ComponentActivity() {
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT)
 
+
         setContent {
-            SuperNotesTheme(
-                darkTheme = isSystemInDarkTheme()
-            ) {
-                val isSystemDarkTheme = isSystemInDarkTheme()
+
+            SuperNotesTheme {
+
                 val systemUiController = rememberSystemUiController()
+                val systemBarColor = MaterialTheme.colors.background
+                val isSystemDarkTheme = isSystemInDarkTheme()
+
                 LaunchedEffect(
                     key1 = isSystemDarkTheme
                 ) {
                     if (isSystemDarkTheme) {
                         systemUiController.setSystemBarsColor(
-                            color = MostlyBlackBlue,
+                            color = systemBarColor,
                             darkIcons = false
                         )
                     } else {
                         systemUiController.setSystemBarsColor(
-                            color = Color.White,
+                            color = systemBarColor,
                             darkIcons = true
                         )
                     }
@@ -115,20 +109,7 @@ private fun SuperNotesApp(navController: NavHostController) {
                 },
                 onOptionsClick = { menuItemId ->
 
-                    when (menuItemId) {
-                        OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(
-                            NavigationId.OPTIONS.destination
-                        )
-                        OptionMenuId.TRASH.optionMenuId -> navController.navigate(
-                            NavigationId.ALL_TRASH_NOTES.destination
-                        )
-                        OptionMenuId.PLAY_STORE.optionMenuId -> context.startActivity(
-                            NavIntents.getPlaystoreIntent()
-                        )
-                        OptionMenuId.PRIVACY_POLICY.optionMenuId -> context.startActivity(
-                            NavIntents.getPrivacyPolicyIntent()
-                        )
-                    }
+                    navigateToMenuItem(menuItemId, navController, context)
                 }
             )
         }
@@ -156,7 +137,7 @@ private fun SuperNotesApp(navController: NavHostController) {
                 navArgument(NOTE_ID) { type = NavType.IntType }
             ),
             deepLinks = listOf(navDeepLink {
-                uriPattern = "myapp://supernotes/noteeditscreen/{noteid}"
+                uriPattern =  NOTE_EDIT_NAVIGATION_URI
                 action = Intent.ACTION_VIEW
             })
         ) {
@@ -250,4 +231,41 @@ fun NavGraphBuilder.transitionDestination(
         content = content,
         arguments = arguments
     )
+}
+
+private fun navigateToMenuItem(menuItemId : Int, navController : NavHostController, context : Context) {
+
+    when (menuItemId) {
+        OptionMenuId.OPTIONS.optionMenuId        -> navController.navigate(
+            NavigationId.OPTIONS.destination
+        )
+
+        OptionMenuId.TRASH.optionMenuId          -> navController.navigate(
+            NavigationId.ALL_TRASH_NOTES.destination
+        )
+
+        OptionMenuId.PLAY_STORE.optionMenuId     -> context.startActivity(
+            NavIntents.getPlaystoreIntent()
+        )
+
+        OptionMenuId.PRIVACY_POLICY.optionMenuId -> context.startActivity(
+            NavIntents.getPrivacyPolicyIntent()
+        )
+    }
+}
+
+private fun createNotificationChannel(activity : Context) {
+
+    val channelName = "Notifications"
+    val channelDescriptionText = "Reminder notifications"
+    val importance = NotificationManager.IMPORTANCE_HIGH
+    val channel = NotificationChannel("1",
+        channelName,
+        importance
+    ).apply {
+        description = channelDescriptionText
+    }
+    val notificationManager : NotificationManager =
+        activity.getSystemService(ComponentActivity.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
 }

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 
 @Composable
-fun SwipeNoteRowContainer(
+fun SwipeContainer(
     modifier: Modifier,
     deleteNote: () -> Unit,
     content: @Composable () -> Unit

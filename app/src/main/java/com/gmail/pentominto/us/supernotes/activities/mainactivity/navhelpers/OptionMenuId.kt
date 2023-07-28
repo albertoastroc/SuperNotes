@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.activities.mainactivity
+package com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers
 
 enum class OptionMenuId(
     val optionName: String,
