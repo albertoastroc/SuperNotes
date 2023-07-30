@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.Settings
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -293,11 +292,8 @@ private fun DateTimePickerDialogs(context : Context, setAlarm : (Context, Long) 
 
     val datePicker = DatePickerDialog(
         context,
-        { _ : DatePicker, selectedYear : Int, selectedMonth : Int, selectedDayOfMonth : Int ->
-            calendar.set(selectedYear,
-                selectedMonth,
-                selectedDayOfMonth
-            )
+        { _, year, month, dayOfMonth ->
+            calendar.set(year, month, dayOfMonth)
         },
         calendar[Calendar.YEAR],
         calendar[Calendar.MONTH],
@@ -306,8 +302,9 @@ private fun DateTimePickerDialogs(context : Context, setAlarm : (Context, Long) 
 
     val timePicker = TimePickerDialog(
         context,
-        { _, selectedHour : Int, selectedMinute : Int ->
-            calendar.set(datePicker.datePicker.year,
+        { view, selectedHour : Int, selectedMinute : Int ->
+            calendar.set(
+                datePicker.datePicker.year,
                 datePicker.datePicker.month,
                 datePicker.datePicker.dayOfMonth,
                 selectedHour,
@@ -326,14 +323,11 @@ private fun DateTimePickerDialogs(context : Context, setAlarm : (Context, Long) 
 
             timePicker.show()
             timePicker.setOnDismissListener {
-
-                setAlarm(context,
-                    calendar.timeInMillis
-                )
-
+                    setAlarm(context,
+                        calendar.timeInMillis
+                    )
             }
         }
-
     }
 
     datePicker.datePicker.minDate = calendar.timeInMillis
