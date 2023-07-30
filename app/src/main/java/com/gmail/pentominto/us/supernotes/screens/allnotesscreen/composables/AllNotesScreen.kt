@@ -1,11 +1,13 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewModel
@@ -14,7 +16,7 @@ import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesViewMod
 fun AllNotesScreen(
     viewModel: AllNotesViewModel = hiltViewModel(),
     onNoteClick: (Int) -> Unit,
-    onOptionsClick: (Int) -> Unit
+    onDrawerItemClick: (Int) -> Unit
 ) {
     val allNotesState by remember { viewModel.allNotesState }
 
@@ -30,9 +32,9 @@ fun AllNotesScreen(
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
             AllNotesDrawer(
-                coroutineScope,
-                scaffoldState,
-                onOptionsClick
+                scope = coroutineScope,
+                scaffoldState = scaffoldState,
+                onDrawerItemClick = onDrawerItemClick
             )
         },
         content = { paddingValues ->
@@ -50,7 +52,7 @@ fun AllNotesScreen(
         },
         floatingActionButton = {
             AllNotesFab(
-                onNoteClick
+                onNoteClick = onNoteClick
             )
         }
     )

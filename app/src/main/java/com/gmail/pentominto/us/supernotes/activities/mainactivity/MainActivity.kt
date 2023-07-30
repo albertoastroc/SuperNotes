@@ -107,7 +107,7 @@ private fun SuperNotesApp(navController: NavHostController) {
                 onNoteClick = { noteId ->
                     navController.navigate("${NavigationId.EDIT_NOTE.destination}/$noteId")
                 },
-                onOptionsClick = { menuItemId ->
+                onDrawerItemClick = { menuItemId ->
 
                     navigateToMenuItem(menuItemId, navController, context)
                 }

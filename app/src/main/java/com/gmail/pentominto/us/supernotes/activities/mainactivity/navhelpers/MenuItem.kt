@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen
+package com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

@@ -2,8 +2,8 @@ package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.DrawerMenuOptions
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.MenuItem
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.DrawerMenuOptions
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.MenuItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
