@@ -37,6 +37,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentIntent(pendingIntent)
                     .build()
+
             }
 
             notificationManager = context?.let { NotificationManagerCompat.from(it) }

@@ -256,8 +256,8 @@ private fun navigateToMenuItem(menuItemId : Int, navController : NavHostControll
 
 private fun createNotificationChannel(activity : Context) {
 
-    val channelName = "Notifications"
-    val channelDescriptionText = "Reminder notifications"
+    val channelName = "Reminders"
+    val channelDescriptionText = "Allow notification reminders for a future date and time."
     val importance = NotificationManager.IMPORTANCE_HIGH
     val channel = NotificationChannel("1",
         channelName,

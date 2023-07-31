@@ -108,7 +108,7 @@ fun NoteEditScreen(
         sheetContent = {
             CategoriesList(
                 categories = noteState.categories,
-                currentCategory = noteState.currentCategory,
+                currentCategory = noteState.currentChosenCategory,
                 onAddCategory = viewModel::insertCategory,
                 onDeleteCategory = viewModel::deleteCategory
             ) {

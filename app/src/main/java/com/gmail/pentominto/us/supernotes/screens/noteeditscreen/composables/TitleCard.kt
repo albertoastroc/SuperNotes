@@ -3,11 +3,13 @@ package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -51,13 +53,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
+import androidx.core.app.NotificationManagerCompat
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -165,6 +167,10 @@ private fun NoteEditMenu(
 
     val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
 
+    val packageManager = LocalContext.current.packageManager
+
+    var notificationManager: NotificationManagerCompat? = NotificationManagerCompat.from(context)
+
     val focusManager = LocalFocusManager.current
 
     val clipboardManager = LocalClipboardManager.current
@@ -239,15 +245,26 @@ private fun NoteEditMenu(
 
             DropdownMenuItem(onClick = {
 
-                when (PackageManager.PERMISSION_GRANTED) {
 
-                    ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) -> showAlarmDialogs()
 
-                    else -> {
+                Log.d("TAG",
+                    "NoteEditMenu:1 ${permissionState.status.isGranted}"
+                )
 
-                        if (permissionState.status.shouldShowRationale) {
+                Log.d("TAG",
+                    "NoteEditMenu:2 ${packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName)}"
+
+                )
+
+                if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName) == PackageManager.PERMISSION_GRANTED
+                    && notificationManager?.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
+                ) {
+                    showAlarmDialogs()
+                } else if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName) == PackageManager.PERMISSION_GRANTED
+                    && notificationManager?.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE
+                    || (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName) == PackageManager.PERMISSION_DENIED)
+                )
+                        {
 
                             coroutineScope.launch {
 
@@ -273,10 +290,6 @@ private fun NoteEditMenu(
                         } else {
                             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                         }
-                    }
-                }
-
-
 
                 dropDownMenuExpanded = false
             }) {

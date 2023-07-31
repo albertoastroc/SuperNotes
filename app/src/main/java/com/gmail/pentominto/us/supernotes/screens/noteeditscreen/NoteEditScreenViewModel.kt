@@ -42,7 +42,7 @@ class NoteEditScreenViewModel @Inject constructor(
                     _noteEditState.value = _noteEditState.value.copy(
                         noteTitle = it.value.noteTitle,
                         noteBody = it.value.noteBody,
-                        currentCategory = it.value.category
+                        currentChosenCategory = it.value.category
 
                     )
                 }
@@ -71,13 +71,13 @@ class NoteEditScreenViewModel @Inject constructor(
 
     fun insertCategory(categoryName : String) {
         viewModelScope.launch {
-            saveNoteText()
             repository.insertCategory(Category(categoryName))
         }
     }
 
     fun deleteCategory(category : Category) {
         viewModelScope.launch {
+
             val notesToUpdate = repository.getNotesOfThisCategory(category.categoryTitle)
 
             repository.deleteCategory(category.categoryId)
@@ -130,20 +130,11 @@ class NoteEditScreenViewModel @Inject constructor(
     fun setAlarm(context : Context, alarmTime : Long) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context,
-            AlarmReceiver::class.java
-        )
+        val alarmIntent = Intent(context, AlarmReceiver::class.java)
 
-        alarmIntent.putExtra("note_id",
-            noteId
-        )
-        alarmIntent.putExtra("note_title",
-            noteEditState.value.noteTitle
-        )
-
-        alarmIntent.putExtra("note_body",
-            noteEditState.value.noteBody
-        )
+        alarmIntent.putExtra("note_id", noteId)
+        alarmIntent.putExtra("note_title", noteEditState.value.noteTitle)
+        alarmIntent.putExtra("note_body", noteEditState.value.noteBody)
 
         val broadcastPendingIntent = PendingIntent.getBroadcast(context,
             noteId,
@@ -158,13 +149,9 @@ class NoteEditScreenViewModel @Inject constructor(
             mainActivityIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
-        val clockInfo = AlarmManager.AlarmClockInfo(alarmTime,
-            activityPendingIntent
-        )
+        val clockInfo = AlarmManager.AlarmClockInfo(alarmTime, activityPendingIntent)
 
-        alarmManager.setAlarmClock(clockInfo,
-            broadcastPendingIntent
-        )
+        alarmManager.setAlarmClock(clockInfo, broadcastPendingIntent)
     }
 
     init {
