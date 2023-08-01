@@ -33,5 +33,4 @@ object Constants {
     // AllNotes
 
     const val DEFAULT_CATEGORY = "No Category"
-
 }

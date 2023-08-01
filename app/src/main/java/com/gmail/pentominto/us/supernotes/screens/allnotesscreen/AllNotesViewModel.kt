@@ -11,8 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AllNotesViewModel @Inject constructor(
@@ -32,11 +32,9 @@ class AllNotesViewModel @Inject constructor(
         }
     }
     private fun showCategories() {
-
-        if ( _allNotesState.value.showCategoryTitles && allNotesState.value.searchBarInput.isEmpty()){
+        if (_allNotesState.value.showCategoryTitles && allNotesState.value.searchBarInput.isEmpty()) {
             _allNotesState.value = _allNotesState.value.copy(showCategoryTitles = true)
-        } else {_allNotesState.value = _allNotesState.value.copy(showCategoryTitles = false)}
-
+        } else { _allNotesState.value = _allNotesState.value.copy(showCategoryTitles = false) }
     }
 
     private fun getNotesList() = viewModelScope.launch {
@@ -45,7 +43,6 @@ class AllNotesViewModel @Inject constructor(
             _allNotesState.value = _allNotesState.value.copy(notes = categoryNotesMap)
         }
     }
-
 
     private fun deleteNote(note: Note) {
         viewModelScope.launch {

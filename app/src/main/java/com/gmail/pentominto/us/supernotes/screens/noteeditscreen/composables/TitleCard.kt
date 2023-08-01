@@ -61,25 +61,25 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
-@OptIn(ExperimentalPermissionsApi::class,
+@OptIn(
+    ExperimentalPermissionsApi::class,
     ExperimentalMaterialApi::class
 )
-
 @SuppressLint("MissingPermission")
 @Composable
 fun TitleAndMenuCard(
-    customTextSelectionColors : TextSelectionColors,
-    noteState : NoteEditState,
-    onTitleValueChange : (String) -> Unit,
-    setAlarm : (Context, Long) -> Unit,
-    bottomSheetScaffoldState : BottomSheetScaffoldState
+    customTextSelectionColors: TextSelectionColors,
+    noteState: NoteEditState,
+    onTitleValueChange: (String) -> Unit,
+    setAlarm: (Context, Long) -> Unit,
+    bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
-
     val context = LocalContext.current
 
     val showAlarmDialogs = showDateTimePickerDialogues(context, setAlarm)
 
-    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) { showAlarmDialogs() }
     }
@@ -147,18 +147,18 @@ fun TitleAndMenuCard(
     )
 }
 
-@OptIn(ExperimentalPermissionsApi::class,
+@OptIn(
+    ExperimentalPermissionsApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
 private fun NoteEditMenu(
-    noteState : NoteEditState,
-    showAlarmDialogs : () -> Unit,
-    context : Context,
-    bottomSheetScaffoldState : BottomSheetScaffoldState,
-    launcher : ManagedActivityResultLauncher<String, Boolean>
+    noteState: NoteEditState,
+    showAlarmDialogs: () -> Unit,
+    context: Context,
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {
-
     val coroutineScope = rememberCoroutineScope()
 
     val packageManager = LocalContext.current.packageManager
@@ -216,7 +216,7 @@ private fun NoteEditMenu(
             }
 
             DropdownMenuItem(onClick = {
-                val sendIntent : Intent = Intent().apply {
+                val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(
                         Intent.EXTRA_TEXT,
@@ -236,9 +236,7 @@ private fun NoteEditMenu(
             }
 
             DropdownMenuItem(onClick = {
-
                 coroutineScope.launch {
-
                     askNotificationPermission(
                         packageManager,
                         context,
@@ -256,7 +254,7 @@ private fun NoteEditMenu(
     }
 }
 
-private fun showDateTimePickerDialogues(context : Context, setAlarm : (Context, Long) -> Unit) : () -> Unit {
+private fun showDateTimePickerDialogues(context: Context, setAlarm: (Context, Long) -> Unit): () -> Unit {
     val calendar = Calendar.getInstance()
 
     val datePicker = DatePickerDialog(
@@ -271,7 +269,7 @@ private fun showDateTimePickerDialogues(context : Context, setAlarm : (Context, 
 
     val timePicker = TimePickerDialog(
         context,
-        { view, selectedHour : Int, selectedMinute : Int ->
+        { view, selectedHour: Int, selectedMinute: Int ->
             calendar.set(
                 datePicker.datePicker.year,
                 datePicker.datePicker.month,
@@ -286,15 +284,15 @@ private fun showDateTimePickerDialogues(context : Context, setAlarm : (Context, 
     )
 
     val showAlarmDialogs = {
-
         datePicker.show()
         datePicker.setOnDateSetListener { _, _, _, _ ->
 
             timePicker.show()
             timePicker.setOnDismissListener {
-                    setAlarm(context,
-                        calendar.timeInMillis
-                    )
+                setAlarm(
+                    context,
+                    calendar.timeInMillis
+                )
             }
         }
     }
@@ -302,31 +300,36 @@ private fun showDateTimePickerDialogues(context : Context, setAlarm : (Context, 
     datePicker.datePicker.minDate = calendar.timeInMillis
     return showAlarmDialogs
 }
-@OptIn(ExperimentalMaterialApi::class)
-private suspend fun askNotificationPermission(packageManager : PackageManager,
-                                              context : Context,
-                                              showAlarmDialogs : () -> Unit,
-                                              bottomSheetScaffoldState : BottomSheetScaffoldState,
-                                              launcher : ManagedActivityResultLauncher<String, Boolean>
-) {
 
+@OptIn(ExperimentalMaterialApi::class)
+private suspend fun askNotificationPermission(
+    packageManager: PackageManager,
+    context: Context,
+    showAlarmDialogs: () -> Unit,
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    launcher: ManagedActivityResultLauncher<String, Boolean>
+) {
     val notificationManager: NotificationManagerCompat? = NotificationManagerCompat.from(context)
 
-    if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS,
+    if (packageManager.checkPermission(
+            Manifest.permission.POST_NOTIFICATIONS,
             context.packageName
-        ) == PackageManager.PERMISSION_GRANTED
-        && notificationManager?.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
+        ) == PackageManager.PERMISSION_GRANTED &&
+        notificationManager?.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
     ) {
         showAlarmDialogs()
-    } else if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS,
+    } else if (packageManager.checkPermission(
+            Manifest.permission.POST_NOTIFICATIONS,
             context.packageName
-        ) == PackageManager.PERMISSION_GRANTED
-        && notificationManager?.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE
-        || (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS,
-            context.packageName
-        ) == PackageManager.PERMISSION_DENIED)
+        ) == PackageManager.PERMISSION_GRANTED &&
+        notificationManager?.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE ||
+        (
+            packageManager.checkPermission(
+                    Manifest.permission.POST_NOTIFICATIONS,
+                    context.packageName
+                ) == PackageManager.PERMISSION_DENIED
+            )
     ) {
-
         val snackBarResult = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
             "Please allow notifications to use reminders.",
             "Go to Permissions",
@@ -334,18 +337,16 @@ private suspend fun askNotificationPermission(packageManager : PackageManager,
         )
 
         if (snackBarResult == SnackbarResult.ActionPerformed) {
-
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            intent.putExtra("android.provider.extra.APP_PACKAGE",
+            intent.putExtra(
+                "android.provider.extra.APP_PACKAGE",
                 context.applicationInfo.packageName
             )
 
             context.startActivity(intent)
         }
-
-
     } else {
         launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }

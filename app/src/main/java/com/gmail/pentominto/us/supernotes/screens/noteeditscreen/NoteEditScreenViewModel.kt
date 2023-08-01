@@ -18,24 +18,22 @@ import com.gmail.pentominto.us.supernotes.utility.AlarmReceiver
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
-    private val repository : LocalRepository,
-    savedStateHandle : SavedStateHandle
+    private val repository: LocalRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var noteId : Int = checkNotNull(savedStateHandle["noteid"])
+    private var noteId: Int = checkNotNull(savedStateHandle["noteid"])
 
-    private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
-    val noteEditState : State<NoteEditState> = _noteEditState
+    private val _noteEditState: MutableState<NoteEditState> = mutableStateOf(NoteEditState())
+    val noteEditState: State<NoteEditState> = _noteEditState
 
-    private fun getNote(noteId : Int) {
-
+    private fun getNote(noteId: Int) {
         viewModelScope.launch {
-
             repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
 
                 categoryNoteMap.forEach {
@@ -69,16 +67,15 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun insertCategory(categoryName : String) {
+    fun insertCategory(categoryName: String) {
         saveNoteText()
         viewModelScope.launch {
             repository.insertCategory(Category(categoryName))
         }
     }
 
-    fun deleteCategory(category : Category) {
+    fun deleteCategory(category: Category) {
         viewModelScope.launch {
-
             val notesToUpdate = repository.getNotesOfThisCategory(category.categoryTitle)
 
             repository.deleteCategory(category.categoryId)
@@ -106,7 +103,7 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveNoteCategory(category : Category) {
+    fun saveNoteCategory(category: Category) {
         saveNoteText()
         viewModelScope.launch {
             saveNoteText()
@@ -117,20 +114,19 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun onTitleInputChange(newInput : String) {
+    fun onTitleInputChange(newInput: String) {
         _noteEditState.value = _noteEditState.value.copy(
             noteTitle = newInput
         )
     }
 
-    fun onBodyInputChange(newInput : String) {
+    fun onBodyInputChange(newInput: String) {
         _noteEditState.value = _noteEditState.value.copy(
             noteBody = newInput
         )
     }
 
-    fun setAlarm(context : Context, alarmTime : Long) {
-
+    fun setAlarm(context: Context, alarmTime: Long) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
 
@@ -138,15 +134,18 @@ class NoteEditScreenViewModel @Inject constructor(
         alarmIntent.putExtra("note_title", noteEditState.value.noteTitle)
         alarmIntent.putExtra("note_body", noteEditState.value.noteBody)
 
-        val broadcastPendingIntent = PendingIntent.getBroadcast(context,
+        val broadcastPendingIntent = PendingIntent.getBroadcast(
+            context,
             noteId,
             alarmIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
-        val mainActivityIntent = Intent(context,
+        val mainActivityIntent = Intent(
+            context,
             MainActivity::class.java
         )
-        val activityPendingIntent = PendingIntent.getActivity(context,
+        val activityPendingIntent = PendingIntent.getActivity(
+            context,
             noteId,
             mainActivityIntent,
             PendingIntent.FLAG_IMMUTABLE

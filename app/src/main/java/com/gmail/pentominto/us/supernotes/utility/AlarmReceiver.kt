@@ -15,7 +15,7 @@ import com.gmail.pentominto.us.supernotes.R
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
 
-    //TODO ask for permissions
+    // TODO ask for permissions
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context?, intent: Intent?) {
         val idExtra = intent?.getIntExtra("note_id", 0)
@@ -24,9 +24,16 @@ class AlarmReceiver : BroadcastReceiver() {
 
         idExtra?.let { id ->
 
-            val tapResultIntent = Intent().setAction(Intent.ACTION_VIEW).setData(Uri.parse("myapp://supernotes/noteeditscreen/$id"))
+            val tapResultIntent = Intent().setAction(Intent.ACTION_VIEW).setData(
+                Uri.parse("myapp://supernotes/noteeditscreen/$id")
+            )
 
-            val pendingIntent: PendingIntent = getActivity( context,id,tapResultIntent,FLAG_IMMUTABLE)
+            val pendingIntent: PendingIntent = getActivity(
+                context,
+                id,
+                tapResultIntent,
+                FLAG_IMMUTABLE
+            )
 
             val notification = context?.let {
                 NotificationCompat.Builder(it, "1")
@@ -37,12 +44,10 @@ class AlarmReceiver : BroadcastReceiver() {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentIntent(pendingIntent)
                     .build()
-
             }
 
             notificationManager = context?.let { NotificationManagerCompat.from(it) }
             notification?.let { notificationManager?.notify(id, it) }
-
         }
     }
 }

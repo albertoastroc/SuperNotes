@@ -13,9 +13,9 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(

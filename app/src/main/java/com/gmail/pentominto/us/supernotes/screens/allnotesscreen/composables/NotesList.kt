@@ -55,7 +55,7 @@ fun NotesList(
             }
 
             items(
-                items = notes.filterNotes(category, allNotesState.searchBarInput ),
+                items = notes.filterNotes(category, allNotesState.searchBarInput),
                 key = { it.noteId }
             ) { note ->
 
@@ -72,11 +72,7 @@ fun NotesList(
     }
 }
 
-
-
-fun List<Note>.filterNotes(category : Category, searchBarInput : String) : List<Note> {
-
-    return this.filter {  it.noteBody.lowercase().contains(searchBarInput) }
+fun List<Note>.filterNotes(category: Category, searchBarInput: String): List<Note> {
+    return this.filter { it.noteBody.lowercase().contains(searchBarInput) }
         .filter { category.categoryTitle != "TrashNotesAPPTAG" }
-
 }

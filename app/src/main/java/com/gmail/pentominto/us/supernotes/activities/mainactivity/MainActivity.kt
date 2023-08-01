@@ -54,11 +54,8 @@ class MainActivity : ComponentActivity() {
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT)
 
-
         setContent {
-
             SuperNotesTheme {
-
                 val systemUiController = rememberSystemUiController()
                 val systemBarColor = MaterialTheme.colors.background
                 val isSystemDarkTheme = isSystemInDarkTheme()
@@ -86,7 +83,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun SuperNotesApp(navController: NavHostController) {
-
     val context = LocalContext.current
 
     AnimatedNavHost(
@@ -136,10 +132,12 @@ private fun SuperNotesApp(navController: NavHostController) {
             arguments = listOf(
                 navArgument(NOTE_ID) { type = NavType.IntType }
             ),
-            deepLinks = listOf(navDeepLink {
-                uriPattern =  NOTE_EDIT_NAVIGATION_URI
-                action = Intent.ACTION_VIEW
-            })
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = NOTE_EDIT_NAVIGATION_URI
+                    action = Intent.ACTION_VIEW
+                }
+            )
         ) {
             val noteId = remember {
                 it.arguments?.getInt(NOTE_ID)
@@ -179,7 +177,7 @@ private fun SuperNotesApp(navController: NavHostController) {
 
 fun NavGraphBuilder.transitionDestination(
     routeName: String,
-    deepLinks : List<NavDeepLink>,
+    deepLinks: List<NavDeepLink>,
     destinations: List<String>,
     arguments: List<NamedNavArgument>,
     content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
@@ -233,18 +231,17 @@ fun NavGraphBuilder.transitionDestination(
     )
 }
 
-private fun navigateToMenuItem(menuItemId : Int, navController : NavHostController, context : Context) {
-
+private fun navigateToMenuItem(menuItemId: Int, navController: NavHostController, context: Context) {
     when (menuItemId) {
-        OptionMenuId.OPTIONS.optionMenuId        -> navController.navigate(
+        OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(
             NavigationId.OPTIONS.destination
         )
 
-        OptionMenuId.TRASH.optionMenuId          -> navController.navigate(
+        OptionMenuId.TRASH.optionMenuId -> navController.navigate(
             NavigationId.ALL_TRASH_NOTES.destination
         )
 
-        OptionMenuId.PLAY_STORE.optionMenuId     -> context.startActivity(
+        OptionMenuId.PLAY_STORE.optionMenuId -> context.startActivity(
             NavIntents.getPlaystoreIntent()
         )
 
@@ -254,18 +251,18 @@ private fun navigateToMenuItem(menuItemId : Int, navController : NavHostControll
     }
 }
 
-private fun createNotificationChannel(activity : Context) {
-
+private fun createNotificationChannel(activity: Context) {
     val channelName = "Reminders"
     val channelDescriptionText = "Allow notification reminders for a future date and time."
     val importance = NotificationManager.IMPORTANCE_HIGH
-    val channel = NotificationChannel("1",
+    val channel = NotificationChannel(
+        "1",
         channelName,
         importance
     ).apply {
         description = channelDescriptionText
     }
-    val notificationManager : NotificationManager =
+    val notificationManager: NotificationManager =
         activity.getSystemService(ComponentActivity.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.createNotificationChannel(channel)
 }

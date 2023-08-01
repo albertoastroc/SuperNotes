@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalMaterialApi::class,
+@file:OptIn(
+    ExperimentalMaterialApi::class,
     ExperimentalPermissionsApi::class
 )
 
@@ -120,6 +121,3 @@ fun NoteEditScreen(
         }
     )
 }
-
-
-
