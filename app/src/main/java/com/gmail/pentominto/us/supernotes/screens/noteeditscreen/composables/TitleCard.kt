@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -58,8 +57,6 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -81,7 +78,7 @@ fun TitleAndMenuCard(
 
     val context = LocalContext.current
 
-    val showAlarmDialogs = DateTimePickerDialogs(context, setAlarm)
+    val showAlarmDialogs = showDateTimePickerDialogues(context, setAlarm)
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -165,11 +162,7 @@ private fun NoteEditMenu(
     launcher : ManagedActivityResultLauncher<String, Boolean>
 ) {
 
-    val permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-
     val packageManager = LocalContext.current.packageManager
-
-    var notificationManager: NotificationManagerCompat? = NotificationManagerCompat.from(context)
 
     val focusManager = LocalFocusManager.current
 
@@ -245,51 +238,16 @@ private fun NoteEditMenu(
 
             DropdownMenuItem(onClick = {
 
+                coroutineScope.launch {
 
-
-                Log.d("TAG",
-                    "NoteEditMenu:1 ${permissionState.status.isGranted}"
-                )
-
-                Log.d("TAG",
-                    "NoteEditMenu:2 ${packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName)}"
-
-                )
-
-                if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName) == PackageManager.PERMISSION_GRANTED
-                    && notificationManager?.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
-                ) {
-                    showAlarmDialogs()
-                } else if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName) == PackageManager.PERMISSION_GRANTED
-                    && notificationManager?.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE
-                    || (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS, context.packageName) == PackageManager.PERMISSION_DENIED)
-                )
-                        {
-
-                            coroutineScope.launch {
-
-                                val snackBarResult = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-                                    "Please allow notifications to use reminders.",
-                                    "Go to Permissions",
-                                    SnackbarDuration.Long
-                                )
-
-                                if (snackBarResult == SnackbarResult.ActionPerformed) {
-
-                                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-                                    intent.putExtra("android.provider.extra.APP_PACKAGE",
-                                        context.applicationInfo.packageName
-                                    )
-
-                                    context.startActivity(intent)
-                                }
-
-                            }
-                        } else {
-                            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        }
+                    askNotificationPermission(
+                        packageManager,
+                        context,
+                        showAlarmDialogs,
+                        bottomSheetScaffoldState,
+                        launcher
+                    )
+                }
 
                 dropDownMenuExpanded = false
             }) {
@@ -299,8 +257,7 @@ private fun NoteEditMenu(
     }
 }
 
-@Composable
-private fun DateTimePickerDialogs(context : Context, setAlarm : (Context, Long) -> Unit) : () -> Unit {
+private fun showDateTimePickerDialogues(context : Context, setAlarm : (Context, Long) -> Unit) : () -> Unit {
     val calendar = Calendar.getInstance()
 
     val datePicker = DatePickerDialog(
@@ -345,4 +302,52 @@ private fun DateTimePickerDialogs(context : Context, setAlarm : (Context, Long) 
 
     datePicker.datePicker.minDate = calendar.timeInMillis
     return showAlarmDialogs
+}
+@OptIn(ExperimentalMaterialApi::class)
+private suspend fun askNotificationPermission(packageManager : PackageManager,
+                                              context : Context,
+                                              showAlarmDialogs : () -> Unit,
+                                              bottomSheetScaffoldState : BottomSheetScaffoldState,
+                                              launcher : ManagedActivityResultLauncher<String, Boolean>
+) {
+
+    val notificationManager: NotificationManagerCompat? = NotificationManagerCompat.from(context)
+
+    if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS,
+            context.packageName
+        ) == PackageManager.PERMISSION_GRANTED
+        && notificationManager?.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
+    ) {
+        showAlarmDialogs()
+    } else if (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS,
+            context.packageName
+        ) == PackageManager.PERMISSION_GRANTED
+        && notificationManager?.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE
+        || (packageManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS,
+            context.packageName
+        ) == PackageManager.PERMISSION_DENIED)
+    ) {
+
+        val snackBarResult = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+            "Please allow notifications to use reminders.",
+            "Go to Permissions",
+            SnackbarDuration.Long
+        )
+
+        if (snackBarResult == SnackbarResult.ActionPerformed) {
+
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            intent.putExtra("android.provider.extra.APP_PACKAGE",
+                context.applicationInfo.packageName
+            )
+
+            context.startActivity(intent)
+        }
+
+
+    } else {
+        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
 }
