@@ -70,6 +70,7 @@ class NoteEditScreenViewModel @Inject constructor(
     }
 
     fun insertCategory(categoryName : String) {
+        saveNoteText()
         viewModelScope.launch {
             repository.insertCategory(Category(categoryName))
         }
@@ -106,6 +107,7 @@ class NoteEditScreenViewModel @Inject constructor(
     }
 
     fun saveNoteCategory(category : Category) {
+        saveNoteText()
         viewModelScope.launch {
             saveNoteText()
             repository.updateNoteCategory(

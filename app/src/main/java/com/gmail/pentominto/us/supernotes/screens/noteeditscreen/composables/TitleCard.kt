@@ -40,6 +40,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +58,6 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -72,7 +72,6 @@ fun TitleAndMenuCard(
     noteState : NoteEditState,
     onTitleValueChange : (String) -> Unit,
     setAlarm : (Context, Long) -> Unit,
-    coroutineScope : CoroutineScope,
     bottomSheetScaffoldState : BottomSheetScaffoldState
 ) {
 
@@ -133,7 +132,6 @@ fun TitleAndMenuCard(
             NoteEditMenu(
                 noteState = noteState,
                 showAlarmDialogs = showAlarmDialogs,
-                coroutineScope = coroutineScope,
                 context = context,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 launcher = launcher
@@ -156,11 +154,12 @@ fun TitleAndMenuCard(
 private fun NoteEditMenu(
     noteState : NoteEditState,
     showAlarmDialogs : () -> Unit,
-    coroutineScope : CoroutineScope,
     context : Context,
     bottomSheetScaffoldState : BottomSheetScaffoldState,
     launcher : ManagedActivityResultLauncher<String, Boolean>
 ) {
+
+    val coroutineScope = rememberCoroutineScope()
 
     val packageManager = LocalContext.current.packageManager
 

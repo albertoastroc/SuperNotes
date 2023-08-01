@@ -31,6 +31,7 @@ import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenV
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteEditScreen(
     noteid: Int,
@@ -93,7 +94,6 @@ fun NoteEditScreen(
                     noteState = noteState,
                     onTitleValueChange = viewModel::onTitleInputChange,
                     setAlarm = viewModel::setAlarm,
-                    coroutineScope = coroutineScope,
                     bottomSheetScaffoldState = bottomSheetScaffoldState
                 )
 
