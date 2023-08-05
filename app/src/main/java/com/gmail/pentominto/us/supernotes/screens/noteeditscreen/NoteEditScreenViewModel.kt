@@ -18,8 +18,8 @@ import com.gmail.pentominto.us.supernotes.utility.AlarmReceiver
 import com.gmail.pentominto.us.supernotes.utility.Constants.DEFAULT_CATEGORY
 import com.gmail.pentominto.us.supernotes.utility.DateGetter.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
@@ -103,15 +103,12 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveNoteCategory(category: Category) {
-        saveNoteText()
-        viewModelScope.launch {
+    suspend fun onCategoryChange(category: Category) {
             saveNoteText()
             repository.updateNoteCategory(
                 chosenCategory = category.categoryTitle,
                 noteId = noteId
             )
-        }
     }
 
     fun onTitleInputChange(newInput: String) {

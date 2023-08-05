@@ -62,7 +62,6 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @OptIn(
-    ExperimentalPermissionsApi::class,
     ExperimentalMaterialApi::class
 )
 @SuppressLint("MissingPermission")

@@ -1,6 +1,5 @@
 @file:OptIn(
     ExperimentalMaterialApi::class,
-    ExperimentalPermissionsApi::class
 )
 
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
@@ -29,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -113,8 +111,9 @@ fun NoteEditScreen(
                 onAddCategory = viewModel::insertCategory,
                 onDeleteCategory = viewModel::deleteCategory
             ) {
-                viewModel.saveNoteCategory(it)
+
                 coroutineScope.launch {
+                    viewModel.onCategoryChange(it)
                     bottomSheetScaffoldState.bottomSheetState.collapse()
                 }
             }

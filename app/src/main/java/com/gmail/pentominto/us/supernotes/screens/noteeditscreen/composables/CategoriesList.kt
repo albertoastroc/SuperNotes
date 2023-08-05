@@ -82,7 +82,7 @@ fun CategoriesList(
                 CategoryItem(
                     category = category,
                     currentCategory = currentCategory,
-                    onClickCategory = onSelectCategory,
+                    onCategoryChange = onSelectCategory,
                     onDeleteCategory = onDeleteCategory
                 )
             }
@@ -204,7 +204,7 @@ private fun AddCategoryDialog(
 private fun CategoryItem(
     category: Category,
     currentCategory: String,
-    onClickCategory: (Category) -> Unit,
+    onCategoryChange: (Category) -> Unit,
     onDeleteCategory: (Category) -> Unit
 ) {
     Row(
@@ -219,7 +219,7 @@ private fun CategoryItem(
             )
             .height(60.dp)
             .clickable {
-                onClickCategory(category)
+                onCategoryChange(category)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
