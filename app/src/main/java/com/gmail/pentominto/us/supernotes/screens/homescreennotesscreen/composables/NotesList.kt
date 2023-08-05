@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
-import com.gmail.pentominto.us.supernotes.screens.allnotesscreen.AllNotesState
+import com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.HomeScreenNotesState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NotesList(
     paddingValues: PaddingValues,
-    allNotesState: AllNotesState,
+    homeScreenNotesState: HomeScreenNotesState,
     scope: CoroutineScope,
     scaffoldState: ScaffoldState,
     onNoteClick: (Int) -> Unit,
@@ -35,15 +35,15 @@ fun NotesList(
     ) {
         item {
             SearchBarWithMenu(
-                input = allNotesState.searchBarInput,
+                input = homeScreenNotesState.searchBarInput,
                 onInputChange = { onSearchChange(it) },
                 onXClick = { clearSearchBar() },
                 onMenuIconClick = { scope.launch { scaffoldState.drawerState.open() } }
             )
         }
-        allNotesState.notes.entries.forEach { (category, notes) ->
+        homeScreenNotesState.notes.entries.forEach { (category, notes) ->
 
-            if (allNotesState.showCategoryTitles && allNotesState.searchBarInput.isEmpty()) {
+            if (homeScreenNotesState.showCategoryTitles && homeScreenNotesState.searchBarInput.isEmpty()) {
                 item(key = category.categoryTitle) {
                     CategoryHeader(
                         category,
@@ -55,7 +55,7 @@ fun NotesList(
             }
 
             items(
-                items = notes.filterNotes(category, allNotesState.searchBarInput),
+                items = notes.filterNotes(category, homeScreenNotesState.searchBarInput),
                 key = { it.noteId }
             ) { note ->
 

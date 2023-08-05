@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.data.Note
 
 @Composable
-fun NoteContainer(
+fun NoteContentContainer(
     note: Note,
     modifier: Modifier,
     onClick: (Int) -> Unit

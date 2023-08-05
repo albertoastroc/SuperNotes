@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +16,7 @@ fun NoteItem(
         deleteNote = { onNoteSwipe(note) }
 
     ) {
-        NoteContainer(
+        NoteContentContainer(
             note = note,
             modifier = modifier,
             onClick = { onNoteClick(it) }

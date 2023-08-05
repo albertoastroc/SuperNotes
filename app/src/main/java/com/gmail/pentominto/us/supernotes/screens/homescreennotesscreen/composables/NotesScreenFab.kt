@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton

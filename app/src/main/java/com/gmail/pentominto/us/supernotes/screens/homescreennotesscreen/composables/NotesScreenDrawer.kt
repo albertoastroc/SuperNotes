@@ -1,6 +1,6 @@
-package com.gmail.pentominto.us.supernotes.screens.allnotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
 
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.DrawerState
 import androidx.compose.runtime.Composable
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.DrawerMenuOptions
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.MenuItem
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AllNotesDrawer(
     scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
+    drawerState: DrawerState,
     onDrawerItemClick: (Int) -> Unit
 ) {
     Drawer(
@@ -43,7 +43,7 @@ fun AllNotesDrawer(
         ),
         onSettingClick = {
             scope.launch {
-                scaffoldState.drawerState.close()
+                drawerState.close()
                 onDrawerItemClick(it)
             }
         }

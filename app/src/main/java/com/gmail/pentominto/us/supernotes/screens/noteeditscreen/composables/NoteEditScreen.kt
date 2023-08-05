@@ -1,7 +1,3 @@
-@file:OptIn(
-    ExperimentalMaterialApi::class,
-)
-
 package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
 import androidx.compose.foundation.background
@@ -11,10 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables.AllNotesDrawer
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenViewModel
 import kotlinx.coroutines.launch
 
@@ -34,16 +33,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun NoteEditScreen(
     noteid: Int,
-    viewModel: NoteEditScreenViewModel = hiltViewModel()
+    viewModel: NoteEditScreenViewModel = hiltViewModel(),
+    onDrawerItemClick: (Int) -> Unit
 
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
 
     val coroutineScope = rememberCoroutineScope()
-
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
-    )
 
     val noteState by remember { viewModel.noteEditState }
 
@@ -52,7 +48,13 @@ fun NoteEditScreen(
         backgroundColor = MaterialTheme.colors.secondary.copy(alpha = .5f)
     )
 
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed),
+        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    )
+
     DisposableEffect(lifeCycleOwner) {
+
         val observer = LifecycleEventObserver { _, event ->
 
             when (event) {
@@ -77,6 +79,15 @@ fun NoteEditScreen(
         scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = Color.Transparent,
         sheetGesturesEnabled = true,
+        drawerGesturesEnabled = true,
+        drawerBackgroundColor = MaterialTheme.colors.background,
+        drawerContent = {
+            AllNotesDrawer(
+                scope = coroutineScope,
+                drawerState = bottomSheetScaffoldState.drawerState,
+                onDrawerItemClick = onDrawerItemClick
+            )
+        },
         sheetPeekHeight = 0.dp,
         content = {
             Column(
