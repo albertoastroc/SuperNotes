@@ -57,7 +57,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -70,12 +69,12 @@ fun TitleAndMenuCard(
     customTextSelectionColors: TextSelectionColors,
     noteState: NoteEditState,
     onTitleValueChange: (String) -> Unit,
-    setAlarm: (Context, Long) -> Unit,
+    scheduleReminder: (Context, Long) -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState
 ) {
     val context = LocalContext.current
 
-    val showAlarmDialogs = showDateTimePickerDialogues(context, setAlarm)
+    val showAlarmDialogs = showDateTimePickerDialogues(context, scheduleReminder)
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -130,7 +129,7 @@ fun TitleAndMenuCard(
 
             NoteEditMenu(
                 noteState = noteState,
-                showAlarmDialogs = showAlarmDialogs,
+                showReminderSchedulerDialog = showAlarmDialogs,
                 context = context,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
                 launcher = launcher
@@ -147,13 +146,12 @@ fun TitleAndMenuCard(
 }
 
 @OptIn(
-    ExperimentalPermissionsApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
 private fun NoteEditMenu(
     noteState: NoteEditState,
-    showAlarmDialogs: () -> Unit,
+    showReminderSchedulerDialog: () -> Unit,
     context: Context,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     launcher: ManagedActivityResultLauncher<String, Boolean>
@@ -236,10 +234,10 @@ private fun NoteEditMenu(
 
             DropdownMenuItem(onClick = {
                 coroutineScope.launch {
-                    askNotificationPermission(
+                    requestNotificationPermission(
                         packageManager,
                         context,
-                        showAlarmDialogs,
+                        showReminderSchedulerDialog,
                         bottomSheetScaffoldState,
                         launcher
                     )
@@ -301,7 +299,7 @@ private fun showDateTimePickerDialogues(context: Context, setAlarm: (Context, Lo
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-private suspend fun askNotificationPermission(
+private suspend fun requestNotificationPermission(
     packageManager: PackageManager,
     context: Context,
     showAlarmDialogs: () -> Unit,

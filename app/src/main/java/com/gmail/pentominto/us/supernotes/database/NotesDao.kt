@@ -42,7 +42,7 @@ interface NotesDao {
     @Query(
         "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle WHERE note_db_id = :id"
     )
-    fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>>
+    fun getNoteWithItsCategory(id: Int): Flow<Map<Category, Note>>
 
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
     fun getNote(id: Int): Flow<Note>

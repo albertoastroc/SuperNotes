@@ -3,9 +3,9 @@ package com.gmail.pentominto.us.supernotes.repositories
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.database.NotesDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
@@ -14,10 +14,6 @@ class LocalRepositoryImpl @Inject constructor(
 
     override suspend fun insertNote(note: Note): Long {
         return dao.insertNote(note)
-    }
-
-    override suspend fun insertTrashNote(trashNote: Note): Long {
-        return dao.insertNote(trashNote)
     }
 
     override suspend fun updateNote(
@@ -47,10 +43,6 @@ class LocalRepositoryImpl @Inject constructor(
         dao.deleteNote(id)
     }
 
-    override suspend fun deleteTrashNote(id: Int) {
-        dao.deleteNote(id)
-    }
-
     override suspend fun deleteCategory(id: Int) {
         dao.deleteCategory(id)
     }
@@ -63,15 +55,15 @@ class LocalRepositoryImpl @Inject constructor(
         return dao.getAllCategoriesAndNotes()
     }
 
-    override fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>> {
-        return dao.getNoteWithCategory(id)
+    override fun getNoteWithItsCategory(id: Int): Flow<Map<Category, Note>> {
+        return dao.getNoteWithItsCategory(id)
     }
 
     override fun getNote(id: Int): Flow<Note> {
         return dao.getNote(id)
     }
 
-    override fun getAllCategories(): Flow<List<Category>> {
+    override fun getCategories(): Flow<List<Category>> {
         return dao.getAllCategories()
     }
 
@@ -79,7 +71,7 @@ class LocalRepositoryImpl @Inject constructor(
         dao.deleteHomeScreenNotes()
     }
 
-    override suspend fun deleteAllTrashNotes() {
+    override suspend fun deleteTrashNotes() {
         dao.deleteAllTrashNotes()
     }
 

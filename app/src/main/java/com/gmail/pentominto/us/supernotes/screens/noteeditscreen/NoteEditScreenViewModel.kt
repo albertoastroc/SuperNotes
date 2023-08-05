@@ -34,7 +34,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
     private fun getNote(noteId: Int) {
         viewModelScope.launch {
-            repository.getNoteWithCategory(noteId).collect { categoryNoteMap ->
+            repository.getNoteWithItsCategory(noteId).collect { categoryNoteMap ->
 
                 categoryNoteMap.forEach {
                     _noteEditState.value = _noteEditState.value.copy(
@@ -61,7 +61,7 @@ class NoteEditScreenViewModel @Inject constructor(
 
     private fun getCategories() {
         viewModelScope.launch {
-            repository.getAllCategories().collect {
+            repository.getCategories().collect {
                 _noteEditState.value = _noteEditState.value.copy(categories = it)
             }
         }
@@ -123,7 +123,7 @@ class NoteEditScreenViewModel @Inject constructor(
         )
     }
 
-    fun setAlarm(context: Context, alarmTime: Long) {
+    fun scheduleReminder(context: Context, alarmTime: Long) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
 

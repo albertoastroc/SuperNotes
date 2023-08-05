@@ -92,7 +92,7 @@ fun NoteEditScreen(
                     customTextSelectionColors = customTextSelectionColors,
                     noteState = noteState,
                     onTitleValueChange = viewModel::onTitleInputChange,
-                    setAlarm = viewModel::setAlarm,
+                    scheduleReminder = viewModel::scheduleReminder,
                     bottomSheetScaffoldState = bottomSheetScaffoldState
                 )
 

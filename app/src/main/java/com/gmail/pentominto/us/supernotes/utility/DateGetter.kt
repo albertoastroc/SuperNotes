@@ -1,7 +1,8 @@
 package com.gmail.pentominto.us.supernotes.utility
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 object DateGetter {
 

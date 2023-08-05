@@ -8,8 +8,6 @@ interface LocalRepository {
 
     suspend fun insertNote(note: Note): Long
 
-    suspend fun insertTrashNote(trashNote: Note): Long
-
     suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int)
 
     suspend fun updateNoteCategory(chosenCategory: String, noteId: Int)
@@ -18,23 +16,21 @@ interface LocalRepository {
 
     suspend fun deleteNote(id: Int)
 
-    suspend fun deleteTrashNote(id: Int)
-
     suspend fun deleteCategory(id: Int)
 
     fun getNotesOfThisCategory(category: String): Flow<List<Note>>
 
     fun getAllCategoriesAndNotes(): Flow<Map<Category, List<Note>>>
 
-    fun getNoteWithCategory(id: Int): Flow<Map<Category, Note>>
+    fun getNoteWithItsCategory(id: Int): Flow<Map<Category, Note>>
 
     fun getNote(id: Int): Flow<Note>
 
-    fun getAllCategories(): Flow<List<Category>>
+    fun getCategories(): Flow<List<Category>>
 
     suspend fun deleteHomeScreenNotes()
 
-    suspend fun deleteAllTrashNotes()
+    suspend fun deleteTrashNotes()
 
     suspend fun defaultCategoryExists(): Boolean
 }
