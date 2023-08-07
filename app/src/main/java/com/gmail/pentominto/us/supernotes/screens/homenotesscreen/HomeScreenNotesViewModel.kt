@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen
+package com.gmail.pentominto.us.supernotes.screens.homenotesscreen
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -32,12 +32,12 @@ class HomeScreenNotesViewModel @Inject constructor(
         }
     }
     private fun showCategories() {
-        if (_homeScreenNotesState.value.showCategoryTitles && homeScreenNotesState.value.searchBarInput.isEmpty()) {
-            _homeScreenNotesState.value = _homeScreenNotesState.value.copy(showCategoryTitles = true)
-        } else { _homeScreenNotesState.value = _homeScreenNotesState.value.copy(showCategoryTitles = false) }
+        if (_homeScreenNotesState.value.showCategories && homeScreenNotesState.value.searchBarInput.isEmpty()) {
+            _homeScreenNotesState.value = _homeScreenNotesState.value.copy(showCategories = true)
+        } else { _homeScreenNotesState.value = _homeScreenNotesState.value.copy(showCategories = false) }
     }
 
-    private fun getNotesList() = viewModelScope.launch {
+    private fun getNotes() = viewModelScope.launch {
         repository.getAllCategoriesAndNotes().collect { categoryNotesMap ->
 
             _homeScreenNotesState.value = _homeScreenNotesState.value.copy(notes = categoryNotesMap)
@@ -77,7 +77,7 @@ class HomeScreenNotesViewModel @Inject constructor(
 
                 if (preferences.contains(hideCategoriesKey)) {
                     _homeScreenNotesState.value = _homeScreenNotesState.value.copy(
-                        showCategoryTitles = preferences[hideCategoriesKey] ?: true
+                        showCategories = preferences[hideCategoriesKey] ?: true
                     )
                 }
 
@@ -92,7 +92,7 @@ class HomeScreenNotesViewModel @Inject constructor(
 
     init {
         getPrefs()
-        getNotesList()
+        getNotes()
         showCategories()
     }
 }

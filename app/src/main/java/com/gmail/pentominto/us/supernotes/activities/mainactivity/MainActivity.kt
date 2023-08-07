@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavIntents
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavigationId
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.OptionMenuId
-import com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables.NotesScreen
+import com.gmail.pentominto.us.supernotes.screens.homenotesscreen.composables.HomeNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
 import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.composables.ReadOnlyNoteScreen
@@ -92,7 +92,7 @@ private fun SuperNotesApp(navController: NavHostController) {
             arguments = emptyList(),
             deepLinks = emptyList()
         ) {
-            NotesScreen(
+            HomeNotesScreen(
                 onNoteClick = { noteId ->
                     navController.navigate("${NavigationId.EDIT_NOTE.destination}/$noteId")
                 },
@@ -167,69 +167,9 @@ private fun SuperNotesApp(navController: NavHostController) {
         }
     }
 }
-//
-//fun NavGraphBuilder.transitionDestination(
-//    routeName: String,
-//    deepLinks: List<NavDeepLink>,
-//    destinations: List<String>,
-//    arguments: List<NamedNavArgument>,
-//    content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
-//) {
-//    composable(
-//        routeName,
-//        deepLinks = deepLinks,
-//        enterTransition = {
-//            when (initialState.destination.route) {
-//                in destinations ->
-//
-//                    slideIntoContainer(
-//                        AnimatedContentScope.SlideDirection.Left,
-//                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
-//                    )
-//                else -> null
-//            }
-//        },
-//        exitTransition = {
-//            when (targetState.destination.route) {
-//                in destinations ->
-//                    slideOutOfContainer(
-//                        AnimatedContentScope.SlideDirection.Left,
-//                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
-//                    )
-//                else -> null
-//            }
-//        },
-//        popEnterTransition = {
-//            when (initialState.destination.route) {
-//                in destinations ->
-//                    slideIntoContainer(
-//                        AnimatedContentScope.SlideDirection.Right,
-//                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
-//                    )
-//                else -> null
-//            }
-//        },
-//        popExitTransition = {
-//            when (targetState.destination.route) {
-//                in destinations ->
-//                    slideOutOfContainer(
-//                        AnimatedContentScope.SlideDirection.Right,
-//                        animationSpec = tween(DEFAULT_ANIMATION_DURATION)
-//                    )
-//                else -> null
-//            }
-//        },
-//        content = content,
-//        arguments = arguments
-//    )
-//}
 
 private fun navigateToMenuItem(menuItemId: Int, navController: NavHostController, context: Context) {
     when (menuItemId) {
-
-        OptionMenuId.HOME.optionMenuId -> navController.navigate(
-            NavigationId.ALL_NOTES.destination
-        )
 
         OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(
             NavigationId.OPTIONS.destination

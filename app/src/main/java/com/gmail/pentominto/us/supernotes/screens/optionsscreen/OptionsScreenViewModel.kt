@@ -60,7 +60,7 @@ class OptionsScreenViewModel @Inject constructor(
         }
     }
 
-    fun getPrefs() {
+    private fun getPreferences() {
         viewModelScope.launch {
             dataStore.data.collect { preferences ->
 
@@ -85,19 +85,19 @@ class OptionsScreenViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllNotes() {
+    fun deleteHomeScreenNotes() {
         viewModelScope.launch {
             repository.deleteHomeScreenNotes()
         }
     }
 
-    fun deleteAllTrashNotes() {
+    fun deleteTrashNotes() {
         viewModelScope.launch {
             repository.deleteTrashNotes()
         }
     }
 
     init {
-        getPrefs()
+        getPreferences()
     }
 }

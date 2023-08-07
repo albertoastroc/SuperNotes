@@ -9,9 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.repositories.LocalRepository
 import com.gmail.pentominto.us.supernotes.utility.Constants.FIREBASE_ID_KEY
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -37,8 +34,8 @@ class MainActivityViewModel @Inject constructor(
 
             dataStore.data.collect { preferences ->
 
-                Firebase.crashlytics.setUserId(preferences[userIdKey] ?: String())
-                Firebase.analytics.setUserId(preferences[userIdKey] ?: String())
+//                Firebase.crashlytics.setUserId(preferences[userIdKey] ?: String())
+//                Firebase.analytics.setUserId(preferences[userIdKey] ?: String())
             }
         }
     }

@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
+    //id 'com.google.gms.google-services'
+    //id 'com.google.firebase.crashlytics'
     id 'org.jlleitschuh.gradle.ktlint' version '11.3.1'
 }
 
@@ -12,7 +12,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.gmail.pentominto.us.supernotes"
+        applicationId "com.gmail.pentominto.us.supernotestest"
         minSdk 29
         targetSdk 33
         versionCode 1

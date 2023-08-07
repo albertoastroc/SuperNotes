@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
+package com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,7 +26,7 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.MenuItem
 
 @Composable
-fun Drawer(
+fun NavigationDrawerContainer(
     drawerOptionsList: List<MenuItem>,
     onSettingClick: (Int) -> Unit,
     itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp)

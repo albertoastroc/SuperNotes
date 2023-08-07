@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homenotesscreen.composables
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme

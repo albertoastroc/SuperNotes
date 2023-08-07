@@ -36,7 +36,7 @@ fun OptionsList(
         yesButtonMessage = "Delete",
         noButtonMessage = "Cancel"
     ) {
-        viewModel.deleteAllNotes()
+        viewModel.deleteHomeScreenNotes()
     }
     OptionsRowWithAlertDialog(
         title = "Delete notes in Trash folder",
@@ -45,7 +45,7 @@ fun OptionsList(
         yesButtonMessage = "Delete",
         noButtonMessage = "Cancel"
     ) {
-        viewModel.deleteAllTrashNotes()
+        viewModel.deleteTrashNotes()
     }
 
     OptionsRowWithAlertDialog(

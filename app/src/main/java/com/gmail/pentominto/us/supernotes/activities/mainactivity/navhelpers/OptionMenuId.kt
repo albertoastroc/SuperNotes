@@ -5,10 +5,6 @@ enum class OptionMenuId(
     val optionMenuId: Int
 ) {
 
-    HOME(
-        optionName = "Home",
-        optionMenuId = 1
-    ),
     OPTIONS(
         optionName = "Options",
         optionMenuId = 2

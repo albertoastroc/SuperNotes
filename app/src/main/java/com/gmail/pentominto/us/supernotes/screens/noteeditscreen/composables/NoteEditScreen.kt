@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables.AllNotesDrawer
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptions
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenViewModel
 import kotlinx.coroutines.launch
 
@@ -58,7 +58,9 @@ fun NoteEditScreen(
         val observer = LifecycleEventObserver { _, event ->
 
             when (event) {
-                Lifecycle.Event.ON_STOP, Lifecycle.Event.ON_PAUSE
+                Lifecycle.Event.ON_STOP,
+                Lifecycle.Event.ON_PAUSE,
+                Lifecycle.Event.ON_DESTROY
                 -> {
                     viewModel.saveNoteText()
                 }
@@ -82,8 +84,7 @@ fun NoteEditScreen(
         drawerGesturesEnabled = true,
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
-            AllNotesDrawer(
-                scope = coroutineScope,
+            NavigationDrawerOptions(
                 drawerState = bottomSheetScaffoldState.drawerState,
                 onDrawerItemClick = onDrawerItemClick
             )

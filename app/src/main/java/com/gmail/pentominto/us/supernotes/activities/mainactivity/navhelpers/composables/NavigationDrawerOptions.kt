@@ -1,25 +1,22 @@
-package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
+package com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables
 
 import androidx.compose.material.DrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.DrawerMenuOptions
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.MenuItem
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun AllNotesDrawer(
-    scope: CoroutineScope,
+fun NavigationDrawerOptions(
     drawerState: DrawerState,
     onDrawerItemClick: (Int) -> Unit
 ) {
-    Drawer(
+
+    val coroutineScope = rememberCoroutineScope()
+
+    NavigationDrawerContainer(
         drawerOptionsList = listOf(
-            MenuItem(
-                id = DrawerMenuOptions.HOME.menuId,
-                title = DrawerMenuOptions.HOME.title,
-                icon = DrawerMenuOptions.HOME.icon
-            ),
             MenuItem(
                 id = DrawerMenuOptions.OPTIONS.menuId,
                 title = DrawerMenuOptions.OPTIONS.title,
@@ -42,7 +39,7 @@ fun AllNotesDrawer(
             )
         ),
         onSettingClick = {
-            scope.launch {
+            coroutineScope.launch {
                 drawerState.close()
                 onDrawerItemClick(it)
             }

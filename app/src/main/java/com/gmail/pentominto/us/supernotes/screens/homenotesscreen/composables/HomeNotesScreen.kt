@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.composables
+package com.gmail.pentominto.us.supernotes.screens.homenotesscreen.composables
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.DrawerValue
@@ -9,35 +9,31 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.supernotes.screens.homescreennotesscreen.HomeScreenNotesViewModel
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptions
+import com.gmail.pentominto.us.supernotes.screens.homenotesscreen.HomeScreenNotesViewModel
 
 @Composable
-fun NotesScreen(
+fun HomeNotesScreen(
     viewModel: HomeScreenNotesViewModel = hiltViewModel(),
     onNoteClick: (Int) -> Unit,
     onDrawerItemClick: (Int) -> Unit
 ) {
-    val allNotesState by remember { viewModel.homeScreenNotesState }
+    val homeNotesState by remember { viewModel.homeScreenNotesState }
 
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     )
 
-    val coroutineScope = rememberCoroutineScope()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = MaterialTheme.colors.background,
         scaffoldState = scaffoldState,
-//        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
         drawerGesturesEnabled = true,
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
-            AllNotesDrawer(
-                scope = coroutineScope,
+            NavigationDrawerOptions(
                 drawerState = scaffoldState.drawerState,
                 onDrawerItemClick = onDrawerItemClick
             )
@@ -46,8 +42,7 @@ fun NotesScreen(
 
             NotesList(
                 paddingValues = paddingValues,
-                homeScreenNotesState = allNotesState,
-                scope = coroutineScope,
+                homeScreenNotesState = homeNotesState,
                 scaffoldState = scaffoldState,
                 onNoteClick = onNoteClick,
                 onNoteSwipe = viewModel::onNoteSwipe,
