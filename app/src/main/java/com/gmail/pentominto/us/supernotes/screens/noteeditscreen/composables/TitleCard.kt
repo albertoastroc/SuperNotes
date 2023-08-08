@@ -8,6 +8,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -306,45 +307,51 @@ private suspend fun requestNotificationPermission(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {
-    val notificationManager: NotificationManagerCompat? = NotificationManagerCompat.from(context)
+    val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
 
-    if (packageManager.checkPermission(
-            Manifest.permission.POST_NOTIFICATIONS,
-            context.packageName
-        ) == PackageManager.PERMISSION_GRANTED &&
-        notificationManager?.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
-    ) {
-        showAlarmDialogs()
-    } else if (packageManager.checkPermission(
-            Manifest.permission.POST_NOTIFICATIONS,
-            context.packageName
-        ) == PackageManager.PERMISSION_GRANTED &&
-        notificationManager?.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE ||
-        (
-            packageManager.checkPermission(
-                    Manifest.permission.POST_NOTIFICATIONS,
-                    context.packageName
-                ) == PackageManager.PERMISSION_DENIED
-            )
-    ) {
-        val snackBarResult = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-            "Please allow notifications to use reminders.",
-            "Go to Permissions",
-            SnackbarDuration.Long
-        )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-        if (snackBarResult == SnackbarResult.ActionPerformed) {
-            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-            intent.putExtra(
-                "android.provider.extra.APP_PACKAGE",
-                context.applicationInfo.packageName
+        if (packageManager.checkPermission(
+                Manifest.permission.POST_NOTIFICATIONS,
+                context.packageName
+            ) == PackageManager.PERMISSION_GRANTED &&
+            notificationManager.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
+        ) {
+            showAlarmDialogs()
+        } else if (packageManager.checkPermission(
+                Manifest.permission.POST_NOTIFICATIONS,
+                context.packageName
+            ) == PackageManager.PERMISSION_GRANTED &&
+            notificationManager.getNotificationChannel("1")?.importance == NotificationManager.IMPORTANCE_NONE ||
+            (
+                    packageManager.checkPermission(
+                        Manifest.permission.POST_NOTIFICATIONS,
+                        context.packageName
+                    ) == PackageManager.PERMISSION_DENIED
+                    )
+        ) {
+            val snackBarResult = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                "Please allow notifications to use reminders.",
+                "Go to Permissions",
+                SnackbarDuration.Long
             )
 
-            context.startActivity(intent)
+            if (snackBarResult == SnackbarResult.ActionPerformed) {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                intent.putExtra(
+                    "android.provider.extra.APP_PACKAGE",
+                    context.applicationInfo.packageName
+                )
+
+                context.startActivity(intent)
+            }
+        } else {
+
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     } else {
-        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        showAlarmDialogs()
     }
 }

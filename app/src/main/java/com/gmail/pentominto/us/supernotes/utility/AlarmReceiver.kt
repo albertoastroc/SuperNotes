@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.supernotes.utility
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.getActivity
@@ -15,9 +14,8 @@ import com.gmail.pentominto.us.supernotes.R
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
 
-    // TODO ask for permissions
-    @SuppressLint("MissingPermission")
-    override fun onReceive(context: Context?, intent: Intent?) {
+    @Throws(SecurityException::class)
+        override fun onReceive(context: Context?, intent: Intent?) {
         val idExtra = intent?.getIntExtra("note_id", 0)
         val titleExtra = intent?.getStringExtra("note_title")
         val bodyExtra = intent?.getStringExtra("note_body")
