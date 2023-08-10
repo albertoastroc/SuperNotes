@@ -14,7 +14,6 @@ object Constants {
     const val USER_HIDE_CATEGORIES_KEY = "hide_categories"
 
     // MainActivity
-    const val DEFAULT_ANIMATION_DURATION = 500
 
     const val NOTE_EDIT_NAVIGATION_URI = "myapp://supernotes/noteeditscreen/{noteid}"
 

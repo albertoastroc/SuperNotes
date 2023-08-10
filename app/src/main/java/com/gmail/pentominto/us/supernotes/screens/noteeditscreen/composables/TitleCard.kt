@@ -2,9 +2,7 @@ package com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.app.NotificationManager
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -59,7 +57,6 @@ import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 @OptIn(
     ExperimentalMaterialApi::class
@@ -75,13 +72,7 @@ fun TitleAndMenuCard(
 ) {
     val context = LocalContext.current
 
-    val showAlarmDialogs = showDateTimePickerDialogues(context, scheduleReminder)
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) { showAlarmDialogs() }
-    }
 
     Card(
         modifier = Modifier,
@@ -130,10 +121,11 @@ fun TitleAndMenuCard(
 
             NoteEditMenu(
                 noteState = noteState,
-                showReminderSchedulerDialog = showAlarmDialogs,
+               // showReminderSchedulerDialog = showAlarmDialogs,
+                scheduleReminder = scheduleReminder,
                 context = context,
                 bottomSheetScaffoldState = bottomSheetScaffoldState,
-                launcher = launcher
+              //  launcher = launcher
             )
         }
     }
@@ -152,11 +144,15 @@ fun TitleAndMenuCard(
 @Composable
 private fun NoteEditMenu(
     noteState: NoteEditState,
-    showReminderSchedulerDialog: () -> Unit,
+    scheduleReminder : (Context, Long) -> Unit,
+    //showReminderSchedulerDialog: () -> Unit,
     context: Context,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    launcher: ManagedActivityResultLauncher<String, Boolean>
+    //launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {
+
+    val shouldShowDateTimePickerDialogue =  remember { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
 
     val packageManager = LocalContext.current.packageManager
@@ -166,6 +162,22 @@ private fun NoteEditMenu(
     val clipboardManager = LocalClipboardManager.current
 
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) { shouldShowDateTimePickerDialogue.value = true }
+    }
+
+    if (shouldShowDateTimePickerDialogue.value){
+
+        DateTimePickerDialogue(
+            context = context,
+            shouldShowDateTimePickerDialogue = shouldShowDateTimePickerDialogue,
+            scheduleReminder = scheduleReminder
+        )
+
+    }
 
     Column {
         Icon(
@@ -234,76 +246,147 @@ private fun NoteEditMenu(
             }
 
             DropdownMenuItem(onClick = {
+
                 coroutineScope.launch {
+
                     requestNotificationPermission(
                         packageManager,
                         context,
-                        showReminderSchedulerDialog,
                         bottomSheetScaffoldState,
                         launcher
                     )
+
                 }
 
-                dropDownMenuExpanded = false
+
+
+
+//                coroutineScope.launch {
+//                    requestNotificationPermission(
+//                        packageManager,
+//                        context,
+//                        showReminderSchedulerDialog,
+//                        bottomSheetScaffoldState,
+//                        launcher
+//                    )
+//                }
+//
+//                dropDownMenuExpanded = false
             }) {
                 Text(text = "Set reminder")
             }
         }
     }
 }
+//@Composable
+//fun DateTimePickerDialogue(context : Context){
+//
+//    val calendar = Calendar.getInstance()
+//
+//    val datePicker = DatePickerDialog(
+//        context,
+//        { _, year, month, dayOfMonth ->
+//            calendar.set(year, month, dayOfMonth)
+//        },
+//        calendar[Calendar.YEAR],
+//        calendar[Calendar.MONTH],
+//        calendar[Calendar.DAY_OF_MONTH]
+//    )
+//
+//    val timePicker = TimePickerDialog(
+//        context,
+//        { view, selectedHour: Int, selectedMinute: Int ->
+//            calendar.set(
+//                datePicker.datePicker.year,
+//                datePicker.datePicker.month,
+//                datePicker.datePicker.dayOfMonth,
+//                selectedHour,
+//                selectedMinute
+//            )
+//        },
+//        calendar[Calendar.HOUR_OF_DAY],
+//        calendar[Calendar.MINUTE],
+//        false
+//    )
+//
+//    Dialog(onDismissRequest = { }) {
+//
+//        Surface(
+//            shape = RoundedCornerShape(16.dp),
+//            color = Color.White
+//        ) {
+//            Box(
+//                modifier = Modifier,
+//                contentAlignment = Alignment.Center){
+//
+//                Row() {
+//                    Text(text = "First row")
+//                }
+//
+//                Row() {
+//                    Text(text = "Second row")
+//                }
+//
+//            }
+//        }
+//
+//    }
+//
+//}
 
-private fun showDateTimePickerDialogues(context: Context, setAlarm: (Context, Long) -> Unit): () -> Unit {
-    val calendar = Calendar.getInstance()
+//private fun showDateTimePickerDialogues(context: Context, setAlarm: (Context, Long) -> Unit): () -> Unit {
+//
+//    val calendar = Calendar.getInstance()
+//
+//    val datePicker = DatePickerDialog(
+//        context,
+//        { _, year, month, dayOfMonth ->
+//            calendar.set(year, month, dayOfMonth)
+//        },
+//        calendar[Calendar.YEAR],
+//        calendar[Calendar.MONTH],
+//        calendar[Calendar.DAY_OF_MONTH]
+//    )
+//
+//    val timePicker = TimePickerDialog(
+//        context,
+//        { view, selectedHour: Int, selectedMinute: Int ->
+//            calendar.set(
+//                datePicker.datePicker.year,
+//                datePicker.datePicker.month,
+//                datePicker.datePicker.dayOfMonth,
+//                selectedHour,
+//                selectedMinute
+//            )
+//        },
+//        calendar[Calendar.HOUR_OF_DAY],
+//        calendar[Calendar.MINUTE],
+//        false
+//    )
+//
+//    val showAlarmDialogs = {
+//        datePicker.show()
+//        datePicker.setOnDateSetListener { _, _, _, _ ->
+//
+//            timePicker.show()
+//            timePicker.setOnDismissListener {
+//                setAlarm(
+//                    context,
+//                    calendar.timeInMillis
+//                )
+//            }
+//        }
+//    }
+//
+//    datePicker.datePicker.minDate = calendar.timeInMillis
+//    return showAlarmDialogs
+//}
 
-    val datePicker = DatePickerDialog(
-        context,
-        { _, year, month, dayOfMonth ->
-            calendar.set(year, month, dayOfMonth)
-        },
-        calendar[Calendar.YEAR],
-        calendar[Calendar.MONTH],
-        calendar[Calendar.DAY_OF_MONTH]
-    )
-
-    val timePicker = TimePickerDialog(
-        context,
-        { view, selectedHour: Int, selectedMinute: Int ->
-            calendar.set(
-                datePicker.datePicker.year,
-                datePicker.datePicker.month,
-                datePicker.datePicker.dayOfMonth,
-                selectedHour,
-                selectedMinute
-            )
-        },
-        calendar[Calendar.HOUR_OF_DAY],
-        calendar[Calendar.MINUTE],
-        false
-    )
-
-    val showAlarmDialogs = {
-        datePicker.show()
-        datePicker.setOnDateSetListener { _, _, _, _ ->
-
-            timePicker.show()
-            timePicker.setOnDismissListener {
-                setAlarm(
-                    context,
-                    calendar.timeInMillis
-                )
-            }
-        }
-    }
-
-    datePicker.datePicker.minDate = calendar.timeInMillis
-    return showAlarmDialogs
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 private suspend fun requestNotificationPermission(
     packageManager: PackageManager,
     context: Context,
-    showAlarmDialogs: () -> Unit,
     bottomSheetScaffoldState: BottomSheetScaffoldState,
     launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {
@@ -317,7 +400,7 @@ private suspend fun requestNotificationPermission(
             ) == PackageManager.PERMISSION_GRANTED &&
             notificationManager.getNotificationChannel("1")?.importance != NotificationManager.IMPORTANCE_NONE
         ) {
-            showAlarmDialogs()
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else if (packageManager.checkPermission(
                 Manifest.permission.POST_NOTIFICATIONS,
                 context.packageName
@@ -352,6 +435,6 @@ private suspend fun requestNotificationPermission(
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     } else {
-        showAlarmDialogs()
+        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 }

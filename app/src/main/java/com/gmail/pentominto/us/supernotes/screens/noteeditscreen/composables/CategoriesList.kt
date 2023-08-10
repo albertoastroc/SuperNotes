@@ -45,7 +45,7 @@ fun CategoriesList(
     onDeleteCategory: (Category) -> Unit,
     onSelectCategory: (Category) -> Unit
 ) {
-    val openCategoryDialog = remember { mutableStateOf(false) }
+    val shouldShowCategoryDialog = remember { mutableStateOf(false) }
 
     val dialogInput = remember { mutableStateOf(String()) }
 
@@ -62,11 +62,11 @@ fun CategoriesList(
                 .heightIn(max = 450.dp)
         ) {
             item {
-                AddItemRow(openCategoryDialog)
+                AddItemRow(shouldShowCategoryDialog)
 
-                if (openCategoryDialog.value) {
+                if (shouldShowCategoryDialog.value) {
                     AddCategoryDialog(
-                        openCategoryDialog = openCategoryDialog,
+                        shouldShowCategoryDialog = shouldShowCategoryDialog,
                         dialogTitleState = dialogTitleState,
                         dialogInput = dialogInput,
                         onClickDialog = onAddCategory
@@ -124,14 +124,14 @@ private fun AddItemRow(openCategoryDialog: MutableState<Boolean>) {
 
 @Composable
 private fun AddCategoryDialog(
-    openCategoryDialog: MutableState<Boolean>,
+    shouldShowCategoryDialog: MutableState<Boolean>,
     dialogTitleState: MutableState<String>,
     dialogInput: MutableState<String>,
     onClickDialog: (String) -> Unit
 ) {
     AlertDialog(
         modifier = Modifier.width(400.dp),
-        onDismissRequest = { openCategoryDialog.value = false },
+        onDismissRequest = { shouldShowCategoryDialog.value = false },
         backgroundColor = MaterialTheme.colors.background,
         title = {
             Text(
@@ -166,7 +166,7 @@ private fun AddCategoryDialog(
                     .padding(bottom = 16.dp)
             ) {
                 Button(
-                    onClick = { openCategoryDialog.value = false },
+                    onClick = { shouldShowCategoryDialog.value = false },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colors.onSecondary,
                         backgroundColor = MaterialTheme.colors.secondary
@@ -181,7 +181,7 @@ private fun AddCategoryDialog(
                     onClick = {
                         if (dialogInput.value.isNotEmpty()) {
                             onClickDialog(dialogInput.value)
-                            openCategoryDialog.value = false
+                            shouldShowCategoryDialog.value = false
                             dialogInput.value = ""
                         } else {
                             dialogTitleState.value = "Note Category name is empty"
