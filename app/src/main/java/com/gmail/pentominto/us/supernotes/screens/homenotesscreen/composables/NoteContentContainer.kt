@@ -29,9 +29,9 @@ import com.gmail.pentominto.us.supernotes.data.Note
 
 @Composable
 fun NoteContentContainer(
-    note: Note,
-    modifier: Modifier,
-    onClick: (Int) -> Unit
+    note : Note,
+    modifier : Modifier,
+    onClick : (Int) -> Unit
 ) {
     Card(
         modifier = modifier

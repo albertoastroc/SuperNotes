@@ -6,7 +6,7 @@ import java.util.Locale
 
 object DateGetter {
 
-    fun getCurrentDate(): String {
+    fun getCurrentDate() : String {
         val currentTime = Calendar.getInstance().time
         val dateFormatter = SimpleDateFormat(
             "M/d/yy",

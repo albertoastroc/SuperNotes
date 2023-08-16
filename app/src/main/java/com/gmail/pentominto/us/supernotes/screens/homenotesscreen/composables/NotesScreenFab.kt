@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.R
 
 @Composable
-fun AllNotesFab(onNoteClick: (Int) -> Unit) {
+fun AllNotesFab(onNoteClick : (Int) -> Unit) {
     FloatingActionButton(
         content = {
             Icon(

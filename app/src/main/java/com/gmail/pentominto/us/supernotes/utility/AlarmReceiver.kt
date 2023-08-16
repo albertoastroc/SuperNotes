@@ -12,11 +12,14 @@ import androidx.core.app.NotificationManagerCompat
 import com.gmail.pentominto.us.supernotes.R
 
 class AlarmReceiver : BroadcastReceiver() {
-    private var notificationManager: NotificationManagerCompat? = null
+
+    private var notificationManager : NotificationManagerCompat? = null
 
     @Throws(SecurityException::class)
-        override fun onReceive(context: Context?, intent: Intent?) {
-        val idExtra = intent?.getIntExtra("note_id", 0)
+    override fun onReceive(context : Context?, intent : Intent?) {
+        val idExtra = intent?.getIntExtra("note_id",
+            0
+        )
         val titleExtra = intent?.getStringExtra("note_title")
         val bodyExtra = intent?.getStringExtra("note_body")
 
@@ -26,7 +29,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 Uri.parse("myapp://supernotes/noteeditscreen/$id")
             )
 
-            val pendingIntent: PendingIntent = getActivity(
+            val pendingIntent : PendingIntent = getActivity(
                 context,
                 id,
                 tapResultIntent,
@@ -34,7 +37,9 @@ class AlarmReceiver : BroadcastReceiver() {
             )
 
             val notification = context?.let {
-                NotificationCompat.Builder(it, "1")
+                NotificationCompat.Builder(it,
+                    "1"
+                )
                     .setContentTitle(titleExtra)
                     .setContentText(bodyExtra)
                     .setSmallIcon(R.drawable.notification_note)
@@ -45,7 +50,11 @@ class AlarmReceiver : BroadcastReceiver() {
             }
 
             notificationManager = context?.let { NotificationManagerCompat.from(it) }
-            notification?.let { notificationManager?.notify(id, it) }
+            notification?.let {
+                notificationManager?.notify(id,
+                    it
+                )
+            }
         }
     }
 }

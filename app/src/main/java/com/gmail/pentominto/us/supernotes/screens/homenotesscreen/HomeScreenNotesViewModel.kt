@@ -16,25 +16,34 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenNotesViewModel @Inject constructor(
-    private val repository: LocalRepository,
-    private val dataStore: DataStore<Preferences>
+    private val repository : LocalRepository,
+    private val dataStore : DataStore<Preferences>
 ) : ViewModel() {
 
-    private val _homeScreenNotesState: MutableState<HomeScreenNotesState> = mutableStateOf(HomeScreenNotesState())
-    val homeScreenNotesState: State<HomeScreenNotesState> = _homeScreenNotesState
+    private val _homeScreenNotesState : MutableState<HomeScreenNotesState> = mutableStateOf(
+        HomeScreenNotesState()
+    )
+    val homeScreenNotesState : State<HomeScreenNotesState> = _homeScreenNotesState
 
     private val hideCategoriesKey = booleanPreferencesKey("hide_categories")
     private val isTrashEnabledKey = booleanPreferencesKey("trash_enabled")
 
-    fun onSearchChange(input: String) {
+    fun onSearchChange(input : String) {
         viewModelScope.launch {
-            _homeScreenNotesState.value = _homeScreenNotesState.value.copy(searchBarInput = input.lowercase())
+            _homeScreenNotesState.value = _homeScreenNotesState.value.copy(
+                searchBarInput = input.lowercase()
+            )
         }
     }
+
     private fun showCategories() {
         if (_homeScreenNotesState.value.showCategories && homeScreenNotesState.value.searchBarInput.isEmpty()) {
             _homeScreenNotesState.value = _homeScreenNotesState.value.copy(showCategories = true)
-        } else { _homeScreenNotesState.value = _homeScreenNotesState.value.copy(showCategories = false) }
+        } else {
+            _homeScreenNotesState.value = _homeScreenNotesState.value.copy(
+                showCategories = false
+            )
+        }
     }
 
     private fun getNotes() = viewModelScope.launch {
@@ -44,13 +53,13 @@ class HomeScreenNotesViewModel @Inject constructor(
         }
     }
 
-    private fun deleteNote(note: Note) {
+    private fun deleteNote(note : Note) {
         viewModelScope.launch {
             repository.deleteNote(note.noteId)
         }
     }
 
-    private fun sendToTrash(note: Note) {
+    private fun sendToTrash(note : Note) {
         viewModelScope.launch {
             repository.updateNoteCategory(
                 "TrashNotesAPPTAG",
@@ -59,7 +68,7 @@ class HomeScreenNotesViewModel @Inject constructor(
         }
     }
 
-    fun onNoteSwipe(note: Note) {
+    fun onNoteSwipe(note : Note) {
         if (homeScreenNotesState.value.trashEnabled) {
             sendToTrash(note)
         } else {

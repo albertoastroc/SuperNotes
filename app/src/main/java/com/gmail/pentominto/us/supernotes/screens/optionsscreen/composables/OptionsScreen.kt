@@ -20,7 +20,7 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreenVie
 
 @Composable
 fun OptionsScreen(
-    viewModel: OptionsScreenViewModel = hiltViewModel()
+    viewModel : OptionsScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -53,6 +53,3 @@ private fun OptionsTitle() {
         color = MaterialTheme.colors.onBackground
     )
 }
-
-
-

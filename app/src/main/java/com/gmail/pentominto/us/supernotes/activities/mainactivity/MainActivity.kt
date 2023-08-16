@@ -7,7 +7,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Process
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -39,7 +38,7 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
 
         createNotificationChannel(this)
@@ -47,8 +46,6 @@ class MainActivity : ComponentActivity() {
         actionBar?.hide()
 
         ViewModelProvider(this).get(MainActivityViewModel::class.java)
-
-        Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT)
 
         setContent {
             SuperNotesTheme {
@@ -78,15 +75,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun SuperNotesApp(navController: NavHostController) {
+private fun SuperNotesApp(navController : NavHostController) {
     val context = LocalContext.current
 
     NavHost(
         navController = navController,
         startDestination = NavigationId.ALL_NOTES.destination
     ) {
-
-
         composable(
             route = NavigationId.ALL_NOTES.destination,
             arguments = emptyList(),
@@ -98,7 +93,10 @@ private fun SuperNotesApp(navController: NavHostController) {
                 },
                 onDrawerItemClick = { menuItemId ->
 
-                    navigateToMenuItem(menuItemId, navController, context)
+                    navigateToMenuItem(menuItemId,
+                        navController,
+                        context
+                    )
                 }
             )
         }
@@ -136,7 +134,10 @@ private fun SuperNotesApp(navController: NavHostController) {
                     noteid = noteId,
                     onDrawerItemClick = { menuItemId ->
 
-                        navigateToMenuItem(menuItemId, navController, context)
+                        navigateToMenuItem(menuItemId,
+                            navController,
+                            context
+                        )
                     }
 
                 )
@@ -168,18 +169,18 @@ private fun SuperNotesApp(navController: NavHostController) {
     }
 }
 
-private fun navigateToMenuItem(menuItemId: Int, navController: NavHostController, context: Context) {
+private fun navigateToMenuItem(menuItemId : Int, navController : NavHostController, context : Context) {
     when (menuItemId) {
 
-        OptionMenuId.OPTIONS.optionMenuId -> navController.navigate(
+        OptionMenuId.OPTIONS.optionMenuId        -> navController.navigate(
             NavigationId.OPTIONS.destination
         )
 
-        OptionMenuId.TRASH.optionMenuId -> navController.navigate(
+        OptionMenuId.TRASH.optionMenuId          -> navController.navigate(
             NavigationId.ALL_TRASH_NOTES.destination
         )
 
-        OptionMenuId.PLAY_STORE.optionMenuId -> context.startActivity(
+        OptionMenuId.PLAY_STORE.optionMenuId     -> context.startActivity(
             NavIntents.getPlaystoreIntent()
         )
 
@@ -189,9 +190,9 @@ private fun navigateToMenuItem(menuItemId: Int, navController: NavHostController
     }
 }
 
-private fun createNotificationChannel(activity: Context) {
+private fun createNotificationChannel(activity : Context) {
     val channelName = "Reminders"
-    val channelDescriptionText = "Allow notification reminders for a future date and time."
+    val channelDescriptionText = "Allows note reminder notifications."
     val importance = NotificationManager.IMPORTANCE_HIGH
     val channel = NotificationChannel(
         "1",
@@ -200,7 +201,7 @@ private fun createNotificationChannel(activity: Context) {
     ).apply {
         description = channelDescriptionText
     }
-    val notificationManager: NotificationManager =
+    val notificationManager : NotificationManager =
         activity.getSystemService(ComponentActivity.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.createNotificationChannel(channel)
 }

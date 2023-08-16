@@ -22,8 +22,8 @@ import com.gmail.pentominto.us.supernotes.screens.trashnotescreen.TrashNotesView
 
 @Composable
 fun TrashNotesScreen(
-    viewModel: TrashNotesViewModel = hiltViewModel(),
-    onTrashNoteClick: (Int) -> Unit
+    viewModel : TrashNotesViewModel = hiltViewModel(),
+    onTrashNoteClick : (Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -65,10 +65,10 @@ fun TrashNotesScreen(
 
 @Composable
 private fun TrashNote(
-    viewModel: TrashNotesViewModel,
-    note: Note,
-    onTrashNoteClick: (Int) -> Unit,
-    modifier: Modifier
+    viewModel : TrashNotesViewModel,
+    note : Note,
+    onTrashNoteClick : (Int) -> Unit,
+    modifier : Modifier
 ) {
     SwipeableTrashNoteRow(
         modifier = modifier,

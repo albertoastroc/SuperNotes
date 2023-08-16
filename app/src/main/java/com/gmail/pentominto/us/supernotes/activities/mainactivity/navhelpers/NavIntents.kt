@@ -5,13 +5,13 @@ import android.net.Uri
 
 object NavIntents {
 
-    fun getPlaystoreIntent(): Intent {
+    fun getPlaystoreIntent() : Intent {
         return Intent()
             .setData(Uri.parse("market://details?id=com.gmail.pentominto.us.supernotes"))
             .setAction(Intent.ACTION_VIEW)
     }
 
-    fun getPrivacyPolicyIntent(): Intent {
+    fun getPrivacyPolicyIntent() : Intent {
         return Intent()
             .setAction(Intent.ACTION_VIEW)
             .setData(

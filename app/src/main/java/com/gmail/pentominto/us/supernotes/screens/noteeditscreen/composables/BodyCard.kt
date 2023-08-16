@@ -23,9 +23,9 @@ import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditState
 
 @Composable
 fun BodyCard(
-    customTextSelectionColors: TextSelectionColors,
-    noteState: NoteEditState,
-    onBodyValueChange: (String) -> Unit
+    customTextSelectionColors : TextSelectionColors,
+    noteState : NoteEditState,
+    onBodyValueChange : (String) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxSize(),

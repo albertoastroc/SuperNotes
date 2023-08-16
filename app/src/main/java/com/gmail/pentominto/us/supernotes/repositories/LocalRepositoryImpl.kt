@@ -9,17 +9,17 @@ import javax.inject.Singleton
 
 @Singleton
 class LocalRepositoryImpl @Inject constructor(
-    private val dao: NotesDao
+    private val dao : NotesDao
 ) : LocalRepository {
 
-    override suspend fun insertNote(note: Note): Long {
+    override suspend fun insertNote(note : Note) : Long {
         return dao.insertNote(note)
     }
 
     override suspend fun updateNote(
-        noteTitle: String,
-        noteBody: String,
-        noteId: Int
+        noteTitle : String,
+        noteBody : String,
+        noteId : Int
     ) {
         dao.updateNote(
             noteTitle,
@@ -28,42 +28,42 @@ class LocalRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun updateNoteCategory(chosenCategory: String, noteId: Int) {
+    override suspend fun updateNoteCategory(chosenCategory : String, noteId : Int) {
         dao.updateNoteCategory(
             chosenCategory,
             noteId
         )
     }
 
-    override suspend fun insertCategory(category: Category) {
+    override suspend fun insertCategory(category : Category) {
         dao.insertCategory(category)
     }
 
-    override suspend fun deleteNote(id: Int) {
+    override suspend fun deleteNote(id : Int) {
         dao.deleteNote(id)
     }
 
-    override suspend fun deleteCategory(id: Int) {
+    override suspend fun deleteCategory(id : Int) {
         dao.deleteCategory(id)
     }
 
-    override fun getNotesOfThisCategory(category: String): Flow<List<Note>> {
+    override fun getNotesOfThisCategory(category : String) : Flow<List<Note>> {
         return dao.getNotesOfThisCategory(category)
     }
 
-    override fun getAllCategoriesAndNotes(): Flow<Map<Category, List<Note>>> {
+    override fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>> {
         return dao.getAllCategoriesAndNotes()
     }
 
-    override fun getNoteWithItsCategory(id: Int): Flow<Map<Category, Note>> {
+    override fun getNoteWithItsCategory(id : Int) : Flow<Map<Category, Note>> {
         return dao.getNoteWithItsCategory(id)
     }
 
-    override fun getNote(id: Int): Flow<Note> {
+    override fun getNote(id : Int) : Flow<Note> {
         return dao.getNote(id)
     }
 
-    override fun getCategories(): Flow<List<Category>> {
+    override fun getCategories() : Flow<List<Category>> {
         return dao.getAllCategories()
     }
 
@@ -75,7 +75,7 @@ class LocalRepositoryImpl @Inject constructor(
         dao.deleteAllTrashNotes()
     }
 
-    override suspend fun defaultCategoryExists(): Boolean {
+    override suspend fun defaultCategoryExists() : Boolean {
         return dao.defaultCategoryExists()
     }
 }

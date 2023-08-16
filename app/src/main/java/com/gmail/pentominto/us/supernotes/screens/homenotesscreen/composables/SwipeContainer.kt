@@ -15,9 +15,9 @@ import com.gmail.pentominto.us.supernotes.R
 
 @Composable
 fun SwipeContainer(
-    modifier: Modifier,
-    deleteNote: () -> Unit,
-    content: @Composable () -> Unit
+    modifier : Modifier,
+    deleteNote : () -> Unit,
+    content : @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(
         confirmStateChange = {

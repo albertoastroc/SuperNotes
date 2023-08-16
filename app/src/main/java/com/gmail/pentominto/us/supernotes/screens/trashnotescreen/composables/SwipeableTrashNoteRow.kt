@@ -18,11 +18,11 @@ import com.gmail.pentominto.us.supernotes.utility.Constants.FRACTION_THRESHOLD
 
 @Composable
 fun SwipeableTrashNoteRow(
-    deleteNote: (Int) -> Unit,
-    restoreNote: () -> Unit,
-    trashNote: Note,
-    modifier: Modifier,
-    content: @Composable () -> Unit
+    deleteNote : (Int) -> Unit,
+    restoreNote : () -> Unit,
+    trashNote : Note,
+    modifier : Modifier,
+    content : @Composable () -> Unit
 ) {
     val dismissState = rememberDismissState(
         confirmStateChange = {

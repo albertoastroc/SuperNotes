@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
-    private val repository: LocalRepository
+    private val dataStore : DataStore<Preferences>,
+    private val repository : LocalRepository
 ) : ViewModel() {
 
     val userIdKey = stringPreferencesKey(FIREBASE_ID_KEY)
@@ -26,7 +26,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             dataStore.edit { preferences ->
 
-                if (!preferences.contains(userIdKey)) {
+                if (! preferences.contains(userIdKey)) {
                     val userId = UUID.randomUUID().toString()
                     preferences[userIdKey] = userId
                 }
@@ -42,7 +42,7 @@ class MainActivityViewModel @Inject constructor(
 
     private fun setDefaultCategory() {
         viewModelScope.launch {
-            if (!repository.defaultCategoryExists()) {
+            if (! repository.defaultCategoryExists()) {
                 repository.insertCategory(
                     Category()
                 )

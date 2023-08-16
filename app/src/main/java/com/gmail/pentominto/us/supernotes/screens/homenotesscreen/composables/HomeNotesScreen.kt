@@ -11,14 +11,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptions
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptionsContainer
 import com.gmail.pentominto.us.supernotes.screens.homenotesscreen.HomeScreenNotesViewModel
 
 @Composable
 fun HomeNotesScreen(
-    viewModel: HomeScreenNotesViewModel = hiltViewModel(),
-    onNoteClick: (Int) -> Unit,
-    onDrawerItemClick: (Int) -> Unit
+    viewModel : HomeScreenNotesViewModel = hiltViewModel(),
+    onNoteClick : (Int) -> Unit,
+    onDrawerItemClick : (Int) -> Unit
 ) {
     val homeNotesState by remember { viewModel.homeScreenNotesState }
 
@@ -33,7 +33,7 @@ fun HomeNotesScreen(
         drawerGesturesEnabled = true,
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
-            NavigationDrawerOptions(
+            NavigationDrawerOptionsContainer(
                 drawerState = scaffoldState.drawerState,
                 onDrawerItemClick = onDrawerItemClick
             )

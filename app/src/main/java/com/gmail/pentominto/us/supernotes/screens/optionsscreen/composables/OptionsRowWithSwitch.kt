@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun OptionsRowWithSwitch(
-    title: String,
-    subTitle: String?,
-    switchState: Boolean,
-    onClick: (Boolean) -> Unit
+    title : String,
+    subTitle : String?,
+    switchState : Boolean,
+    onClick : (Boolean) -> Unit
 ) {
     val checkedState = remember { mutableStateOf(switchState) }
 

@@ -29,7 +29,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDatabase(
-        @ApplicationContext app: Context
+        @ApplicationContext app : Context
     ) = Room.databaseBuilder(
         app,
         NoteDatabase::class.java,
@@ -39,16 +39,16 @@ object AppModule {
 
     @Provides
     fun providesDAO(
-        database: NoteDatabase
-    ): NotesDao {
+        database : NoteDatabase
+    ) : NotesDao {
         return database.notesDAO()
     }
 
     @Provides
     @Singleton
     fun providePreferencesDataStore(
-        @ApplicationContext appContext: Context
-    ): DataStore<Preferences> {
+        @ApplicationContext appContext : Context
+    ) : DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
                 produceNewData = { emptyPreferences() }

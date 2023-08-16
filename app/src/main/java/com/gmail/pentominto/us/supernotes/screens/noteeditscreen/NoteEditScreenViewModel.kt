@@ -23,16 +23,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteEditScreenViewModel @Inject constructor(
-    private val repository: LocalRepository,
-    savedStateHandle: SavedStateHandle
+    private val repository : LocalRepository,
+    savedStateHandle : SavedStateHandle
 ) : ViewModel() {
 
-    private var noteId: Int = checkNotNull(savedStateHandle["noteid"])
+    private var noteId : Int = checkNotNull(savedStateHandle["noteid"])
 
-    private val _noteEditState: MutableState<NoteEditState> = mutableStateOf(NoteEditState())
-    val noteEditState: State<NoteEditState> = _noteEditState
+    private val _noteEditState : MutableState<NoteEditState> = mutableStateOf(NoteEditState())
+    val noteEditState : State<NoteEditState> = _noteEditState
 
-    private fun getNote(noteId: Int) {
+    private fun getNote(noteId : Int) {
         viewModelScope.launch {
             repository.getNoteWithItsCategory(noteId).collect { categoryNoteMap ->
 
@@ -67,14 +67,14 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    fun insertCategory(categoryName: String) {
+    fun insertCategory(categoryName : String) {
         saveNoteText()
         viewModelScope.launch {
             repository.insertCategory(Category(categoryName))
         }
     }
 
-    fun deleteCategory(category: Category) {
+    fun deleteCategory(category : Category) {
         viewModelScope.launch {
             val notesToUpdate = repository.getNotesOfThisCategory(category.categoryTitle)
 
@@ -103,33 +103,41 @@ class NoteEditScreenViewModel @Inject constructor(
         }
     }
 
-    suspend fun onCategoryChange(category: Category) {
-            saveNoteText()
-            repository.updateNoteCategory(
-                chosenCategory = category.categoryTitle,
-                noteId = noteId
-            )
+    suspend fun onCategoryChange(category : Category) {
+        saveNoteText()
+        repository.updateNoteCategory(
+            chosenCategory = category.categoryTitle,
+            noteId = noteId
+        )
     }
 
-    fun onTitleInputChange(newInput: String) {
+    fun onTitleInputChange(newInput : String) {
         _noteEditState.value = _noteEditState.value.copy(
             noteTitle = newInput
         )
     }
 
-    fun onBodyInputChange(newInput: String) {
+    fun onBodyInputChange(newInput : String) {
         _noteEditState.value = _noteEditState.value.copy(
             noteBody = newInput
         )
     }
 
-    fun scheduleReminder(context: Context, alarmTime: Long) {
+    fun scheduleReminder(context : Context, alarmTime : Long) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, AlarmReceiver::class.java)
+        val alarmIntent = Intent(context,
+            AlarmReceiver::class.java
+        )
 
-        alarmIntent.putExtra("note_id", noteId)
-        alarmIntent.putExtra("note_title", noteEditState.value.noteTitle)
-        alarmIntent.putExtra("note_body", noteEditState.value.noteBody)
+        alarmIntent.putExtra("note_id",
+            noteId
+        )
+        alarmIntent.putExtra("note_title",
+            noteEditState.value.noteTitle
+        )
+        alarmIntent.putExtra("note_body",
+            noteEditState.value.noteBody
+        )
 
         val broadcastPendingIntent = PendingIntent.getBroadcast(
             context,
@@ -147,9 +155,13 @@ class NoteEditScreenViewModel @Inject constructor(
             mainActivityIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
-        val clockInfo = AlarmManager.AlarmClockInfo(alarmTime, activityPendingIntent)
+        val clockInfo = AlarmManager.AlarmClockInfo(alarmTime,
+            activityPendingIntent
+        )
 
-        alarmManager.setAlarmClock(clockInfo, broadcastPendingIntent)
+        alarmManager.setAlarmClock(clockInfo,
+            broadcastPendingIntent
+        )
     }
 
     init {

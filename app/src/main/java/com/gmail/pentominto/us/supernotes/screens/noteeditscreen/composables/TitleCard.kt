@@ -30,6 +30,7 @@ import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
@@ -80,11 +81,11 @@ import java.util.Calendar
 @SuppressLint("MissingPermission")
 @Composable
 fun TitleAndMenuCard(
-    customTextSelectionColors: TextSelectionColors,
-    noteState: NoteEditState,
-    onTitleValueChange: (String) -> Unit,
-    scheduleReminder: (Context, Long) -> Unit,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    customTextSelectionColors : TextSelectionColors,
+    noteState : NoteEditState,
+    onTitleValueChange : (String) -> Unit,
+    scheduleReminder : (Context, Long) -> Unit,
+    bottomSheetScaffoldState : BottomSheetScaffoldState
 ) {
     val context = LocalContext.current
 
@@ -135,11 +136,11 @@ fun TitleAndMenuCard(
 
             NoteEditMenu(
                 noteState = noteState,
-               // showReminderSchedulerDialog = showAlarmDialogs,
+                // showReminderSchedulerDialog = showAlarmDialogs,
                 scheduleReminder = scheduleReminder,
                 context = context,
-                bottomSheetScaffoldState = bottomSheetScaffoldState,
-              //  launcher = launcher
+                bottomSheetScaffoldState = bottomSheetScaffoldState
+                //  launcher = launcher
             )
         }
     }
@@ -157,13 +158,12 @@ fun TitleAndMenuCard(
 )
 @Composable
 private fun NoteEditMenu(
-    noteState: NoteEditState,
+    noteState : NoteEditState,
     scheduleReminder : (Context, Long) -> Unit,
-    context: Context,
-    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    context : Context,
+    bottomSheetScaffoldState : BottomSheetScaffoldState
 ) {
-
-    val shouldShowDateTimePickerDialogue =  remember { mutableStateOf(false) }
+    val shouldShowDateTimePickerDialogue = remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -178,17 +178,17 @@ private fun NoteEditMenu(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) { shouldShowDateTimePickerDialogue.value = true }
+        if (isGranted) {
+            shouldShowDateTimePickerDialogue.value = true
+        }
     }
 
-    if (shouldShowDateTimePickerDialogue.value){
-
+    if (shouldShowDateTimePickerDialogue.value) {
         DateTimePickerDialogue(
             context = context,
             shouldShowDateTimePickerDialogue = shouldShowDateTimePickerDialogue,
             scheduleReminder = scheduleReminder
         )
-
     }
 
     Column {
@@ -238,7 +238,7 @@ private fun NoteEditMenu(
             }
 
             DropdownMenuItem(onClick = {
-                val sendIntent: Intent = Intent().apply {
+                val sendIntent : Intent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(
                         Intent.EXTRA_TEXT,
@@ -258,9 +258,7 @@ private fun NoteEditMenu(
             }
 
             DropdownMenuItem(onClick = {
-
                 coroutineScope.launch {
-
                     requestNotificationPermission(
                         packageManager,
                         context,
@@ -278,15 +276,14 @@ private fun NoteEditMenu(
 
 @OptIn(ExperimentalMaterialApi::class)
 private suspend fun requestNotificationPermission(
-    packageManager: PackageManager,
-    context: Context,
-    bottomSheetScaffoldState: BottomSheetScaffoldState,
-    launcher: ManagedActivityResultLauncher<String, Boolean>
+    packageManager : PackageManager,
+    context : Context,
+    bottomSheetScaffoldState : BottomSheetScaffoldState,
+    launcher : ManagedActivityResultLauncher<String, Boolean>
 ) {
-    val notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
+    val notificationManager : NotificationManagerCompat = NotificationManagerCompat.from(context)
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
         if (packageManager.checkPermission(
                 Manifest.permission.POST_NOTIFICATIONS,
                 context.packageName
@@ -324,7 +321,6 @@ private suspend fun requestNotificationPermission(
                 context.startActivity(intent)
             }
         } else {
-
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     } else {
@@ -337,8 +333,7 @@ fun DateTimePickerDialogue(
     context : Context,
     shouldShowDateTimePickerDialogue : MutableState<Boolean>,
     scheduleReminder : (Context, Long) -> Unit
-){
-
+) {
     val calendar = Calendar.getInstance()
 
     val dateFormatter = SimpleDateFormat("MM-dd-yyyy")
@@ -350,17 +345,20 @@ fun DateTimePickerDialogue(
     val datePicker = DatePickerDialog(
         context,
         { _, year, month, dayOfMonth ->
-            calendar.set(year, month, dayOfMonth)
+            calendar.set(year,
+                month,
+                dayOfMonth
+            )
         },
 
         calendar[Calendar.YEAR],
         calendar[Calendar.MONTH],
-        calendar[Calendar.DAY_OF_MONTH],
+        calendar[Calendar.DAY_OF_MONTH]
     )
 
     val timePicker = TimePickerDialog(
         context,
-        { view, selectedHour: Int, selectedMinute: Int ->
+        { view, selectedHour : Int, selectedMinute : Int ->
             calendar.set(
                 datePicker.datePicker.year,
                 datePicker.datePicker.month,
@@ -368,36 +366,34 @@ fun DateTimePickerDialogue(
                 selectedHour,
                 selectedMinute
             )
-
         },
         calendar[Calendar.HOUR_OF_DAY],
         calendar[Calendar.MINUTE],
         false
     )
 
-    val dateState =  remember { mutableStateOf(date) }
-    val timeState =  remember { mutableStateOf(time) }
+    val dateState = remember { mutableStateOf(date) }
+    val timeState = remember { mutableStateOf(time) }
 
-    Dialog(onDismissRequest = {
-        shouldShowDateTimePickerDialogue.value = false
-    }) {
-
+    Dialog(
+        onDismissRequest = {
+            shouldShowDateTimePickerDialogue.value = false
+        }
+    ) {
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = Color.White
+            color = MaterialTheme.colors.primary
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(),
-                contentAlignment = Alignment.Center){
-
-                Column() {
-
-
+                contentAlignment = Alignment.Center
+            ) {
+                Column {
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    //time
+                    // time
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -406,17 +402,16 @@ fun DateTimePickerDialogue(
                         Text(
                             modifier = Modifier.padding(start = 16.dp),
                             text = dateState.value,
-                            color = Color.Black
+                            color = MaterialTheme.colors.onPrimary
                         )
 
                         IconButton(onClick = {
-
                             datePicker.show()
-
                         }) {
-                            Icon(Icons.Default.Edit,
+                            Icon(
+                                Icons.Default.Edit,
                                 contentDescription = "icon",
-                                tint = Color.Black
+                                tint = MaterialTheme.colors.onPrimary
                             )
                         }
                     }
@@ -429,17 +424,16 @@ fun DateTimePickerDialogue(
                         Text(
                             modifier = Modifier.padding(start = 16.dp),
                             text = timeState.value,
-                            color = Color.Black
+                            color = MaterialTheme.colors.onPrimary
                         )
 
                         IconButton(onClick = {
-
                             timePicker.show()
-
                         }) {
-                            Icon(Icons.Default.Edit,
+                            Icon(
+                                Icons.Default.Edit,
                                 contentDescription = "icon",
-                                tint = Color.Black
+                                tint = MaterialTheme.colors.onPrimary
                             )
                         }
                     }
@@ -449,18 +443,23 @@ fun DateTimePickerDialogue(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Button(onClick = {
-
-                            scheduleReminder(context, calendar.timeInMillis)
-                            shouldShowDateTimePickerDialogue.value = false
-
-                        }) {
-                            Text(text = "Set reminder")
+                        Button(
+                            elevation = ButtonDefaults.elevation(defaultElevation = 0.dp),
+                            onClick = {
+                                scheduleReminder(context,
+                                    calendar.timeInMillis
+                                )
+                                shouldShowDateTimePickerDialogue.value = false
+                            }
+                        ) {
+                            Text(
+                                text = "Set reminder",
+                                color = MaterialTheme.colors.onPrimary
+                            )
                         }
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
-
                 }
             }
         }

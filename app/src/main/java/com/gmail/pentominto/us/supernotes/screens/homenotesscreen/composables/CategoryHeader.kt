@@ -12,8 +12,8 @@ import com.gmail.pentominto.us.supernotes.data.Category
 
 @Composable
 fun CategoryHeader(
-    category: Category,
-    modifier: Modifier
+    category : Category,
+    modifier : Modifier
 ) {
     Text(
         text = category.categoryTitle,

@@ -39,11 +39,11 @@ import com.gmail.pentominto.us.supernotes.utility.NoRippleInteractionSource
 
 @Composable
 fun CategoriesList(
-    categories: List<Category>,
-    currentCategory: String,
-    onAddCategory: (String) -> Unit,
-    onDeleteCategory: (Category) -> Unit,
-    onSelectCategory: (Category) -> Unit
+    categories : List<Category>,
+    currentCategory : String,
+    onAddCategory : (String) -> Unit,
+    onDeleteCategory : (Category) -> Unit,
+    onSelectCategory : (Category) -> Unit
 ) {
     val shouldShowCategoryDialog = remember { mutableStateOf(false) }
 
@@ -91,7 +91,7 @@ fun CategoriesList(
 }
 
 @Composable
-private fun AddItemRow(openCategoryDialog: MutableState<Boolean>) {
+private fun AddItemRow(openCategoryDialog : MutableState<Boolean>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,10 +124,10 @@ private fun AddItemRow(openCategoryDialog: MutableState<Boolean>) {
 
 @Composable
 private fun AddCategoryDialog(
-    shouldShowCategoryDialog: MutableState<Boolean>,
-    dialogTitleState: MutableState<String>,
-    dialogInput: MutableState<String>,
-    onClickDialog: (String) -> Unit
+    shouldShowCategoryDialog : MutableState<Boolean>,
+    dialogTitleState : MutableState<String>,
+    dialogInput : MutableState<String>,
+    onClickDialog : (String) -> Unit
 ) {
     AlertDialog(
         modifier = Modifier.width(400.dp),
@@ -202,10 +202,10 @@ private fun AddCategoryDialog(
 
 @Composable
 private fun CategoryItem(
-    category: Category,
-    currentCategory: String,
-    onCategoryChange: (Category) -> Unit,
-    onDeleteCategory: (Category) -> Unit
+    category : Category,
+    currentCategory : String,
+    onCategoryChange : (Category) -> Unit,
+    onDeleteCategory : (Category) -> Unit
 ) {
     Row(
         modifier = Modifier

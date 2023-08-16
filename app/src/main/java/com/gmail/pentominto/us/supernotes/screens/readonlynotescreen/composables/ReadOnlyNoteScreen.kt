@@ -22,8 +22,8 @@ import com.gmail.pentominto.us.supernotes.screens.readonlynotescreen.ReadOnlyNot
 
 @Composable
 fun ReadOnlyNoteScreen(
-    trashNoteId: Int,
-    viewModel: ReadOnlyNoteViewModel = hiltViewModel()
+    trashNoteId : Int,
+    viewModel : ReadOnlyNoteViewModel = hiltViewModel()
 ) {
     val trashNoteState = remember { viewModel.readOnlyNoteState }
 

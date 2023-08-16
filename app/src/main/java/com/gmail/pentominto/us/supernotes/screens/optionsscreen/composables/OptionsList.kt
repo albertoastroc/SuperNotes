@@ -9,9 +9,9 @@ import com.gmail.pentominto.us.supernotes.screens.optionsscreen.OptionsScreenVie
 
 @Composable
 fun OptionsList(
-    optionsState: OptionsScreenState,
-    viewModel: OptionsScreenViewModel,
-    context: Context
+    optionsState : OptionsScreenState,
+    viewModel : OptionsScreenViewModel,
+    context : Context
 ) {
     OptionsRowWithSwitch(
         title = "Enable categories",

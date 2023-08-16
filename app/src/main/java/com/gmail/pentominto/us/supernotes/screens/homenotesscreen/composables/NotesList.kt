@@ -18,15 +18,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesList(
-    paddingValues: PaddingValues,
-    homeScreenNotesState: HomeScreenNotesState,
-    scaffoldState: ScaffoldState,
-    onNoteClick: (Int) -> Unit,
-    onSearchChange: (String) -> Unit,
-    clearSearchBar: () -> Unit,
-    onNoteSwipe: (Note) -> Unit
+    paddingValues : PaddingValues,
+    homeScreenNotesState : HomeScreenNotesState,
+    scaffoldState : ScaffoldState,
+    onNoteClick : (Int) -> Unit,
+    onSearchChange : (String) -> Unit,
+    clearSearchBar : () -> Unit,
+    onNoteSwipe : (Note) -> Unit
 ) {
-
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(
@@ -57,7 +56,9 @@ fun NotesList(
             }
 
             items(
-                items = notes.filterNotes(category, homeScreenNotesState.searchBarInput),
+                items = notes.filterNotes(category,
+                    homeScreenNotesState.searchBarInput
+                ),
                 key = { it.noteId }
             ) { note ->
 
@@ -74,7 +75,7 @@ fun NotesList(
     }
 }
 
-fun List<Note>.filterNotes(category: Category, searchBarInput: String): List<Note> {
+fun List<Note>.filterNotes(category : Category, searchBarInput : String) : List<Note> {
     return this.filter { it.noteBody.lowercase().contains(searchBarInput) }
         .filter { category.categoryTitle != "TrashNotesAPPTAG" }
 }

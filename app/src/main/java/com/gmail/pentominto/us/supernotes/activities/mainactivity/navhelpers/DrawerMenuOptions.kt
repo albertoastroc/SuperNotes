@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
-enum class DrawerMenuOptions(val menuId: Int, val title: String, val icon: ImageVector) {
+enum class DrawerMenuOptions(val menuId : Int, val title : String, val icon : ImageVector) {
 
     OPTIONS(
         2,

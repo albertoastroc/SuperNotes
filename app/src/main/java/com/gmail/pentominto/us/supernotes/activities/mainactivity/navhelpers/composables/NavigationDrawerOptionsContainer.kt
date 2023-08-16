@@ -7,15 +7,20 @@ import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.Dra
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.MenuItem
 import kotlinx.coroutines.launch
 
-@Composable
-fun NavigationDrawerOptions(
-    drawerState: DrawerState,
-    onDrawerItemClick: (Int) -> Unit
-) {
+/**
+ *
+ * Sets up how many items will be shown in nav drawer and passes on click function down
+ *
+ */
 
+@Composable
+fun NavigationDrawerOptionsContainer(
+    drawerState : DrawerState,
+    onDrawerItemClick : (Int) -> Unit
+) {
     val coroutineScope = rememberCoroutineScope()
 
-    NavigationDrawerContainer(
+    NavigationDrawerList(
         drawerOptionsList = listOf(
             MenuItem(
                 id = DrawerMenuOptions.OPTIONS.menuId,

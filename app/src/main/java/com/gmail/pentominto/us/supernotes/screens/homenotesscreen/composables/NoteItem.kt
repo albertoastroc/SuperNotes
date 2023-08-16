@@ -6,10 +6,10 @@ import com.gmail.pentominto.us.supernotes.data.Note
 
 @Composable
 fun NoteItem(
-    note: Note,
-    onNoteClick: (Int) -> Unit,
-    onNoteSwipe: (Note) -> Unit,
-    modifier: Modifier
+    note : Note,
+    onNoteClick : (Int) -> Unit,
+    onNoteSwipe : (Note) -> Unit,
+    modifier : Modifier
 ) {
     SwipeContainer(
         modifier = modifier,

@@ -25,19 +25,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptions
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptionsContainer
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.NoteEditScreenViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteEditScreen(
-    noteid: Int,
-    viewModel: NoteEditScreenViewModel = hiltViewModel(),
-    onDrawerItemClick: (Int) -> Unit
+    noteid : Int,
+    viewModel : NoteEditScreenViewModel = hiltViewModel(),
+    onDrawerItemClick : (Int) -> Unit
 
 ) {
-
     val lifeCycleOwner = LocalLifecycleOwner.current.lifecycle
 
     val coroutineScope = rememberCoroutineScope()
@@ -55,7 +54,6 @@ fun NoteEditScreen(
     )
 
     DisposableEffect(lifeCycleOwner) {
-
         val observer = LifecycleEventObserver { _, event ->
 
             when (event) {
@@ -65,6 +63,7 @@ fun NoteEditScreen(
                 -> {
                     viewModel.saveNoteText()
                 }
+
                 else -> {}
             }
         }
@@ -85,7 +84,7 @@ fun NoteEditScreen(
         drawerGesturesEnabled = true,
         drawerBackgroundColor = MaterialTheme.colors.background,
         drawerContent = {
-            NavigationDrawerOptions(
+            NavigationDrawerOptionsContainer(
                 drawerState = bottomSheetScaffoldState.drawerState,
                 onDrawerItemClick = onDrawerItemClick
             )
@@ -101,7 +100,6 @@ fun NoteEditScreen(
                         end = 16.dp
                     )
             ) {
-
                 TitleAndMenuCard(
                     customTextSelectionColors = customTextSelectionColors,
                     noteState = noteState,
@@ -125,7 +123,6 @@ fun NoteEditScreen(
                 onAddCategory = viewModel::insertCategory,
                 onDeleteCategory = viewModel::deleteCategory
             ) {
-
                 coroutineScope.launch {
                     viewModel.onCategoryChange(it)
                     bottomSheetScaffoldState.bottomSheetState.collapse()

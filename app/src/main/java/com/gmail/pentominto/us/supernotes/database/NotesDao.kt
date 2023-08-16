@@ -12,43 +12,43 @@ import kotlinx.coroutines.flow.Flow
 interface NotesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: Note): Long
+    suspend fun insertNote(note : Note) : Long
 
     @Query(
         "UPDATE note_table SET noteTitle = :noteTitle, noteBody = :noteBody WHERE note_db_id = :noteId"
     )
-    suspend fun updateNote(noteTitle: String, noteBody: String, noteId: Int)
+    suspend fun updateNote(noteTitle : String, noteBody : String, noteId : Int)
 
     @Query("UPDATE note_table SET category = :chosenCategory WHERE note_db_id = :noteId")
-    suspend fun updateNoteCategory(chosenCategory: String, noteId: Int)
+    suspend fun updateNoteCategory(chosenCategory : String, noteId : Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCategory(category: Category)
+    suspend fun insertCategory(category : Category)
 
     @Query("DELETE FROM note_table WHERE note_db_id = :id")
-    suspend fun deleteNote(id: Int)
+    suspend fun deleteNote(id : Int)
 
     @Query("DELETE FROM category_table WHERE category_db_id = :id")
-    suspend fun deleteCategory(id: Int)
+    suspend fun deleteCategory(id : Int)
 
     @Query("SELECT * FROM note_table WHERE category = :category")
-    fun getNotesOfThisCategory(category: String): Flow<List<Note>>
+    fun getNotesOfThisCategory(category : String) : Flow<List<Note>>
 
     @Query(
         "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle ORDER BY categoryTitle COLLATE NOCASE ASC"
     )
-    fun getAllCategoriesAndNotes(): Flow<Map<Category, List<Note>>>
+    fun getAllCategoriesAndNotes() : Flow<Map<Category, List<Note>>>
 
     @Query(
         "SELECT * FROM note_table JOIN category_table ON note_table.category = category_table.categoryTitle WHERE note_db_id = :id"
     )
-    fun getNoteWithItsCategory(id: Int): Flow<Map<Category, Note>>
+    fun getNoteWithItsCategory(id : Int) : Flow<Map<Category, Note>>
 
     @Query("SELECT * FROM note_table WHERE note_db_id = :id")
-    fun getNote(id: Int): Flow<Note>
+    fun getNote(id : Int) : Flow<Note>
 
     @Query("SELECT * FROM category_table")
-    fun getAllCategories(): Flow<List<Category>>
+    fun getAllCategories() : Flow<List<Category>>
 
     @Query("DELETE FROM note_table WHERE category != 'TrashNotesAPPTAG' ")
     suspend fun deleteHomeScreenNotes()
@@ -58,5 +58,5 @@ interface NotesDao {
 
     // temporary while prepoluated database gets fixed
     @Query("SELECT EXISTS(SELECT * FROM category_table WHERE categoryTitle = 'No Category')")
-    suspend fun defaultCategoryExists(): Boolean
+    suspend fun defaultCategoryExists() : Boolean
 }

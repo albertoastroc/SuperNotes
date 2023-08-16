@@ -15,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrashNotesViewModel @Inject constructor(
-    val repository: LocalRepository
+    val repository : LocalRepository
 ) : ViewModel() {
 
-    private val _trashNotesList: MutableState<List<Note>> = mutableStateOf(emptyList())
-    val trashNotesList: State<List<Note>> = _trashNotesList
+    private val _trashNotesList : MutableState<List<Note>> = mutableStateOf(emptyList())
+    val trashNotesList : State<List<Note>> = _trashNotesList
 
     private fun getTrashNotesList() {
         viewModelScope.launch {
@@ -30,11 +30,11 @@ class TrashNotesViewModel @Inject constructor(
         }
     }
 
-    fun deleteTrashNote(noteId: Int) = viewModelScope.launch {
+    fun deleteTrashNote(noteId : Int) = viewModelScope.launch {
         repository.deleteNote(noteId)
     }
 
-    fun restoreTrashNote(note: Note) {
+    fun restoreTrashNote(note : Note) {
         viewModelScope.launch {
             repository.updateNoteCategory(
                 DEFAULT_CATEGORY,

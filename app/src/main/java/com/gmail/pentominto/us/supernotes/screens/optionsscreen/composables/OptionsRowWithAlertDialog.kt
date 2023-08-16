@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -22,21 +23,23 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun OptionsRowWithAlertDialog(
-    title: String,
-    subTitle: String?,
-    message: String,
-    yesButtonMessage: String,
-    noButtonMessage: String,
-    onClick: () -> Unit
+    title : String,
+    subTitle : String?,
+    message : String,
+    yesButtonMessage : String,
+    noButtonMessage : String,
+    onClick : () -> Unit
 ) {
     val openConfirmDialog = remember { mutableStateOf(false) }
 
     if (openConfirmDialog.value) {
         AlertDialog(
+            backgroundColor = MaterialTheme.colors.primary,
             onDismissRequest = { openConfirmDialog.value = false },
             title = { Text(text = message) },
             confirmButton = {
                 Button(
+                    elevation = ButtonDefaults.elevation(defaultElevation = 0.dp),
                     onClick = {
                         onClick()
                         openConfirmDialog.value = false
@@ -48,6 +51,7 @@ fun OptionsRowWithAlertDialog(
             },
             dismissButton = {
                 Button(
+                    elevation = ButtonDefaults.elevation(defaultElevation = 0.dp),
                     onClick = {
                         openConfirmDialog.value = false
                     },

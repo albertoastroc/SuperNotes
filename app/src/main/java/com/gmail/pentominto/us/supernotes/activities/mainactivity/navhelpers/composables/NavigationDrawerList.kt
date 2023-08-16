@@ -25,11 +25,17 @@ import androidx.compose.ui.unit.sp
 import com.gmail.pentominto.us.supernotes.R
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.MenuItem
 
+/**
+ *
+ * Creates a list of the options to be shown in the nav drawer
+ *
+ */
+
 @Composable
-fun NavigationDrawerContainer(
-    drawerOptionsList: List<MenuItem>,
-    onSettingClick: (Int) -> Unit,
-    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp)
+fun NavigationDrawerList(
+    drawerOptionsList : List<MenuItem>,
+    onSettingClick : (Int) -> Unit,
+    itemTextStyle : TextStyle = TextStyle(fontSize = 18.sp)
 ) {
     LazyColumn {
         item {
