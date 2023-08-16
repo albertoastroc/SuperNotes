@@ -206,7 +206,9 @@ private fun navigateToMenuItem(menuItemId : Int, navController : NavHostControll
 
         NavDrawerId.TRASH.navDrawerId          -> navController.navigate(
             NavigationId.ALL_TRASH_NOTES.destination
-        )
+        ) {
+            popUpTo(NavigationId.ALL_NOTES.destination)
+        }
 
         NavDrawerId.PLAY_STORE.navDrawerId     -> context.startActivity(
             NavIntents.getPlaystoreIntent()
