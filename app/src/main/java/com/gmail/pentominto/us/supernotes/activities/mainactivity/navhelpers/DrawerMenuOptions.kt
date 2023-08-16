@@ -10,22 +10,22 @@ import androidx.compose.ui.graphics.vector.ImageVector
 enum class DrawerMenuOptions(val menuId : Int, val title : String, val icon : ImageVector) {
 
     OPTIONS(
-        2,
+        1,
         "Options",
         Icons.Default.Settings
     ),
     TRASH(
-        3,
+        2,
         "Trash",
         Icons.Default.Delete
     ),
     RATE_ME(
-        4,
+        3,
         "Rate me in the Play Store!",
         Icons.Default.Star
     ),
     PRIVACY_POLICY(
-        5,
+        4,
         "Privacy policy and info",
         Icons.Default.Info
     )

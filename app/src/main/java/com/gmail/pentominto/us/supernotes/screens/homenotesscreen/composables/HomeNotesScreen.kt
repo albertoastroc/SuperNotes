@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.supernotes.screens.homenotesscreen.composables
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
@@ -13,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.composables.NavigationDrawerOptionsContainer
 import com.gmail.pentominto.us.supernotes.screens.homenotesscreen.HomeScreenNotesViewModel
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeNotesScreen(
     viewModel : HomeScreenNotesViewModel = hiltViewModel(),
@@ -38,10 +39,9 @@ fun HomeNotesScreen(
                 onDrawerItemClick = onDrawerItemClick
             )
         },
-        content = { paddingValues ->
+        content = {
 
             NotesList(
-                paddingValues = paddingValues,
                 homeScreenNotesState = homeNotesState,
                 scaffoldState = scaffoldState,
                 onNoteClick = onNoteClick,

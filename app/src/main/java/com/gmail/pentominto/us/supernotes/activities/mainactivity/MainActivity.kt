@@ -19,9 +19,9 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavDrawerId
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavIntents
 import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.NavigationId
-import com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers.OptionMenuId
 import com.gmail.pentominto.us.supernotes.screens.homenotesscreen.composables.HomeNotesScreen
 import com.gmail.pentominto.us.supernotes.screens.noteeditscreen.composables.NoteEditScreen
 import com.gmail.pentominto.us.supernotes.screens.optionsscreen.composables.OptionsScreen
@@ -106,12 +106,27 @@ private fun SuperNotesApp(navController : NavHostController) {
             arguments = emptyList(),
             deepLinks = emptyList()
         ) {
+
             TrashNotesScreen(
                 onTrashNoteClick = { trashNoteId ->
                     navController.navigate(NavigationId.TRASH_NOTE.destination + "/$trashNoteId")
+
+                },
+                onDrawerItemClick = { menuItemId ->
+
+                    navigateToMenuItem(menuItemId,
+                        navController,
+                        context
+                    )
                 }
             )
         }
+
+        /**
+         *
+         * Deeplinks used for navigating from a reminder notification
+         *
+         */
 
         composable(
             route = NavigationId.EDIT_NOTE.destination + "/{$NOTE_ID}",
@@ -155,7 +170,15 @@ private fun SuperNotesApp(navController : NavHostController) {
                 it.arguments?.getInt(TRASH_NOTE_ID)
             }
             if (trashNoteId != null) {
-                ReadOnlyNoteScreen(trashNoteId = trashNoteId)
+                ReadOnlyNoteScreen(trashNoteId = trashNoteId,
+                    onDrawerItemClick = { menuItemId ->
+
+                        navigateToMenuItem(menuItemId,
+                            navController,
+                            context
+                        )
+                    }
+                )
             }
         }
 
@@ -169,22 +192,27 @@ private fun SuperNotesApp(navController : NavHostController) {
     }
 }
 
+/**
+ *
+ * Helps with navigation when triggered from Nav Drawer
+ *
+ */
 private fun navigateToMenuItem(menuItemId : Int, navController : NavHostController, context : Context) {
     when (menuItemId) {
 
-        OptionMenuId.OPTIONS.optionMenuId        -> navController.navigate(
+        NavDrawerId.OPTIONS.navDrawerId        -> navController.navigate(
             NavigationId.OPTIONS.destination
         )
 
-        OptionMenuId.TRASH.optionMenuId          -> navController.navigate(
+        NavDrawerId.TRASH.navDrawerId          -> navController.navigate(
             NavigationId.ALL_TRASH_NOTES.destination
         )
 
-        OptionMenuId.PLAY_STORE.optionMenuId     -> context.startActivity(
+        NavDrawerId.PLAY_STORE.navDrawerId     -> context.startActivity(
             NavIntents.getPlaystoreIntent()
         )
 
-        OptionMenuId.PRIVACY_POLICY.optionMenuId -> context.startActivity(
+        NavDrawerId.PRIVACY_POLICY.navDrawerId -> context.startActivity(
             NavIntents.getPrivacyPolicyIntent()
         )
     }

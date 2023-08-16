@@ -1,22 +1,22 @@
 package com.gmail.pentominto.us.supernotes.activities.mainactivity.navhelpers
 
-enum class OptionMenuId(
-    val optionMenuId : Int
+enum class NavDrawerId(
+    val navDrawerId : Int
 ) {
 
     OPTIONS(
-        optionMenuId = 1
+        navDrawerId = 1
     ),
 
     TRASH(
-        optionMenuId = 2
+        navDrawerId = 2
     ),
 
     PLAY_STORE(
-        optionMenuId = 3
+        navDrawerId = 3
     ),
 
     PRIVACY_POLICY(
-        optionMenuId = 4
+        navDrawerId = 4
     )
 }

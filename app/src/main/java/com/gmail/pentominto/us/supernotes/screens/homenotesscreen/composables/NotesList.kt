@@ -2,14 +2,14 @@ package com.gmail.pentominto.us.supernotes.screens.homenotesscreen.composables
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.gmail.pentominto.us.supernotes.data.Category
 import com.gmail.pentominto.us.supernotes.data.Note
 import com.gmail.pentominto.us.supernotes.screens.homenotesscreen.HomeScreenNotesState
@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesList(
-    paddingValues : PaddingValues,
     homeScreenNotesState : HomeScreenNotesState,
     scaffoldState : ScaffoldState,
     onNoteClick : (Int) -> Unit,
@@ -30,8 +29,7 @@ fun NotesList(
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize(1f),
-        contentPadding = paddingValues
+            .padding(horizontal = 24.dp)
 
     ) {
         item {
